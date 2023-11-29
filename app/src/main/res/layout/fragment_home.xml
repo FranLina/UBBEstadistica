@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".user.HomeFragment">
+
+    <ImageView
+        android:id="@+id/fondoImagenHome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/fondo_pantalla2"
+        tools:ignore="MissingConstraints" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="900dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="MissingConstraints">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="100sp"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnAArbitro"
+                            android:layout_width="50dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableTop="@drawable/designacion"
+                            android:text="Árbitros"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            app:cornerRadius="30dp"
+                            app:strokeColor="@color/yellow_logo"
+                            app:strokeWidth="2dp" />
+
+                        <Button
+                            android:id="@+id/btnAJugadores"
+                            android:layout_width="50dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableTop="@drawable/jugador_de_baloncesto"
+                            android:text="Jugadores"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            app:cornerRadius="30dp"
+                            app:strokeColor="@color/yellow_logo"
+                            app:strokeWidth="2dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnAEquipos"
+                            android:layout_width="50dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableTop="@drawable/jugadores_de_baloncesto"
+                            android:text="Equipos"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            app:cornerRadius="30dp"
+                            app:strokeColor="@color/yellow_logo"
+                            app:strokeWidth="2dp" />
+
+                        <Button
+                            android:id="@+id/btnALigas"
+                            android:layout_width="50dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableTop="@drawable/trofeo"
+                            android:text="Ligas"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            app:cornerRadius="30dp"
+                            app:strokeColor="@color/yellow_logo"
+                            app:strokeWidth="2dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnADesignaciones"
+                            android:layout_width="50dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableTop="@drawable/marcador"
+                            android:text="Designaciones"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            app:cornerRadius="30dp"
+                            app:strokeColor="@color/yellow_logo"
+                            app:strokeWidth="2dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnADatos"
+                            android:layout_width="50dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableTop="@drawable/camiseta"
+                            android:text="Datos Personales"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            app:cornerRadius="30dp"
+                            app:strokeColor="@color/yellow_logo"
+                            app:strokeWidth="2dp" />
+
+                        <Button
+                            android:id="@+id/btnAConfiguracion"
+                            android:layout_width="50dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableTop="@drawable/configuraciones"
+                            android:text="Configuración"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            app:cornerRadius="30dp"
+                            app:strokeColor="@color/yellow_logo"
+                            app:strokeWidth="2dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:id="@+id/btnACerrar"
+                            android:layout_width="250dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="50dp"
+                            android:layout_marginRight="20dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:drawableTop="@drawable/puerta"
+                            android:text="Cerrar Sesión"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            app:cornerRadius="30dp"
+                            app:strokeColor="@color/yellow_logo"
+                            app:strokeWidth="2dp" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

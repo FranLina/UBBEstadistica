@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "362588779926",
+    "project_id": "ubbestadistica",
+    "storage_bucket": "ubbestadistica.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362588779926:android:d21b20aafcce3fdbd659b7",
+        "android_client_info": {
+          "package_name": "com.franciscolinares.ubb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH_syr5AgTizskdn2Gh10yCorayDC9iJU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

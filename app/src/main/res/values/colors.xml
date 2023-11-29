@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green_clay">#4BFF09</color>
     <color name="yellow_logo">#F3DD2F</color>
+    <color name="yellow_logo_200">#FFF59D</color>
+    <color name="yellow_logo_500">#FFEB3B</color>
+    <color name="yellow_logo_700">#FBC02D</color>
 </resources>

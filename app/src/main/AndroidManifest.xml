@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UBB_estadistica">
         <activity
+            android:name=".user.MainActivity"
+            android:exported="false"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.UBB_estadistica.NoActionBar" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.UBB_estadistica">
