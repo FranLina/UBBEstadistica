@@ -18,5 +18,21 @@
         <action
             android:id="@+id/action_homeFragment_to_loginActivity"
             app:destination="@id/loginActivity" />
+        <action
+            android:id="@+id/action_homeFragment_to_datosPersonalesFragment"
+            app:destination="@id/datosPersonalesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_configuracionFragment"
+            app:destination="@id/configuracionFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/datosPersonalesFragment"
+        android:name="com.franciscolinares.ubb.user.DatosPersonalesFragment"
+        android:label="Datos Personales"
+        tools:layout="@layout/fragment_datos_personales" />
+    <fragment
+        android:id="@+id/configuracionFragment"
+        android:name="com.franciscolinares.ubb.user.ConfiguracionFragment"
+        android:label="Configuración"
+        tools:layout="@layout/fragment_configuracion" />
 </navigation>

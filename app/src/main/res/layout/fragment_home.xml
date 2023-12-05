@@ -52,7 +52,7 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/btnAArbitro"
+                            android:id="@+id/btnArbitro"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
                             android:layout_marginLeft="20dp"
@@ -68,7 +68,7 @@
                             app:strokeWidth="2dp" />
 
                         <Button
-                            android:id="@+id/btnAJugadores"
+                            android:id="@+id/btnJugadores"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
                             android:layout_marginLeft="10dp"
@@ -91,7 +91,7 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/btnAEquipos"
+                            android:id="@+id/btnEquipos"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
                             android:layout_marginLeft="20dp"
@@ -107,7 +107,7 @@
                             app:strokeWidth="2dp" />
 
                         <Button
-                            android:id="@+id/btnALigas"
+                            android:id="@+id/btnLigas"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
                             android:layout_marginLeft="10dp"
@@ -130,7 +130,7 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/btnADesignaciones"
+                            android:id="@+id/btnDesignaciones"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
                             android:layout_marginLeft="10dp"
@@ -152,7 +152,7 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/btnADatos"
+                            android:id="@+id/btnDatos"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
                             android:layout_marginLeft="20dp"
@@ -168,7 +168,7 @@
                             app:strokeWidth="2dp" />
 
                         <Button
-                            android:id="@+id/btnAConfiguracion"
+                            android:id="@+id/btnConfiguracion"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
                             android:layout_marginLeft="10dp"
@@ -195,7 +195,7 @@
                             android:layout_weight="1" />
 
                         <Button
-                            android:id="@+id/btnACerrar"
+                            android:id="@+id/btnCerrar"
                             android:layout_width="250dp"
                             android:layout_height="100dp"
                             android:layout_marginLeft="20dp"
