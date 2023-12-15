@@ -48,6 +48,12 @@ class HomeFragment : Fragment() {
             val intent = Intent(getActivity(), LoginActivity::class.java)
             startActivity(intent)
         }
+        binding.btnJugadores.setOnClickListener {
+            Navigation.findNavController(root).navigate(R.id.action_homeFragment_to_jugadorFragment)
+        }
+        binding.btnEquipos.setOnClickListener {
+            Navigation.findNavController(root).navigate(R.id.action_homeFragment_to_equipoFragment)
+        }
         return root
     }
 

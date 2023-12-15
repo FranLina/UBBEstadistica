@@ -52,27 +52,11 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/btnArbitro"
+                            android:id="@+id/btnJugadores"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="10dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="#FFFFFF"
-                            android:drawableTop="@drawable/designacion"
-                            android:text="Árbitros"
-                            android:textColor="#000000"
-                            android:textSize="12sp"
-                            app:cornerRadius="30dp"
-                            app:strokeColor="@color/yellow_logo"
-                            app:strokeWidth="2dp" />
-
-                        <Button
-                            android:id="@+id/btnJugadores"
-                            android:layout_width="50dp"
-                            android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="20dp"
                             android:layout_weight="1"
                             android:backgroundTint="#FFFFFF"
                             android:drawableTop="@drawable/jugador_de_baloncesto"
@@ -83,19 +67,12 @@
                             app:strokeColor="@color/yellow_logo"
                             app:strokeWidth="2dp" />
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
                         <Button
                             android:id="@+id/btnEquipos"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="20dp"
                             android:layout_weight="1"
                             android:backgroundTint="#FFFFFF"
                             android:drawableTop="@drawable/jugadores_de_baloncesto"
@@ -106,16 +83,23 @@
                             app:strokeColor="@color/yellow_logo"
                             app:strokeWidth="2dp" />
 
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
                         <Button
-                            android:id="@+id/btnLigas"
+                            android:id="@+id/btnCrearEnfrentamiento"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
                             android:layout_weight="1"
                             android:backgroundTint="#FFFFFF"
-                            android:drawableTop="@drawable/trofeo"
-                            android:text="Ligas"
+                            android:drawableTop="@drawable/calendar"
+                            android:text="Crear Enfrentamiento"
                             android:textColor="#000000"
                             android:textSize="12sp"
                             app:cornerRadius="30dp"
@@ -130,15 +114,15 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/btnDesignaciones"
+                            android:id="@+id/btnMisPartidos"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
                             android:layout_weight="1"
                             android:backgroundTint="#FFFFFF"
                             android:drawableTop="@drawable/marcador"
-                            android:text="Designaciones"
+                            android:text="Mis Partidos"
                             android:textColor="#000000"
                             android:textSize="12sp"
                             app:cornerRadius="30dp"

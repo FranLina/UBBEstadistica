@@ -24,6 +24,12 @@
         <action
             android:id="@+id/action_homeFragment_to_configuracionFragment"
             app:destination="@id/configuracionFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_jugadorFragment"
+            app:destination="@id/jugadorFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_equipoFragment"
+            app:destination="@id/equipoFragment" />
     </fragment>
     <fragment
         android:id="@+id/datosPersonalesFragment"
@@ -35,4 +41,65 @@
         android:name="com.franciscolinares.ubb.user.ConfiguracionFragment"
         android:label="Configuración"
         tools:layout="@layout/fragment_configuracion" />
+    <fragment
+        android:id="@+id/jugadorFragment"
+        android:name="com.franciscolinares.ubb.user.JugadorFragment"
+        android:label="Jugador"
+        tools:layout="@layout/fragment_jugador" >
+        <action
+            android:id="@+id/action_jugadorFragment_to_crearJugadorFragment"
+            app:destination="@id/crearJugadorFragment" />
+        <action
+            android:id="@+id/action_jugadorFragment_to_consultarJugadorFragment"
+            app:destination="@id/consultarJugadorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/crearJugadorFragment"
+        android:name="com.franciscolinares.ubb.jugador.CrearJugadorFragment"
+        android:label="Crear Jugador"
+        tools:layout="@layout/fragment_crear_jugador" >
+        <action
+            android:id="@+id/action_crearJugadorFragment_to_consultarJugadorFragment"
+            app:destination="@id/consultarJugadorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/consultarJugadorFragment"
+        android:name="com.franciscolinares.ubb.jugador.ConsultarJugadorFragment"
+        android:label="Consultar Jugador"
+        tools:layout="@layout/fragment_consultar_jugador" />
+    <fragment
+        android:id="@+id/equipoFragment"
+        android:name="com.franciscolinares.ubb.user.EquipoFragment"
+        android:label="Equipo"
+        tools:layout="@layout/fragment_equipo" >
+        <action
+            android:id="@+id/action_equipoFragment_to_crearEquipoFragment"
+            app:destination="@id/crearEquipoFragment" />
+        <action
+            android:id="@+id/action_equipoFragment_to_consultarEquipoFragment"
+            app:destination="@id/consultarEquipoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/crearEquipoFragment"
+        android:name="com.franciscolinares.ubb.equipo.CrearEquipoFragment"
+        android:label="Crear Equipo"
+        tools:layout="@layout/fragment_crear_equipo">
+        <action
+            android:id="@+id/action_crearEquipoFragment_to_consultarEquipoFragment"
+            app:destination="@id/consultarEquipoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/consultarEquipoFragment"
+        android:name="com.franciscolinares.ubb.equipo.ConsultarEquipoFragment"
+        android:label="Consultar Equipo"
+        tools:layout="@layout/fragment_consultar_equipo" >
+        <action
+            android:id="@+id/action_consultarEquipoFragment_to_agregarJugadorFragment"
+            app:destination="@id/agregarJugadorFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/agregarJugadorFragment"
+        android:name="com.franciscolinares.ubb.equipo.AgregarJugadorFragment"
+        android:label="Agregar Jugador"
+        tools:layout="@layout/fragment_agregar_jugador" />
 </navigation>
