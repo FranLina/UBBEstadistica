@@ -1,19 +1,20 @@
-package com.franciscolinares.ubb.equipo.ListViewEquipo
+package com.franciscolinares.ubb.partido.ListViewPartido
 
-class Equipo(
+class Partido(
     val id: String,
-    val nombreEquipo: String,
-    val categoria: String,
-    val sexo: String,
-    val localidad: String,
-    val foto: String,
-    val plantilla: HashMap<String, String>
-){
+    val local: String,
+    val visitante: String,
+    val polideportivo: String,
+    val resultado: String,
+    val hora: String,
+    val fecha: String,
+    val estado: String
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Equipo
+        other as Partido
 
         if (id != other.id) return false
 

@@ -12,7 +12,6 @@
         android:layout_marginTop="15sp"
         android:layout_marginRight="15sp"
         android:layout_marginBottom="15sp"
-        android:backgroundTint="#FFFFFF"
         app:cardCornerRadius="10dp">
 
         <LinearLayout

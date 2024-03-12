@@ -30,6 +30,12 @@
         <action
             android:id="@+id/action_homeFragment_to_equipoFragment"
             app:destination="@id/equipoFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_crearPartidoFragment"
+            app:destination="@id/crearPartidoFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_gestionarPartidosFragment"
+            app:destination="@id/gestionarPartidosFragment" />
     </fragment>
     <fragment
         android:id="@+id/datosPersonalesFragment"
@@ -102,4 +108,23 @@
         android:name="com.franciscolinares.ubb.equipo.AgregarJugadorFragment"
         android:label="Agregar Jugador"
         tools:layout="@layout/fragment_agregar_jugador" />
+    <fragment
+        android:id="@+id/crearPartidoFragment"
+        android:name="com.franciscolinares.ubb.partido.CrearPartidoFragment"
+        android:label="Crear Enfrentamiento"
+        tools:layout="@layout/fragment_crear_partido" >
+        <action
+            android:id="@+id/action_crearPartidoFragment_to_fecharPartidoFragment"
+            app:destination="@id/fecharPartidoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fecharPartidoFragment"
+        android:name="com.franciscolinares.ubb.partido.FecharPartidoFragment"
+        android:label="Fechar Partido"
+        tools:layout="@layout/fragment_fechar_partido" />
+    <fragment
+        android:id="@+id/gestionarPartidosFragment"
+        android:name="com.franciscolinares.ubb.partido.GestionarPartidosFragment"
+        android:label="Gestionar Partidos"
+        tools:layout="@layout/fragment_gestionar_partidos" />
 </navigation>

@@ -54,6 +54,14 @@ class HomeFragment : Fragment() {
         binding.btnEquipos.setOnClickListener {
             Navigation.findNavController(root).navigate(R.id.action_homeFragment_to_equipoFragment)
         }
+        binding.btnCrearEnfrentamiento.setOnClickListener {
+            Navigation.findNavController(root)
+                .navigate(R.id.action_homeFragment_to_crearPartidoFragment)
+        }
+        binding.btnMisPartidos.setOnClickListener {
+            Navigation.findNavController(root)
+                .navigate(R.id.action_homeFragment_to_gestionarPartidosFragment)
+        }
         return root
     }
 
