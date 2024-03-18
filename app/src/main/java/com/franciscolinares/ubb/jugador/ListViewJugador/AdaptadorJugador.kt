@@ -32,8 +32,8 @@ class AdaptadorJugador(private val mcontext: Context, private val listaJugadores
         if (jugador.foto != "") {
             Picasso.get()
                 .load(jugador.foto)
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .error(R.drawable.ic_launcher_foreground)
+                .placeholder(R.drawable.jugador_de_baloncesto)
+                .error(R.drawable.jugador_de_baloncesto)
                 .into(layout.findViewById<ImageView>(R.id.imageLVJJugador))
         }
 

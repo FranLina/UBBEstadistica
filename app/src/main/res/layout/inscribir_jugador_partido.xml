@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="40sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginRight="40sp"
+        android:layout_marginBottom="20sp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtViewInscribirJP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Inscribir Jugador"
+            android:textAlignment="center"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/txtIJPNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_logo"
+            android:ems="10"
+            android:hint="Nombre Jugador"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/txtIJPApellido1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_logo"
+            android:ems="10"
+            android:hint="Apellido Jugador"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/txtIJPApellido2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_logo"
+            android:ems="10"
+            android:hint="Apellido 2 Jugador"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/txtIJPDorsal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/yellow_logo"
+            android:ems="10"
+            android:hint="Dorsal"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/btnInscribirJP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="45sp"
+            android:layout_marginTop="25sp"
+            android:layout_marginRight="45sp"
+            android:backgroundTint="#3A3A3A"
+            android:text="Inscribir Jugador"
+            app:cornerRadius="25sp" />
+    </LinearLayout>
+
+</LinearLayout>

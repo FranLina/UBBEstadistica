@@ -53,8 +53,8 @@ class AdaptadorPartido(private val mcontext: Context, private val listaPartidos:
                 if (it.get("UrlFoto") != "") {
                     Picasso.get()
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.ic_launcher_foreground)
-                        .error(R.drawable.ic_launcher_foreground)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(layout.findViewById<ImageView>(R.id.imageLVLocal))
                 }
             }.addOnFailureListener { exception ->
@@ -66,8 +66,8 @@ class AdaptadorPartido(private val mcontext: Context, private val listaPartidos:
                 if (it.get("UrlFoto") != "") {
                     Picasso.get()
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.ic_launcher_foreground)
-                        .error(R.drawable.ic_launcher_foreground)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(layout.findViewById<ImageView>(R.id.imageLVVisitante))
                 }
             }.addOnFailureListener { exception ->

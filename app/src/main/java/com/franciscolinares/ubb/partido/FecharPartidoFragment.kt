@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.franciscolinares.ubb.R
-import com.franciscolinares.ubb.databinding.FragmentCrearPartidoBinding
 import com.franciscolinares.ubb.databinding.FragmentFecharPartidoBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -45,8 +44,8 @@ class FecharPartidoFragment : Fragment() {
                 if (it.get("UrlFoto") != "") {
                     Picasso.get()
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.ic_launcher_foreground)
-                        .error(R.drawable.ic_launcher_foreground)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.imageEELocal)
                 }
             }
@@ -57,8 +56,8 @@ class FecharPartidoFragment : Fragment() {
                 if (it.get("UrlFoto") != "") {
                     Picasso.get()
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.ic_launcher_foreground)
-                        .error(R.drawable.ic_launcher_foreground)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.imageEEVisitante)
                 }
             }
@@ -73,7 +72,15 @@ class FecharPartidoFragment : Fragment() {
                     "Resultado" to "",
                     "Polideportivo" to binding.txtEEPolideportivo.text.toString(),
                     "Fecha" to binding.txtEEFecha.text.toString(),
-                    "Hora" to binding.txtEEHora.text.toString()
+                    "Hora" to binding.txtEEHora.text.toString(),
+                    "Cuarto" to "1",
+                    "Tiempo" to "10:00",
+                    "FaltaL" to 0,
+                    "FaltaV" to 0,
+                    "TiempoML" to 2,
+                    "TiempoMV" to 2,
+                    "QuintetoL" to "",
+                    "QuintetoV" to ""
                 ) as Map<String, Any>
             ).addOnSuccessListener {
                 Toast.makeText(

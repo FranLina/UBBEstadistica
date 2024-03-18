@@ -1,10 +1,12 @@
 package com.franciscolinares.ubb.partido
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentCrearPartidoBinding
 import com.franciscolinares.ubb.databinding.FragmentGestionarPartidosBinding
@@ -23,6 +25,7 @@ class GestionarPartidosFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,7 +52,20 @@ class GestionarPartidosFragment : Fragment() {
             val adapter = AdaptadorPartido(binding.root.context, listaPartidos)
 
             binding.ListViewPartidos.adapter = adapter
+
+            binding.ListViewPartidos.setOnItemClickListener { adapterView, view, i, l ->
+
+                val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+                val editor = prefs.edit()
+                editor.putString("idPartido", listaPartidos[i].id)
+                editor.apply()
+                Navigation.findNavController(binding.root)
+                    .navigate(R.id.action_gestionarPartidosFragment_to_cargarPlantillasFragment)
+
+            }
         }
+
+
 
         return root
     }

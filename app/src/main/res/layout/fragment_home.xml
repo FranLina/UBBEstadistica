@@ -59,7 +59,7 @@
                             android:layout_marginRight="10dp"
                             android:layout_weight="1"
                             android:backgroundTint="#FFFFFF"
-                            android:drawableTop="@drawable/jugador_de_baloncesto"
+                            android:drawableTop="@drawable/usuario2"
                             android:text="Jugadores"
                             android:textColor="#000000"
                             android:textSize="12sp"
