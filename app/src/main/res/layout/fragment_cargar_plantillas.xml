@@ -67,6 +67,7 @@
                             android:background="#EAEAEA"
                             android:text="PLANTILLAS"
                             android:textAlignment="center"
+                            android:textColor="@color/black"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -93,8 +94,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:backgroundTint="#3A3A3A"
+                                android:backgroundTint="@color/yellow_logo"
                                 android:text="Seleccionar jugadores Equipo"
+                                android:textColor="@color/black"
                                 app:cornerRadius="30dp" />
 
                             <Space
@@ -118,8 +120,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:backgroundTint="#3A3A3A"
+                                android:backgroundTint="@color/yellow_logo"
                                 android:text="Iniciar Partido"
+                                android:textColor="@color/black"
                                 app:cornerRadius="30dp" />
 
                             <Space

@@ -80,8 +80,8 @@
                     android:id="@+id/btnEntrar"
                     android:layout_width="270dp"
                     android:layout_height="75dp"
-                    android:layout_marginTop="30dp"
-                    android:backgroundTint="#FFFFFF"
+                    android:layout_marginTop="60dp"
+                    android:backgroundTint="@color/yellow_logo"
                     android:text="Entrar"
                     android:textColor="#000000"
                     android:textSize="16sp"
@@ -89,7 +89,7 @@
                     app:cornerRadius="30dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/txtInvitado" />
+                    app:layout_constraintTop_toBottomOf="@+id/textContraseña" />
 
                 <EditText
                     android:id="@+id/textContraseña"
@@ -107,18 +107,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textUsuario" />
 
-                <TextView
-                    android:id="@+id/txtInvitado"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:text="Entrar como Invitado"
-                    android:textColor="#FFFFFF"
-                    android:textSize="16sp"
-                    android:textStyle="italic"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textContraseña" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

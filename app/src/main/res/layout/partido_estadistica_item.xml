@@ -23,6 +23,15 @@
             android:layout_marginBottom="15sp"
             android:orientation="vertical">
 
+            <View
+                android:id="@+id/lineaSeparadoraEstado"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="#DFDFDF" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -49,40 +58,34 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="75dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/txtLVEstado"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15sp"
-                        android:background="#DFDFDF"
-                        android:text="Estado"
-                        android:textAlignment="center"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtLVResultado"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="20sp"
                         android:text="Resultado"
                         android:textAlignment="center"
-                        android:textSize="22sp"
+                        android:textSize="20sp"
                         android:textStyle="bold" />
+
+                    <View
+                        android:id="@+id/LineaSeparar"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="5dp"
+                        android:background="#606060" />
 
                     <TextView
                         android:id="@+id/txtLVFecha"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:text="Fecha"
-                        android:textAlignment="center"
-                        android:textStyle="bold" />
+                        android:textAlignment="center" />
 
                     <TextView
                         android:id="@+id/txtLVHora"
@@ -122,7 +125,8 @@
                 android:background="#DFDFDF"
                 android:text="Polideportivo"
                 android:textAlignment="center"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

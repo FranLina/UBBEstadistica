@@ -51,9 +51,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:backgroundTint="#FFFFFF"
+            android:backgroundTint="@color/yellow_logo"
             android:text="Crear Enfrentamiento"
-            android:textColor="?android:attr/textColorTertiary" />
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/txtEquiposDisponibles"

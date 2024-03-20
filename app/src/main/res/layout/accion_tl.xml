@@ -173,6 +173,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/yellow_logo"
                 android:text="Guardar"
+                android:textColor="@color/black"
                 app:cornerRadius="30sp" />
 
             <Space

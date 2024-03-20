@@ -132,7 +132,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="20dp"
                                 android:layout_weight="1"
-                                android:backgroundTint="#3A3A3A"
+                                android:backgroundTint="@color/yellow_logo"
                                 android:text="Guardar"
                                 app:cornerRadius="30dp" />
 

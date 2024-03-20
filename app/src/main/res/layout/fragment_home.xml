@@ -48,129 +48,108 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="100sp"
+                        android:layout_marginTop="120sp"
                         android:orientation="horizontal">
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/btnJugadores"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginStart="40dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_weight="1"
-                            android:backgroundTint="#FFFFFF"
-                            android:drawableTop="@drawable/usuario2"
-                            android:text="Jugadores"
-                            android:textColor="#000000"
-                            android:textSize="12sp"
-                            app:cornerRadius="30dp"
-                            app:strokeColor="@color/yellow_logo"
-                            app:strokeWidth="2dp" />
+                            android:backgroundTint="@color/yellow_logo_200"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/jugador_blanco" />
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/btnEquipos"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="20dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="40dp"
                             android:layout_weight="1"
-                            android:backgroundTint="#FFFFFF"
-                            android:drawableTop="@drawable/jugadores_de_baloncesto"
-                            android:text="Equipos"
-                            android:textColor="#000000"
-                            android:textSize="12sp"
-                            app:cornerRadius="30dp"
-                            app:strokeColor="@color/yellow_logo"
-                            app:strokeWidth="2dp" />
+                            android:backgroundTint="@color/yellow_logo_200"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/jugadores_equipo" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
                         android:orientation="horizontal">
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/btnCrearEnfrentamiento"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
+                            android:layout_marginStart="40dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_weight="1"
-                            android:backgroundTint="#FFFFFF"
-                            android:drawableTop="@drawable/calendar"
-                            android:text="Crear Enfrentamiento"
-                            android:textColor="#000000"
-                            android:textSize="12sp"
-                            app:cornerRadius="30dp"
-                            app:strokeColor="@color/yellow_logo"
-                            app:strokeWidth="2dp" />
+                            android:backgroundTint="@color/yellow_logo_200"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/calendario" />
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <Button
+                        <ImageButton
                             android:id="@+id/btnMisPartidos"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_weight="1"
-                            android:backgroundTint="#FFFFFF"
-                            android:drawableTop="@drawable/marcador"
-                            android:text="Mis Partidos"
-                            android:textColor="#000000"
-                            android:textSize="12sp"
-                            app:cornerRadius="30dp"
-                            app:strokeColor="@color/yellow_logo"
-                            app:strokeWidth="2dp" />
+                            android:backgroundTint="@color/yellow_logo_200"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/partido" />
+
+                        <ImageButton
+                            android:id="@+id/btnEstadistica"
+                            android:layout_width="50dp"
+                            android:layout_height="100dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="40dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/yellow_logo_200"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/estadistica" />
+
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
                         android:orientation="horizontal">
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/btnDatos"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginStart="40dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_weight="1"
-                            android:backgroundTint="#FFFFFF"
-                            android:drawableTop="@drawable/camiseta"
-                            android:text="Datos Personales"
-                            android:textColor="#000000"
-                            android:textSize="12sp"
-                            app:cornerRadius="30dp"
-                            app:strokeColor="@color/yellow_logo"
-                            app:strokeWidth="2dp" />
+                            android:backgroundTint="@color/yellow_logo_200"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/datos_personales" />
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/btnConfiguracion"
                             android:layout_width="50dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="20dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="40dp"
                             android:layout_weight="1"
-                            android:backgroundTint="#FFFFFF"
-                            android:drawableTop="@drawable/configuraciones"
-                            android:text="Configuración"
-                            android:textColor="#000000"
-                            android:textSize="12sp"
-                            app:cornerRadius="30dp"
-                            app:strokeColor="@color/yellow_logo"
-                            app:strokeWidth="2dp" />
+                            android:backgroundTint="@color/yellow_logo_200"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/contrasena" />
+
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="60dp"
                         android:orientation="horizontal">
 
                         <Space
@@ -178,21 +157,14 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1" />
 
-                        <Button
+                        <ImageButton
                             android:id="@+id/btnCerrar"
-                            android:layout_width="250dp"
+                            android:layout_width="50dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="50dp"
-                            android:layout_marginRight="20dp"
-                            android:backgroundTint="#FFFFFF"
-                            android:drawableTop="@drawable/puerta"
-                            android:text="Cerrar Sesión"
-                            android:textColor="#000000"
-                            android:textSize="12sp"
-                            app:cornerRadius="30dp"
-                            app:strokeColor="@color/yellow_logo"
-                            app:strokeWidth="2dp" />
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/yellow_logo_200"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/salida" />
 
                         <Space
                             android:layout_width="wrap_content"

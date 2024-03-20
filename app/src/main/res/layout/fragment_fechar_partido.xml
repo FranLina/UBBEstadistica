@@ -120,6 +120,7 @@
                             android:background="#ECECEC"
                             android:text="Partido"
                             android:textAlignment="center"
+                            android:textColor="@color/black"
                             android:textStyle="bold" />
 
                         <EditText
@@ -165,7 +166,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:backgroundTint="#3A3A3A"
+                                android:backgroundTint="@color/yellow_logo"
                                 android:text="Fechar"
                                 app:cornerRadius="30dp" />
 

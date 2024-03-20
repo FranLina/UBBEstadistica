@@ -3,18 +3,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/Mantenimeinto"
+        android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
+            android:id="@+id/homeFragment"
+            android:icon="@drawable/hogar"
+            android:title="Inicio" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:id="@+id/jugadorFragment"
+            android:icon="@drawable/jugador_blanco"
+            android:title="Jugadores" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/equipoFragment"
+            android:icon="@drawable/jugadores_equipo"
+            android:title="Equipos" />
+        <item
+            android:id="@+id/crearPartidoFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/calendario"
+            android:title="Crear Partido" />
+        <item
+            android:id="@+id/gestionarPartidosFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/partido"
+            android:title="Partido" />
+        <item
+            android:id="@+id/cargarPartidosEstadisticaFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/estadistica"
+            android:title="Estadística" />
+    </group>
+    <group
+        android:id="@+id/Personal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <item
+            android:id="@+id/datosPersonalesFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/datos_personales"
+            android:title="Datos Personales" />
+        <item
+            android:id="@+id/configuracionFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/contrasena"
+            android:title="Contraseña" />
     </group>
 </menu>

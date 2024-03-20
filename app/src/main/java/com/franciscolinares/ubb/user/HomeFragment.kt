@@ -62,6 +62,10 @@ class HomeFragment : Fragment() {
             Navigation.findNavController(root)
                 .navigate(R.id.action_homeFragment_to_gestionarPartidosFragment)
         }
+        binding.btnEstadistica.setOnClickListener {
+            Navigation.findNavController(root)
+                .navigate(R.id.action_homeFragment_to_cargarPartidosEstadisticaFragment)
+        }
         return root
     }
 
