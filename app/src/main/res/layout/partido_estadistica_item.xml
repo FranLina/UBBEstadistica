@@ -59,19 +59,29 @@
 
                 <LinearLayout
                     android:layout_width="75dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20sp"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtLVEstadoPartido"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Estado"
+                        android:textAlignment="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtLVResultado"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20sp"
                         android:text="Resultado"
                         android:textAlignment="center"
                         android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                     <View
                         android:id="@+id/LineaSeparar"
@@ -85,7 +95,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Fecha"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/txtLVHora"

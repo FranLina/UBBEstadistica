@@ -23,7 +23,7 @@ class AdaptadorPartidoEstadistica(private val mcontext: Context, private val lis
 
     private val db = Firebase.firestore
 
-    @SuppressLint("ViewHolder", "SetTextI18n")
+    @SuppressLint("ViewHolder", "SetTextI18n", "CutPasteId")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layout = LayoutInflater.from(mcontext).inflate(R.layout.partido_estadistica_item, parent, false)
 
@@ -34,21 +34,23 @@ class AdaptadorPartidoEstadistica(private val mcontext: Context, private val lis
         layout.findViewById<TextView>(R.id.txtLVPolideportivo).text = partido.polideportivo
         layout.findViewById<TextView>(R.id.txtLVFecha).text = partido.fecha
         layout.findViewById<TextView>(R.id.txtLVHora).text = partido.hora
+        layout.findViewById<TextView>(R.id.txtLVEstadoPartido).text = partido.estado
 
         when (partido.estado) {
+            "No Comenzado" -> {
+
+            }
+            "En Directo" -> {
+                layout.findViewById<View>(R.id.lineaSeparadoraEstado).setBackgroundColor(Color.parseColor("#4CAF50"))
+                layout.findViewById<TextView>(R.id.txtLVEstadoPartido).setTextColor(Color.parseColor("#4CAF50"))
+            }
             "Finalizado" -> {
                 layout.findViewById<TextView>(R.id.txtLVResultado).text = partido.resultado
                 layout.findViewById<TextView>(R.id.txtLVResultado).setTextSize(TypedValue.COMPLEX_UNIT_SP, 28F)
-                layout.findViewById<View>(R.id.lineaSeparadoraEstado).setBackgroundColor(Color.parseColor("#FFEB3B"))
-                layout.findViewById<TextView>(R.id.txtLVResultado).setTextColor(Color.parseColor("#FFEB3B"))
-            }
-            "No Comenzado" -> {
-                layout.findViewById<TextView>(R.id.txtLVResultado).text = partido.estado
-            }
-            else -> {
-                layout.findViewById<View>(R.id.lineaSeparadoraEstado).setBackgroundColor(Color.parseColor("#4CAF50"))
-                layout.findViewById<TextView>(R.id.txtLVResultado).text = partido.estado
-                layout.findViewById<TextView>(R.id.txtLVResultado).setTextColor(Color.parseColor("#4CAF50"))
+                layout.findViewById<TextView>(R.id.txtLVResultado).visibility = View.VISIBLE
+                layout.findViewById<TextView>(R.id.txtLVEstadoPartido).setTextColor(Color.RED)
+                layout.findViewById<View>(R.id.lineaSeparadoraEstado).setBackgroundColor(Color.RED)
+
             }
         }
 

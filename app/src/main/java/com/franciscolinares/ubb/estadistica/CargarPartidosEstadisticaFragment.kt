@@ -1,5 +1,6 @@
 package com.franciscolinares.ubb.estadistica
 
+import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import com.franciscolinares.ubb.databinding.FragmentCargarPartidosEstadisticaBin
 import com.franciscolinares.ubb.databinding.FragmentPartidoBinding
 import com.franciscolinares.ubb.estadistica.ListViewEstadistica.AdaptadorPartidoEstadistica
 import com.franciscolinares.ubb.partido.ListViewPartido.Partido
+import com.franciscolinares.ubb.user.MainActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -61,8 +63,8 @@ class CargarPartidosEstadisticaFragment : Fragment() {
                     val editor = prefs.edit()
                     editor.putString("idPartido", listaPartido[i].id)
                     editor.apply()
-                    /*Navigation.findNavController(binding.root)
-                        .navigate(R.id.action_cargarJornadasLigaFragment_to_cargaPartidoActivity)*/
+                    Navigation.findNavController(binding.root)
+                        .navigate(R.id.action_cargarPartidosEstadisticaFragment_to_cargaPartidoActivity)
                 }
             }
         }

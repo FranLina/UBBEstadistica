@@ -10,6 +10,7 @@
         android:name="com.franciscolinares.ubb.LoginActivity"
         android:label="activity_login"
         tools:layout="@layout/activity_login" />
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.franciscolinares.ubb.user.HomeFragment"
@@ -173,5 +174,14 @@
         android:id="@+id/cargarPartidosEstadisticaFragment"
         android:name="com.franciscolinares.ubb.estadistica.CargarPartidosEstadisticaFragment"
         android:label="Partidos"
-        tools:layout="@layout/fragment_cargar_partidos_estadistica" />
+        tools:layout="@layout/fragment_cargar_partidos_estadistica" >
+        <action
+            android:id="@+id/action_cargarPartidosEstadisticaFragment_to_cargaPartidoActivity"
+            app:destination="@id/cargaPartidoActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/cargaPartidoActivity"
+        android:name="com.franciscolinares.ubb.estadistica.CargaPartidoActivity"
+        android:label="Partido"
+        tools:layout="@layout/activity_carga_partido" />
 </navigation>

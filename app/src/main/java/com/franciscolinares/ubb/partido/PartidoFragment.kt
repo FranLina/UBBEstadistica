@@ -314,7 +314,8 @@ class PartidoFragment : Fragment() {
                                                                 "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                                 "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                 "equipo" to "Local",
-                                                                "tipoFrase" to "1"
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "3"
                                                             ) as Map<String?, Any?>
                                                             listRegistros.add(registro)
                                                             db.collection("MinutoaMinuto")
@@ -367,7 +368,8 @@ class PartidoFragment : Fragment() {
                                                                 "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                                 "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                 "equipo" to "Visitante",
-                                                                "tipoFrase" to "1"
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "3"
                                                             ) as Map<String?, Any?>
                                                             listRegistros.add(registro)
                                                             db.collection("MinutoaMinuto")
@@ -434,7 +436,8 @@ class PartidoFragment : Fragment() {
                                                                 "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                                 "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                 "equipo" to "Local",
-                                                                "tipoFrase" to "1"
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "3"
                                                             ) as Map<String?, Any?>
                                                             listRegistros.add(registro)
                                                             db.collection("MinutoaMinuto")
@@ -496,7 +499,8 @@ class PartidoFragment : Fragment() {
                                                                 "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                                 "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                 "equipo" to "Visitante",
-                                                                "tipoFrase" to "1"
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "3"
                                                             ) as Map<String?, Any?>
                                                             listRegistros.add(registro)
                                                             db.collection("MinutoaMinuto")
@@ -575,11 +579,12 @@ class PartidoFragment : Fragment() {
                                                     val registro = hashMapOf(
                                                         "cuarto" to cuarto,
                                                         "dorsal" to lista[i].text,
-                                                        "frase" to countTL.toString() + " TIROS LIBRES PARA EL ",
+                                                        "frase" to "$countTL TIROS LIBRES PARA EL ",
                                                         "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                                         "equipo" to "Local",
-                                                        "tipoFrase" to "3"
+                                                        "tipoFrase" to "3",
+                                                        "tipoImg" to "4"
                                                     ) as Map<String?, Any?>
                                                     listRegistros.add(registro)
 
@@ -606,7 +611,8 @@ class PartidoFragment : Fragment() {
                                                             "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Local",
-                                                            "tipoFrase" to "1"
+                                                            "tipoFrase" to "1",
+                                                            "tipoImg" to "5"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
@@ -626,7 +632,8 @@ class PartidoFragment : Fragment() {
                                                             "resultado" to "",
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Local",
-                                                            "tipoFrase" to "1"
+                                                            "tipoFrase" to "1",
+                                                            "tipoImg" to "6"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
@@ -656,7 +663,8 @@ class PartidoFragment : Fragment() {
                                                             "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Local",
-                                                            "tipoFrase" to "1"
+                                                            "tipoFrase" to "1",
+                                                            "tipoImg" to "5"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
@@ -676,7 +684,8 @@ class PartidoFragment : Fragment() {
                                                             "resultado" to "",
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Local",
-                                                            "tipoFrase" to "1"
+                                                            "tipoFrase" to "1",
+                                                            "tipoImg" to "6"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
@@ -706,7 +715,8 @@ class PartidoFragment : Fragment() {
                                                             "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Local",
-                                                            "tipoFrase" to "1"
+                                                            "tipoFrase" to "1",
+                                                            "tipoImg" to "5"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
@@ -726,7 +736,8 @@ class PartidoFragment : Fragment() {
                                                             "resultado" to "",
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Local",
-                                                            "tipoFrase" to "1"
+                                                            "tipoFrase" to "1",
+                                                            "tipoImg" to "6"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
@@ -793,7 +804,8 @@ class PartidoFragment : Fragment() {
                                                         "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                                         "equipo" to "Visitante",
-                                                        "tipoFrase" to "3"
+                                                        "tipoFrase" to "3",
+                                                        "tipoImg" to "4",
                                                     ) as Map<String?, Any?>
                                                     listRegistros.add(registro)
 
@@ -820,7 +832,8 @@ class PartidoFragment : Fragment() {
                                                             "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Visitante",
-                                                            "tipoFrase" to "1"
+                                                            "tipoFrase" to "1",
+                                                            "tipoImg" to "5"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
@@ -840,7 +853,8 @@ class PartidoFragment : Fragment() {
                                                             "resultado" to "",
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Visitante",
-                                                            "tipoFrase" to "1"
+                                                            "tipoFrase" to "1",
+                                                            "tipoImg" to "6"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
@@ -870,7 +884,8 @@ class PartidoFragment : Fragment() {
                                                             "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Visitante",
-                                                            "tipoFrase" to "1"
+                                                            "tipoFrase" to "1",
+                                                            "tipoImg" to "5"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
@@ -890,7 +905,8 @@ class PartidoFragment : Fragment() {
                                                             "resultado" to "",
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Visitante",
-                                                            "tipoFrase" to "1"
+                                                            "tipoFrase" to "1",
+                                                            "tipoImg" to "6"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
@@ -920,7 +936,8 @@ class PartidoFragment : Fragment() {
                                                             "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Visitante",
-                                                            "tipoFrase" to "1"
+                                                            "tipoFrase" to "1",
+                                                            "tipoImg" to "5"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
@@ -940,7 +957,8 @@ class PartidoFragment : Fragment() {
                                                             "resultado" to "",
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Visitante",
-                                                            "tipoFrase" to "1"
+                                                            "tipoFrase" to "1",
+                                                            "tipoImg" to "6"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
@@ -1021,7 +1039,8 @@ class PartidoFragment : Fragment() {
                                     "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                     "tiempo" to binding.TiempoCuarto.text.toString(),
                                     "equipo" to "Local",
-                                    "tipoFrase" to "1"
+                                    "tipoFrase" to "1",
+                                    "tipoImg" to "9"
                                 ) as Map<String?, Any?>
                                 listRegistros.add(registro)
                                 db.collection("MinutoaMinuto").document(idPartido)
@@ -1071,7 +1090,8 @@ class PartidoFragment : Fragment() {
                                     "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                     "tiempo" to binding.TiempoCuarto.text.toString(),
                                     "equipo" to "Visitante",
-                                    "tipoFrase" to "1"
+                                    "tipoFrase" to "1",
+                                    "tipoImg" to "9"
                                 ) as Map<String?, Any?>
                                 listRegistros.add(registro)
                                 db.collection("MinutoaMinuto").document(idPartido)
@@ -1145,7 +1165,8 @@ class PartidoFragment : Fragment() {
                                                                 "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                                 "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                 "equipo" to "Local",
-                                                                "tipoFrase" to "1"
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "7"
                                                             ) as Map<String?, Any?>
                                                             listRegistros.add(registro)
                                                             db.collection("MinutoaMinuto")
@@ -1208,7 +1229,8 @@ class PartidoFragment : Fragment() {
                                                                 "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                                 "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                 "equipo" to "Visitante",
-                                                                "tipoFrase" to "1"
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "7"
                                                             ) as Map<String?, Any?>
                                                             listRegistros.add(registro)
                                                             db.collection("MinutoaMinuto")
@@ -1273,7 +1295,8 @@ class PartidoFragment : Fragment() {
                                                                 "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                                 "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                 "equipo" to "Local",
-                                                                "tipoFrase" to "1"
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "6"
                                                             ) as Map<String?, Any?>
                                                             listRegistros.add(registro)
                                                             db.collection("MinutoaMinuto")
@@ -1328,7 +1351,8 @@ class PartidoFragment : Fragment() {
                                                                 "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                                 "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                 "equipo" to "Visitante",
-                                                                "tipoFrase" to "1"
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "6"
                                                             ) as Map<String?, Any?>
                                                             listRegistros.add(registro)
                                                             db.collection("MinutoaMinuto")
@@ -1412,7 +1436,8 @@ class PartidoFragment : Fragment() {
                                                                 "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                                 "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                 "equipo" to "Local",
-                                                                "tipoFrase" to "1"
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "8"
                                                             ) as Map<String?, Any?>
                                                             listRegistros.add(registro)
                                                             db.collection("MinutoaMinuto")
@@ -1475,7 +1500,8 @@ class PartidoFragment : Fragment() {
                                                                 "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                                 "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                 "equipo" to "Visitante",
-                                                                "tipoFrase" to "1"
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "8"
                                                             ) as Map<String?, Any?>
                                                             listRegistros.add(registro)
                                                             db.collection("MinutoaMinuto")
@@ -1546,7 +1572,8 @@ class PartidoFragment : Fragment() {
                                         "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                         "equipo" to "Local",
-                                        "tipoFrase" to "1"
+                                        "tipoFrase" to "1",
+                                        "tipoImg" to "6"
                                     ) as Map<String?, Any?>
                                     listRegistros.add(registro)
                                     db.collection("MinutoaMinuto")
@@ -1598,7 +1625,8 @@ class PartidoFragment : Fragment() {
                                         "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                         "equipo" to "Visitante",
-                                        "tipoFrase" to "1"
+                                        "tipoFrase" to "1",
+                                        "tipoImg" to "6"
                                     ) as Map<String?, Any?>
                                     listRegistros.add(registro)
                                     db.collection("MinutoaMinuto")
@@ -1664,7 +1692,8 @@ class PartidoFragment : Fragment() {
                                     "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                     "tiempo" to binding.TiempoCuarto.text.toString(),
                                     "equipo" to "Local",
-                                    "tipoFrase" to "1"
+                                    "tipoFrase" to "1",
+                                    "tipoImg" to "10"
                                 ) as Map<String?, Any?>
                                 listRegistros.add(registro)
                                 db.collection("MinutoaMinuto").document(idPartido)
@@ -1714,7 +1743,8 @@ class PartidoFragment : Fragment() {
                                     "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                     "tiempo" to binding.TiempoCuarto.text.toString(),
                                     "equipo" to "Visitante",
-                                    "tipoFrase" to "1"
+                                    "tipoFrase" to "1",
+                                    "tipoImg" to "10"
                                 ) as Map<String?, Any?>
                                 listRegistros.add(registro)
                                 db.collection("MinutoaMinuto").document(idPartido)
@@ -1775,7 +1805,8 @@ class PartidoFragment : Fragment() {
                                     "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                     "tiempo" to binding.TiempoCuarto.text.toString(),
                                     "equipo" to "Local",
-                                    "tipoFrase" to "1"
+                                    "tipoFrase" to "1",
+                                    "tipoImg" to "11"
                                 ) as Map<String?, Any?>
                                 listRegistros.add(registro)
                                 db.collection("MinutoaMinuto").document(idPartido)
@@ -1825,7 +1856,8 @@ class PartidoFragment : Fragment() {
                                     "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                     "tiempo" to binding.TiempoCuarto.text.toString(),
                                     "equipo" to "Visitante",
-                                    "tipoFrase" to "1"
+                                    "tipoFrase" to "1",
+                                    "tipoImg" to "11"
                                 ) as Map<String?, Any?>
                                 listRegistros.add(registro)
                                 db.collection("MinutoaMinuto").document(idPartido)
@@ -1896,7 +1928,8 @@ class PartidoFragment : Fragment() {
                                         "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                         "equipo" to "Local",
-                                        "tipoFrase" to "1"
+                                        "tipoFrase" to "1",
+                                        "tipoImg" to "12"
                                     ) as Map<String?, Any?>
                                     listRegistros.add(registro)
                                     db.collection("MinutoaMinuto")
@@ -1948,7 +1981,8 @@ class PartidoFragment : Fragment() {
                                         "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                         "equipo" to "Visitante",
-                                        "tipoFrase" to "1"
+                                        "tipoFrase" to "1",
+                                        "tipoImg" to "12"
                                     ) as Map<String?, Any?>
                                     listRegistros.add(registro)
                                     db.collection("MinutoaMinuto")
@@ -2011,7 +2045,8 @@ class PartidoFragment : Fragment() {
                                         "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                         "equipo" to "Local",
-                                        "tipoFrase" to "1"
+                                        "tipoFrase" to "1",
+                                        "tipoImg" to "13"
                                     ) as Map<String?, Any?>
                                     listRegistros.add(registro)
                                     db.collection("MinutoaMinuto")
@@ -2063,7 +2098,8 @@ class PartidoFragment : Fragment() {
                                         "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                         "equipo" to "Visitante",
-                                        "tipoFrase" to "1"
+                                        "tipoFrase" to "1",
+                                        "tipoImg" to "13"
                                     ) as Map<String?, Any?>
                                     listRegistros.add(registro)
                                     db.collection("MinutoaMinuto")
@@ -2138,7 +2174,8 @@ class PartidoFragment : Fragment() {
                                         "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                         "equipo" to "Local",
-                                        "tipoFrase" to "1"
+                                        "tipoFrase" to "1",
+                                        "tipoImg" to "14"
                                     ) as Map<String?, Any?>
                                     listRegistros.add(registro)
                                     db.collection("MinutoaMinuto")
@@ -2190,7 +2227,8 @@ class PartidoFragment : Fragment() {
                                         "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                         "equipo" to "Visitante",
-                                        "tipoFrase" to "1"
+                                        "tipoFrase" to "1",
+                                        "tipoImg" to "14"
                                     ) as Map<String?, Any?>
                                     listRegistros.add(registro)
                                     db.collection("MinutoaMinuto")
@@ -2254,7 +2292,8 @@ class PartidoFragment : Fragment() {
                                         "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                         "equipo" to "Local",
-                                        "tipoFrase" to "1"
+                                        "tipoFrase" to "1",
+                                        "tipoImg" to "14"
                                     ) as Map<String?, Any?>
                                     listRegistros.add(registro)
                                     db.collection("MinutoaMinuto")
@@ -2306,7 +2345,8 @@ class PartidoFragment : Fragment() {
                                         "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                         "equipo" to "Visitante",
-                                        "tipoFrase" to "1"
+                                        "tipoFrase" to "1",
+                                        "tipoImg" to "14"
                                     ) as Map<String?, Any?>
                                     listRegistros.add(registro)
                                     db.collection("MinutoaMinuto")
@@ -2603,6 +2643,7 @@ class PartidoFragment : Fragment() {
                         toggleButton.id = cont
                         toggleButton.textOff = jugador["dorsal"].toString()
                         toggleButton.textOn = jugador["dorsal"].toString()
+                        toggleButton.setTextColor(Color.BLACK)
 
                         if (equipo == "Local")
                             toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocaldesactivado))
@@ -2668,7 +2709,8 @@ class PartidoFragment : Fragment() {
                                         "resultado" to "",
                                         "tiempo" to "",
                                         "equipo" to "",
-                                        "tipoFrase" to "2"
+                                        "tipoFrase" to "2",
+                                        "tipoImg" to ""
                                     ) as Map<String?, Any?>
                                     listRegistros.add(registro)
                                 }
@@ -2760,7 +2802,8 @@ class PartidoFragment : Fragment() {
                                             "resultado" to "",
                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                             "equipo" to equipo,
-                                            "tipoFrase" to "3"
+                                            "tipoFrase" to "3",
+                                            "tipoImg" to "1"
                                         ) as Map<String?, Any?>
                                         listRegistros.add(registro)
                                         cont++
@@ -2831,6 +2874,7 @@ class PartidoFragment : Fragment() {
                             toggleButton.textOff = jugador["dorsal"].toString()
                             toggleButton.textOn = jugador["dorsal"].toString()
                             toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocaldesactivado))
+                            toggleButton.setTextColor(Color.BLACK)
 
                             if (contLoca < 5)
                                 view.findViewById<LinearLayout>(R.id.ContenedorCambios)
@@ -2894,7 +2938,8 @@ class PartidoFragment : Fragment() {
                                     "resultado" to "",
                                     "tiempo" to binding.TiempoCuarto.text.toString(),
                                     "equipo" to "Local",
-                                    "tipoFrase" to "3"
+                                    "tipoFrase" to "3",
+                                    "tipoImg" to "1"
                                 ) as Map<String?, Any?>
                                 listRegistros.add(registro)
                                 quintetoL.remove(toggleButtonSale.text.toString())
@@ -2913,7 +2958,8 @@ class PartidoFragment : Fragment() {
                                             "resultado" to "",
                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                             "equipo" to "Local",
-                                            "tipoFrase" to "3"
+                                            "tipoFrase" to "3",
+                                            "tipoImg" to "1"
                                         ) as Map<String?, Any?>
                                         listRegistros.add(registro)
                                         cont++
@@ -2971,6 +3017,7 @@ class PartidoFragment : Fragment() {
                             toggleButton.textOff = jugador["dorsal"].toString()
                             toggleButton.textOn = jugador["dorsal"].toString()
                             toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitantedesactivado))
+                            toggleButton.setTextColor(Color.BLACK)
 
                             if (contLoca < 5)
                                 view.findViewById<LinearLayout>(R.id.ContenedorCambios)
@@ -3034,7 +3081,8 @@ class PartidoFragment : Fragment() {
                                     "resultado" to "",
                                     "tiempo" to binding.TiempoCuarto.text.toString(),
                                     "equipo" to "Visitante",
-                                    "tipoFrase" to "3"
+                                    "tipoFrase" to "3",
+                                    "tipoImg" to "1"
                                 ) as Map<String?, Any?>
                                 listRegistros.add(registro)
                                 quintetoV.remove(toggleButtonSale.text.toString())
@@ -3053,7 +3101,8 @@ class PartidoFragment : Fragment() {
                                             "resultado" to "",
                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                             "equipo" to "Visitante",
-                                            "tipoFrase" to "3"
+                                            "tipoFrase" to "3",
+                                            "tipoImg" to "1"
                                         ) as Map<String?, Any?>
                                         listRegistros.add(registro)
                                         cont++
@@ -3114,7 +3163,7 @@ class PartidoFragment : Fragment() {
                             toggleButton.textOff = jugador["dorsal"].toString()
                             toggleButton.textOn = jugador["dorsal"].toString()
                             toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocaldesactivado))
-
+                            toggleButton.setTextColor(Color.BLACK)
                             if (contLoca < 5)
                                 view.findViewById<LinearLayout>(R.id.ContenedorCambios)
                                     .addView(toggleButton)
@@ -3177,7 +3226,8 @@ class PartidoFragment : Fragment() {
                                     "resultado" to "",
                                     "tiempo" to binding.TiempoCuarto.text.toString(),
                                     "equipo" to "Local",
-                                    "tipoFrase" to "3"
+                                    "tipoFrase" to "3",
+                                    "tipoImg" to "1"
                                 ) as Map<String?, Any?>
                                 listRegistros.add(registro)
                                 quintetoL.remove(toggleButtonSale.text.toString())
@@ -3196,7 +3246,8 @@ class PartidoFragment : Fragment() {
                                             "resultado" to "",
                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                             "equipo" to "Local",
-                                            "tipoFrase" to "3"
+                                            "tipoFrase" to "3",
+                                            "tipoImg" to "1"
                                         ) as Map<String?, Any?>
                                         listRegistros.add(registro)
                                         cont++
@@ -3258,6 +3309,7 @@ class PartidoFragment : Fragment() {
                             toggleButton.textOff = jugador["dorsal"].toString()
                             toggleButton.textOn = jugador["dorsal"].toString()
                             toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitantedesactivado))
+                            toggleButton.setTextColor(Color.BLACK)
 
                             if (contLoca < 5)
                                 view.findViewById<LinearLayout>(R.id.ContenedorCambios)
@@ -3321,7 +3373,8 @@ class PartidoFragment : Fragment() {
                                     "resultado" to "",
                                     "tiempo" to binding.TiempoCuarto.text.toString(),
                                     "equipo" to "Visitante",
-                                    "tipoFrase" to "3"
+                                    "tipoFrase" to "3",
+                                    "tipoImg" to "1"
                                 ) as Map<String?, Any?>
                                 listRegistros.add(registro)
                                 quintetoV.remove(toggleButtonSale.text.toString())
@@ -3340,7 +3393,8 @@ class PartidoFragment : Fragment() {
                                             "resultado" to "",
                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                             "equipo" to "Visitante",
-                                            "tipoFrase" to "3"
+                                            "tipoFrase" to "3",
+                                            "tipoImg" to "1"
                                         ) as Map<String?, Any?>
                                         listRegistros.add(registro)
                                         cont++
@@ -3427,7 +3481,8 @@ class PartidoFragment : Fragment() {
                     "resultado" to "",
                     "tiempo" to binding.TiempoCuarto.text.toString(),
                     "equipo" to equipo,
-                    "tipoFrase" to "3"
+                    "tipoFrase" to "3",
+                    "tipoImg" to "2"
                 ) as Map<String?, Any?>
                 listRegistros.add(registro)
 

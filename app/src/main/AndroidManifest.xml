@@ -12,6 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UBB_estadistica">
         <activity
+            android:name=".estadistica.PruebaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".estadistica.CargaPartidoActivity"
+            android:exported="false"
+            android:theme="@style/Theme.UBB_estadistica.NoActionBar" />
+        <activity
             android:name=".user.MainActivity"
             android:exported="false"
             android:label="@string/title_activity_main"
