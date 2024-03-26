@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cabeceraPrincipal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/yellow_logo">
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="140dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+</TableRow>

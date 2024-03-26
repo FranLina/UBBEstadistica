@@ -74,8 +74,7 @@ class PlantillaVisitanteFragment : Fragment() {
                     db.collection("Jugadores").document(jugador.key).get()
                         .addOnSuccessListener {
                             val checkbox: CheckBox = CheckBox(binding.root.context)
-                            checkbox.text = it.get("Apellido2").toString() + " " +
-                                    it.get("Apellido1") + " " + it.get("Nombre") + " , " + jugador.value
+                            checkbox.text = it.get("Apellido1").toString() + " " + it.get("Apellido2").toString() + ", " + it.get("Nombre") + " , " + jugador.value
                             checkbox.id = index
                             index++
                             contenedor.addView(checkbox)
@@ -109,7 +108,7 @@ class PlantillaVisitanteFragment : Fragment() {
                             listaDorsalesR += listaDorsalesI
                             if (!tieneNumerosRepetidos(listaDorsalesR)) {
                                 val checkbox: CheckBox = CheckBox(binding.root.context)
-                                checkbox.text = "$apellido1J $apellido2J $nombreJ , $dorsalJ"
+                                checkbox.text = "$apellido1J $apellido2J, $nombreJ , $dorsalJ"
                                 checkbox.id = index
                                 listaIdJugadores.add(UUID.randomUUID().toString())
                                 index++
@@ -168,7 +167,7 @@ class PlantillaVisitanteFragment : Fragment() {
                     .addOnSuccessListener {
                         listJugadores = it.get("ListadoJugadores") as ArrayList<String>
 
-                        for (i in 0..listCheckBox.count() - 1) {
+                        for (i in 0..<listCheckBox.count()) {
 
                             val checkbox: CheckBox = listCheckBox[i]
                             if (checkbox.isChecked) {
@@ -222,9 +221,14 @@ class PlantillaVisitanteFragment : Fragment() {
                     "Cargado el equipo visitante con exito",
                     Toast.LENGTH_SHORT
                 ).show()
+                db.collection("Partidos").document(idpartido.toString())
+                    .update(
+                        hashMapOf(
+                            "Estado" to "En Directo",
+                        ) as Map<String, Any>
+                    )
                 Navigation.findNavController(binding.root)
                     .navigate(R.id.action_plantillaVisitanteFragment_to_cargarPlantillasFragment)
-
             }
         }
 

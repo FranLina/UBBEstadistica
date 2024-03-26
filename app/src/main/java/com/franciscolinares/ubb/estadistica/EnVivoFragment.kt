@@ -69,12 +69,12 @@ class EnVivoFragment : Fragment() {
 
         i = binding.progressBar.progress
 
-        Thread(Runnable {
+        Thread {
             while (i < 100) {
                 i += 1
-                handler.post(Runnable {
+                handler.post {
                     binding.progressBar.progress = i
-                })
+                }
                 try {
                     Thread.sleep(125)
                 } catch (e: InterruptedException) {
@@ -120,7 +120,7 @@ class EnVivoFragment : Fragment() {
                         }
                 }
             }
-        }).start()
+        }.start()
 
         return root
     }

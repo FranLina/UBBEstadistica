@@ -77,8 +77,8 @@ class PlantillaLocalFragment : Fragment() {
                         .addOnSuccessListener {
                             val checkbox: CheckBox = CheckBox(binding.root.context)
                             checkbox.text =
-                                it.get("Apellido2").toString() + " " + it.get("Apellido1") +
-                                        " " + it.get("Nombre") + " , " + jugador.value
+                                it.get("Apellido1").toString() + " " +  it.get("Apellido2").toString() + ", " +
+                                          it.get("Nombre") + " , " + jugador.value
                             checkbox.id = index
                             index++
                             contenedor.addView(checkbox)
@@ -112,7 +112,7 @@ class PlantillaLocalFragment : Fragment() {
                             listaDorsalesR += listaDorsalesI
                             if (!tieneNumerosRepetidos(listaDorsalesR)) {
                                 val checkbox: CheckBox = CheckBox(binding.root.context)
-                                checkbox.text = "$apellido1J $apellido2J $nombreJ , $dorsalJ"
+                                checkbox.text = "$apellido1J $apellido2J, $nombreJ , $dorsalJ"
                                 checkbox.id = index
                                 listaIdJugadores.add(UUID.randomUUID().toString())
                                 index++
@@ -168,7 +168,7 @@ class PlantillaLocalFragment : Fragment() {
 
             } else {
 
-                for (i in 0..listCheckBox.count() - 1) {
+                for (i in 0..<listCheckBox.count()) {
                     val checkbox: CheckBox = listCheckBox[i]
                     if (checkbox.isChecked) {
 

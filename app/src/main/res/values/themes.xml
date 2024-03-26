@@ -29,5 +29,8 @@
     <style name="Base.Theme.UBB_estadistica" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/yellow_logo_500</item>
+        <item name="colorPrimaryDark">@color/yellow_logo_700</item>
+        <item name="colorAccent">@color/yellow_logo</item>
     </style>
 </resources>

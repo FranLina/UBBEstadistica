@@ -69,7 +69,7 @@ class FecharPartidoFragment : Fragment() {
                     "EquipoLocal" to equipoLocal,
                     "EquipoVisitante" to equipoVisitante,
                     "Estado" to "No Comenzado",
-                    "Resultado" to "",
+                    "Resultado" to "0 - 0",
                     "Polideportivo" to binding.txtEEPolideportivo.text.toString(),
                     "Fecha" to binding.txtEEFecha.text.toString(),
                     "Hora" to binding.txtEEHora.text.toString(),

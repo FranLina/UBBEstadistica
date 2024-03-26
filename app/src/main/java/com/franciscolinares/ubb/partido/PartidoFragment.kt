@@ -69,6 +69,8 @@ class PartidoFragment : Fragment() {
                 if (registro.size > 10) {
                     recuperaInfo()
                 } else {
+                    binding.TiempoCuarto.text = tiempo
+                    binding.TiempoCuarto.base = SystemClock.elapsedRealtime() + pauseOffSet
                     val listRegistro = ArrayList<Map<String?, Any?>>()
                     db.collection("MinutoaMinuto")
                         .document(idPartido)
