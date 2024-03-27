@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/filaJugadorCampo"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/txtJCDorsal"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="34"
+        android:textStyle="bold" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgJCFoto"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/circular"
+        app:srcCompat="@drawable/jugador_blanco" />
+
+    <TextView
+        android:id="@+id/txtJCNombre"
+        android:layout_width="170dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="nombre" />
+
+    <TextView
+        android:id="@+id/txtJCPuntos"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/txtJCRebotes"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/txtJCAsistencias"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/txtJCFalta"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/txtJCValoracion"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="0" />
+</TableRow>

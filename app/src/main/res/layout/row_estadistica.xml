@@ -63,7 +63,7 @@
         android:textColor="@color/black" />
 
     <TextView
-        android:id="@+id/txtERebO"
+        android:id="@+id/txtERebD"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:gravity="center"
@@ -71,7 +71,7 @@
         android:textColor="@color/black" />
 
     <TextView
-        android:id="@+id/txtERebD"
+        android:id="@+id/txtERebO"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:gravity="center"
