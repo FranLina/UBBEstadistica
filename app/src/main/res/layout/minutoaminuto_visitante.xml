@@ -27,6 +27,13 @@
                 android:text="TRIPLE"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/txtLVMNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="Nombre jugador" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -44,10 +51,10 @@
                     android:id="@+id/txtLVMResultado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
+                    android:layout_weight="0.1"
                     android:gravity="right"
                     android:text="0 - 0"
-                    android:textColor="@color/teal_200"
+                    android:textColor="@color/yellow_logo_700"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
@@ -58,12 +65,23 @@
         <ImageView
             android:id="@+id/imgAccionMAM"
             android:layout_width="150sp"
-            android:layout_height="40sp"
+            android:layout_height="50sp"
             android:layout_marginLeft="10sp"
-            android:layout_marginTop="15sp"
-            android:layout_marginRight="10sp"
+            android:layout_marginTop="20sp"
             android:layout_weight="1"
             app:srcCompat="@drawable/canastablanco" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgJugadorMAM"
+            android:layout_width="165sp"
+            android:layout_height="50sp"
+            android:layout_marginLeft="10sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginRight="10sp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/circular"
+            app:srcCompat="@drawable/jugador_blanco" />
 
     </LinearLayout>
 

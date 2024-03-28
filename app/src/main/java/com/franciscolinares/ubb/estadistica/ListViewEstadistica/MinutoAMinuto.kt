@@ -3,6 +3,7 @@ package com.franciscolinares.ubb.estadistica.ListViewEstadistica
 class MinutoAMinuto (
     val cuarto: String,
     val dorsal: String,
+    val nombre: String,
     val equipo: String,
     val frase: String,
     val resultado: String,

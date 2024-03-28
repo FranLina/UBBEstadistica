@@ -19,6 +19,7 @@ import com.franciscolinares.ubb.databinding.FragmentEstadisticasBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import java.util.Locale
 
 class EstadisticasFragment : Fragment() {
 
@@ -112,10 +113,11 @@ class EstadisticasFragment : Fragment() {
 
         db.collection("Partidos").document(idPartido).get()
             .addOnSuccessListener {
-                binding.txtNombreELocal.text = "  " + it.get("EquipoLocal").toString()
-                binding.txtNombreEVisitante.text = "  " + it.get("EquipoVisitante").toString()
-                binding.txtNombreELocalEsta.text = it.get("EquipoLocal").toString()
-                binding.txtNombreEVisitanteEsta.text = it.get("EquipoVisitante").toString()
+                binding.txtNombreELocal.text = "  " + it.get("EquipoLocal").toString().toUpperCase(
+                    Locale.ROOT)
+                binding.txtNombreEVisitante.text = "  " + it.get("EquipoVisitante").toString().toUpperCase(Locale.ROOT)
+                binding.txtNombreELocalEsta.text = it.get("EquipoLocal").toString().toUpperCase(Locale.ROOT)
+                binding.txtNombreEVisitanteEsta.text = it.get("EquipoVisitante").toString().toUpperCase(Locale.ROOT)
                 binding.txtPuntosLocalPartido.text =
                     (it.get("Resultado").toString().split(" - "))[0]
                 binding.txtPuntosVisitantePartido.text =

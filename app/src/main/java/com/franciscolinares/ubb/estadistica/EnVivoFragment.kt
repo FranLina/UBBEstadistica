@@ -90,6 +90,7 @@ class EnVivoFragment : Fragment() {
                 val minuto = MinutoAMinuto(
                     minutoMap["cuarto"].toString(),
                     minutoMap["dorsal"].toString(),
+                    minutoMap["nombre"].toString(),
                     minutoMap["equipo"].toString(),
                     minutoMap["frase"].toString(),
                     minutoMap["resultado"].toString(),
@@ -131,6 +132,7 @@ class EnVivoFragment : Fragment() {
                                             val minuto = MinutoAMinuto(
                                                 minutoMap["cuarto"].toString(),
                                                 minutoMap["dorsal"].toString(),
+                                                minutoMap["nombre"].toString(),
                                                 minutoMap["equipo"].toString(),
                                                 minutoMap["frase"].toString(),
                                                 minutoMap["resultado"].toString(),
@@ -192,10 +194,12 @@ class EnVivoFragment : Fragment() {
 
         db.collection("Partidos").document(idPartido).get()
             .addOnSuccessListener {
-                binding.txtNombreELocal.text = "  " + it.get("EquipoLocal").toString()
-                binding.txtNombreEVisitante.text = "  " + it.get("EquipoVisitante").toString()
-                binding.txtEquipoLJC.text = it.get("EquipoLocal").toString()
-                binding.txtEquipoVJC.text = it.get("EquipoVisitante").toString()
+                binding.txtNombreELocal.text = "  " + it.get("EquipoLocal").toString().toUpperCase(
+                    Locale.ROOT)
+                binding.txtNombreEVisitante.text = "  " + it.get("EquipoVisitante").toString().toUpperCase(
+                    Locale.ROOT)
+                binding.txtEquipoLJC.text = it.get("EquipoLocal").toString().toUpperCase(Locale.ROOT)
+                binding.txtEquipoVJC.text = it.get("EquipoVisitante").toString().toUpperCase(Locale.ROOT)
                 binding.txtPuntosLocalPartido.text =
                     (it.get("Resultado").toString().split(" - "))[0]
                 binding.txtPuntosVisitantePartido.text =
