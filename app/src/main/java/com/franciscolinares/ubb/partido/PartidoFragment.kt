@@ -41,8 +41,10 @@ class PartidoFragment : Fragment() {
     private var tmV = 2
     private var quintetoL: ArrayList<String> = arrayListOf<String>()
     private var quintetoV: ArrayList<String> = arrayListOf<String>()
+    private var estado = ""
     private var isPlay = false
     private var pauseOffSet: Long = 10 * 60 * 1000
+    private var pauseOffSetProrroga: Long = 5 * 60 * 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -141,7 +143,7 @@ class PartidoFragment : Fragment() {
 
         //Pulsar boton Local
         binding.TBLocal1.setOnCheckedChangeListener { _, _ ->
-            if (binding.TBLocal1.isChecked) {
+            if (binding.TBLocal1.isChecked && binding.TBLocal1.text != " ") {
                 vaciarToggle(llenarListToggle())
                 binding.TBLocal1.isChecked = true
                 binding.TBLocal1.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocalactivado))
@@ -150,7 +152,7 @@ class PartidoFragment : Fragment() {
             }
         }
         binding.TBLocal2.setOnCheckedChangeListener { _, _ ->
-            if (binding.TBLocal2.isChecked) {
+            if (binding.TBLocal2.isChecked && binding.TBLocal2.text != " ") {
                 vaciarToggle(llenarListToggle())
                 binding.TBLocal2.isChecked = true
                 binding.TBLocal2.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocalactivado))
@@ -159,7 +161,7 @@ class PartidoFragment : Fragment() {
             }
         }
         binding.TBLocal3.setOnCheckedChangeListener { _, _ ->
-            if (binding.TBLocal3.isChecked) {
+            if (binding.TBLocal3.isChecked && binding.TBLocal3.text != " ") {
                 vaciarToggle(llenarListToggle())
                 binding.TBLocal3.isChecked = true
                 binding.TBLocal3.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocalactivado))
@@ -168,7 +170,7 @@ class PartidoFragment : Fragment() {
             }
         }
         binding.TBLocal4.setOnCheckedChangeListener { _, _ ->
-            if (binding.TBLocal4.isChecked) {
+            if (binding.TBLocal4.isChecked && binding.TBLocal4.text != " ") {
                 vaciarToggle(llenarListToggle())
                 binding.TBLocal4.isChecked = true
                 binding.TBLocal4.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocalactivado))
@@ -177,7 +179,7 @@ class PartidoFragment : Fragment() {
             }
         }
         binding.TBLocal5.setOnCheckedChangeListener { _, _ ->
-            if (binding.TBLocal5.isChecked) {
+            if (binding.TBLocal5.isChecked && binding.TBLocal5.text != " ") {
                 vaciarToggle(llenarListToggle())
                 binding.TBLocal5.isChecked = true
                 binding.TBLocal5.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocalactivado))
@@ -188,7 +190,7 @@ class PartidoFragment : Fragment() {
 
         //Pulsar boton Visitante
         binding.TBVisitante1.setOnCheckedChangeListener { _, _ ->
-            if (binding.TBVisitante1.isChecked) {
+            if (binding.TBVisitante1.isChecked && binding.TBVisitante1.text != " ") {
                 vaciarToggle(llenarListToggle())
                 binding.TBVisitante1.isChecked = true
                 binding.TBVisitante1.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitanteactivo))
@@ -197,7 +199,7 @@ class PartidoFragment : Fragment() {
             }
         }
         binding.TBVisitante2.setOnCheckedChangeListener { _, _ ->
-            if (binding.TBVisitante2.isChecked) {
+            if (binding.TBVisitante2.isChecked && binding.TBVisitante2.text != " ") {
                 vaciarToggle(llenarListToggle())
                 binding.TBVisitante2.isChecked = true
                 binding.TBVisitante2.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitanteactivo))
@@ -206,7 +208,7 @@ class PartidoFragment : Fragment() {
             }
         }
         binding.TBVisitante3.setOnCheckedChangeListener { _, _ ->
-            if (binding.TBVisitante3.isChecked) {
+            if (binding.TBVisitante3.isChecked && binding.TBVisitante3.text != " ") {
                 vaciarToggle(llenarListToggle())
                 binding.TBVisitante3.isChecked = true
                 binding.TBVisitante3.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitanteactivo))
@@ -215,7 +217,7 @@ class PartidoFragment : Fragment() {
             }
         }
         binding.TBVisitante4.setOnCheckedChangeListener { _, _ ->
-            if (binding.TBVisitante4.isChecked) {
+            if (binding.TBVisitante4.isChecked && binding.TBVisitante4.text != " ") {
                 vaciarToggle(llenarListToggle())
                 binding.TBVisitante4.isChecked = true
                 binding.TBVisitante4.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitanteactivo))
@@ -224,7 +226,7 @@ class PartidoFragment : Fragment() {
             }
         }
         binding.TBVisitante5.setOnCheckedChangeListener { _, _ ->
-            if (binding.TBVisitante5.isChecked) {
+            if (binding.TBVisitante5.isChecked && binding.TBVisitante5.text != " ") {
                 vaciarToggle(llenarListToggle())
                 binding.TBVisitante5.isChecked = true
                 binding.TBVisitante5.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitanteactivo))
@@ -236,7 +238,7 @@ class PartidoFragment : Fragment() {
         //Acciones Partido
         binding.imageTML.setOnClickListener {
             val tml = binding.txtTiemposMLocal.text.toString()
-            if (tml.toInt() > 0) {
+            if (tml.toInt() > 0 && estado != "Finalizado") {
                 tiempoMuerto("Local")
                 tmL -= 1
                 binding.txtTiemposMLocal.text = tmL.toString()
@@ -249,7 +251,7 @@ class PartidoFragment : Fragment() {
         }
         binding.imageTMV.setOnClickListener {
             val tmv = binding.txtTiemposMVisitante.text.toString()
-            if (tmv.toInt() > 0) {
+            if (tmv.toInt() > 0 && estado != "Finalizado") {
                 tiempoMuerto("Visitante")
                 tmV -= 1
                 binding.txtTiemposMVisitante.text = tmV.toString()
@@ -262,2182 +264,2194 @@ class PartidoFragment : Fragment() {
         }
 
         binding.btnFalta.setOnClickListener {
+            if (estado != "Finalizado") {
+                val builder = AlertDialog.Builder(binding.root.context)
+                val view = layoutInflater.inflate(R.layout.accion_partido, null)
+                builder.setView(view)
+                view.findViewById<Button>(R.id.btnAnotar).text = "Recibida"
+                view.findViewById<Button>(R.id.btnFallar).text = "Cometida"
+                val dialog = builder.create()
+                dialog.show()
+                paraCronometro()
 
-            val builder = AlertDialog.Builder(binding.root.context)
-            val view = layoutInflater.inflate(R.layout.accion_partido, null)
-            builder.setView(view)
-            view.findViewById<Button>(R.id.btnAnotar).text = "Recibida"
-            view.findViewById<Button>(R.id.btnFallar).text = "Cometida"
-            val dialog = builder.create()
-            dialog.show()
-            paraCronometro()
+                falL = binding.txtFaltasLocal.text.toString().toInt()
+                falV = binding.txtFaltasVisitante.text.toString().toInt()
 
-            falL = binding.txtFaltasLocal.text.toString().toInt()
-            falV = binding.txtFaltasVisitante.text.toString().toInt()
+                view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
+                    val lista = llenarListToggle()
+                    for (i in 0..<lista.count()) {
+                        if (lista[i].isChecked) {
+                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-            view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
-                val lista = llenarListToggle()
-                for (i in 0..<lista.count()) {
-                    if (lista[i].isChecked) {
-                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                                jugador["falR"] = jugador["falR"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Falta reciba por el jugador " + lista[i].textOn + ", lleva " + jugador["falR"] + " faltas recibidas.",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                            jugador["falR"] = jugador["falR"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Falta reciba por el jugador " + lista[i].textOn + ", lleva " + jugador["falR"] + " faltas recibidas.",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido).get()
-                                                        .addOnSuccessListener {
-                                                            val listRegistros =
-                                                                it.get("registro") as ArrayList<Map<String?, Any?>>
-                                                            val registro = hashMapOf(
-                                                                "cuarto" to cuarto,
-                                                                "dorsal" to lista[i].text,
-                                                                "nombre" to jugador["nombre"],
-                                                                "frase" to "FALTA RECIBIDA",
-                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                "equipo" to "Local",
-                                                                "tipoFrase" to "3",
-                                                                "tipoImg" to "3"
-                                                            ) as Map<String?, Any?>
-                                                            listRegistros.add(registro)
-                                                            db.collection("MinutoaMinuto")
-                                                                .document(idPartido)
-                                                                .update(
-                                                                    hashMapOf(
-                                                                        "registro" to listRegistros,
-                                                                    ) as Map<String?, Any?>
-                                                                )
-                                                        }
-                                                }
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido).get()
+                                                            .addOnSuccessListener {
+                                                                val listRegistros =
+                                                                    it.get("registro") as ArrayList<Map<String?, Any?>>
+                                                                val registro = hashMapOf(
+                                                                    "cuarto" to cuarto,
+                                                                    "dorsal" to lista[i].text,
+                                                                    "nombre" to jugador["nombre"],
+                                                                    "frase" to "FALTA RECIBIDA",
+                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                    "equipo" to "Local",
+                                                                    "tipoFrase" to "3",
+                                                                    "tipoImg" to "3"
+                                                                ) as Map<String?, Any?>
+                                                                listRegistros.add(registro)
+                                                                db.collection("MinutoaMinuto")
+                                                                    .document(idPartido)
+                                                                    .update(
+                                                                        hashMapOf(
+                                                                            "registro" to listRegistros,
+                                                                        ) as Map<String?, Any?>
+                                                                    )
+                                                            }
+                                                    }
+                                            }
                                         }
+
                                     }
+                            } else {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                                }
-                        } else {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                                jugador["falR"] = jugador["falR"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Falta recibida por el jugador " + lista[i].textOn + ", lleva " + jugador["falR"] + " faltas recibidas.",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                            jugador["falR"] = jugador["falR"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Falta recibida por el jugador " + lista[i].textOn + ", lleva " + jugador["falR"] + " faltas recibidas.",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido).get()
-                                                        .addOnSuccessListener {
-                                                            val listRegistros =
-                                                                it.get("registro") as ArrayList<Map<String?, Any?>>
-                                                            val registro = hashMapOf(
-                                                                "cuarto" to cuarto,
-                                                                "dorsal" to lista[i].text,
-                                                                "nombre" to jugador["nombre"],
-                                                                "frase" to "FALTA RECIBIDA",
-                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                "equipo" to "Visitante",
-                                                                "tipoFrase" to "3",
-                                                                "tipoImg" to "3"
-                                                            ) as Map<String?, Any?>
-                                                            listRegistros.add(registro)
-                                                            db.collection("MinutoaMinuto")
-                                                                .document(idPartido)
-                                                                .update(
-                                                                    hashMapOf(
-                                                                        "registro" to listRegistros,
-                                                                    ) as Map<String?, Any?>
-                                                                )
-                                                        }
-                                                }
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido).get()
+                                                            .addOnSuccessListener {
+                                                                val listRegistros =
+                                                                    it.get("registro") as ArrayList<Map<String?, Any?>>
+                                                                val registro = hashMapOf(
+                                                                    "cuarto" to cuarto,
+                                                                    "dorsal" to lista[i].text,
+                                                                    "nombre" to jugador["nombre"],
+                                                                    "frase" to "FALTA RECIBIDA",
+                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                    "equipo" to "Visitante",
+                                                                    "tipoFrase" to "3",
+                                                                    "tipoImg" to "3"
+                                                                ) as Map<String?, Any?>
+                                                                listRegistros.add(registro)
+                                                                db.collection("MinutoaMinuto")
+                                                                    .document(idPartido)
+                                                                    .update(
+                                                                        hashMapOf(
+                                                                            "registro" to listRegistros,
+                                                                        ) as Map<String?, Any?>
+                                                                    )
+                                                            }
+                                                    }
+                                            }
                                         }
-                                    }
 
-                                }
+                                    }
+                            }
                         }
                     }
+                    vaciarToggle(lista)
+                    dialog.hide()
                 }
-                vaciarToggle(lista)
-                dialog.hide()
-            }
 
-            view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
-                val lista = llenarListToggle()
-                for (i in 0..<lista.count()) {
-                    if (lista[i].isChecked) {
-                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
+                    val lista = llenarListToggle()
+                    for (i in 0..<lista.count()) {
+                        if (lista[i].isChecked) {
+                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                            jugador["falC"] = jugador["falC"].toString().toInt() + 1
-                                            binding.txtFaltasLocal.text = (falL + 1).toString()
-                                            falL += 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Falta del jugador " + lista[i].textOn + ", lleva " + jugador["falC"] + " faltas.",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                    actualizaFaltaEquipo("FaltaL")
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                                jugador["falC"] = jugador["falC"].toString().toInt() + 1
+                                                binding.txtFaltasLocal.text = (falL + 1).toString()
+                                                falL += 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Falta del jugador " + lista[i].textOn + ", lleva " + jugador["falC"] + " faltas.",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                        actualizaFaltaEquipo("FaltaL")
 
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido).get()
-                                                        .addOnSuccessListener {
-                                                            val listRegistros =
-                                                                it.get("registro") as ArrayList<Map<String?, Any?>>
-                                                            val registro = hashMapOf(
-                                                                "cuarto" to cuarto,
-                                                                "dorsal" to lista[i].text,
-                                                                "nombre" to jugador["nombre"],
-                                                                "frase" to "FALTA COMETIDA",
-                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                "equipo" to "Local",
-                                                                "tipoFrase" to "3",
-                                                                "tipoImg" to "3"
-                                                            ) as Map<String?, Any?>
-                                                            listRegistros.add(registro)
-                                                            db.collection("MinutoaMinuto")
-                                                                .document(idPartido)
-                                                                .update(
-                                                                    hashMapOf(
-                                                                        "registro" to listRegistros,
-                                                                    ) as Map<String?, Any?>
-                                                                ).addOnSuccessListener {
-                                                                    if (jugador["falC"].toString() == "5")
-                                                                        faltas5Local(
-                                                                            llenarListToggleLocal(),
-                                                                            lista[i]
-                                                                        )
-                                                                }
-                                                        }
-                                                }
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido).get()
+                                                            .addOnSuccessListener {
+                                                                val listRegistros =
+                                                                    it.get("registro") as ArrayList<Map<String?, Any?>>
+                                                                val registro = hashMapOf(
+                                                                    "cuarto" to cuarto,
+                                                                    "dorsal" to lista[i].text,
+                                                                    "nombre" to jugador["nombre"],
+                                                                    "frase" to "FALTA COMETIDA",
+                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                    "equipo" to "Local",
+                                                                    "tipoFrase" to "3",
+                                                                    "tipoImg" to "3"
+                                                                ) as Map<String?, Any?>
+                                                                listRegistros.add(registro)
+                                                                db.collection("MinutoaMinuto")
+                                                                    .document(idPartido)
+                                                                    .update(
+                                                                        hashMapOf(
+                                                                            "registro" to listRegistros,
+                                                                        ) as Map<String?, Any?>
+                                                                    ).addOnSuccessListener {
+                                                                        if (jugador["falC"].toString() == "5")
+                                                                            faltas5Local(
+                                                                                llenarListToggleLocal(),
+                                                                                lista[i]
+                                                                            )
+                                                                    }
+                                                            }
+                                                    }
+                                            }
                                         }
+
                                     }
+                            } else {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                                }
-                        } else {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                                jugador["falC"] = jugador["falC"].toString().toInt() + 1
+                                                binding.txtFaltasVisitante.text = (falV + 1).toString()
+                                                falV += 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Falta del jugador " + lista[i].textOn + ", lleva " + jugador["falC"] + " faltas.",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                        actualizaFaltaEquipo("FaltaV")
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                            jugador["falC"] = jugador["falC"].toString().toInt() + 1
-                                            binding.txtFaltasVisitante.text = (falV + 1).toString()
-                                            falV += 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Falta del jugador " + lista[i].textOn + ", lleva " + jugador["falC"] + " faltas.",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                    actualizaFaltaEquipo("FaltaV")
-
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido).get()
-                                                        .addOnSuccessListener {
-                                                            val listRegistros =
-                                                                it.get("registro") as ArrayList<Map<String?, Any?>>
-                                                            val registro = hashMapOf(
-                                                                "cuarto" to cuarto,
-                                                                "dorsal" to lista[i].text,
-                                                                "nombre" to jugador["nombre"],
-                                                                "frase" to "FALTA COMETIDA",
-                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                "equipo" to "Visitante",
-                                                                "tipoFrase" to "3",
-                                                                "tipoImg" to "3"
-                                                            ) as Map<String?, Any?>
-                                                            listRegistros.add(registro)
-                                                            db.collection("MinutoaMinuto")
-                                                                .document(idPartido)
-                                                                .update(
-                                                                    hashMapOf(
-                                                                        "registro" to listRegistros,
-                                                                    ) as Map<String?, Any?>
-                                                                ).addOnSuccessListener {
-                                                                    if (jugador["falC"].toString() == "5")
-                                                                        faltas5Visitante(
-                                                                            llenarListToggleLocal(),
-                                                                            lista[i]
-                                                                        )
-                                                                }
-                                                        }
-                                                }
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido).get()
+                                                            .addOnSuccessListener {
+                                                                val listRegistros =
+                                                                    it.get("registro") as ArrayList<Map<String?, Any?>>
+                                                                val registro = hashMapOf(
+                                                                    "cuarto" to cuarto,
+                                                                    "dorsal" to lista[i].text,
+                                                                    "nombre" to jugador["nombre"],
+                                                                    "frase" to "FALTA COMETIDA",
+                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                    "equipo" to "Visitante",
+                                                                    "tipoFrase" to "3",
+                                                                    "tipoImg" to "3"
+                                                                ) as Map<String?, Any?>
+                                                                listRegistros.add(registro)
+                                                                db.collection("MinutoaMinuto")
+                                                                    .document(idPartido)
+                                                                    .update(
+                                                                        hashMapOf(
+                                                                            "registro" to listRegistros,
+                                                                        ) as Map<String?, Any?>
+                                                                    ).addOnSuccessListener {
+                                                                        if (jugador["falC"].toString() == "5")
+                                                                            faltas5Visitante(
+                                                                                llenarListToggleVisitante(),
+                                                                                lista[i]
+                                                                            )
+                                                                    }
+                                                            }
+                                                    }
+                                            }
                                         }
-                                    }
 
-                                }
+                                    }
+                            }
                         }
                     }
+                    vaciarToggle(lista)
+                    dialog.hide()
                 }
-                vaciarToggle(lista)
-                dialog.hide()
-            }
 
-            actualizaTiempo()
+                actualizaTiempo()
+            }
         }
         binding.btnTL.setOnClickListener {
-            val builder = AlertDialog.Builder(binding.root.context)
-            val view = layoutInflater.inflate(R.layout.accion_tl, null)
-            builder.setView(view)
-            val dialog = builder.create()
-            dialog.show()
-            paraCronometro()
+            if (estado != "Finalizado") {
+                val builder = AlertDialog.Builder(binding.root.context)
+                val view = layoutInflater.inflate(R.layout.accion_tl, null)
+                builder.setView(view)
+                val dialog = builder.create()
+                dialog.show()
+                paraCronometro()
 
-            view.findViewById<Button>(R.id.btnADGuardarTL).setOnClickListener {
+                view.findViewById<Button>(R.id.btnADGuardarTL).setOnClickListener {
 
-                val lista = llenarListToggle()
-                for (i in 0..<lista.count()) {
-                    if (lista[i].isChecked) {
-                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    var countTL = 0
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                    val lista = llenarListToggle()
+                    for (i in 0..<lista.count()) {
+                        if (lista[i].isChecked) {
+                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        var countTL = 0
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
 
-                                            if (view.findViewById<RadioButton>(R.id.rb1tlA).isChecked || view.findViewById<RadioButton>(
-                                                    R.id.rb1tlF
-                                                ).isChecked
-                                            )
-                                                countTL++
-                                            if (view.findViewById<RadioButton>(R.id.rb2tlA).isChecked || view.findViewById<RadioButton>(
-                                                    R.id.rb2tlF
-                                                ).isChecked
-                                            )
-                                                countTL++
-                                            if (view.findViewById<RadioButton>(R.id.rb3tlA).isChecked || view.findViewById<RadioButton>(
-                                                    R.id.rb3tlF
-                                                ).isChecked
-                                            )
-                                                countTL++
+                                                if (view.findViewById<RadioButton>(R.id.rb1tlA).isChecked || view.findViewById<RadioButton>(
+                                                        R.id.rb1tlF
+                                                    ).isChecked
+                                                )
+                                                    countTL++
+                                                if (view.findViewById<RadioButton>(R.id.rb2tlA).isChecked || view.findViewById<RadioButton>(
+                                                        R.id.rb2tlF
+                                                    ).isChecked
+                                                )
+                                                    countTL++
+                                                if (view.findViewById<RadioButton>(R.id.rb3tlA).isChecked || view.findViewById<RadioButton>(
+                                                        R.id.rb3tlF
+                                                    ).isChecked
+                                                )
+                                                    countTL++
 
-                                            db.collection("MinutoaMinuto")
-                                                .document(idPartido).get()
-                                                .addOnSuccessListener { it2 ->
-                                                    val listRegistros =
-                                                        it2.get("registro") as ArrayList<Map<String?, Any?>>
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to lista[i].text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "$countTL TIROS LIBRES PARA ",
-                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Local",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "4"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-
-                                                    if (view.findViewById<RadioButton>(R.id.rb1tlA).isChecked) {
-                                                        jugador["tlA"] =
-                                                            jugador["tlA"].toString().toInt() + 1
-                                                        jugador["puntos"] =
-                                                            jugador["puntos"].toString().toInt() + 1
-                                                        binding.txtPuntosLocal.text =
-                                                            (binding.txtPuntosLocal.text.toString()
-                                                                .toInt() + 1).toString()
-
-                                                        actualizaResultado()
-
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Tiro Libre del jugador " + lista[i].textOn + " anotado",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
+                                                db.collection("MinutoaMinuto")
+                                                    .document(idPartido).get()
+                                                    .addOnSuccessListener { it2 ->
+                                                        val listRegistros =
+                                                            it2.get("registro") as ArrayList<Map<String?, Any?>>
                                                         val registro = hashMapOf(
                                                             "cuarto" to cuarto,
                                                             "dorsal" to lista[i].text,
                                                             "nombre" to jugador["nombre"],
-                                                            "frase" to "TIRO LIBRE ANOTADO",
+                                                            "frase" to "$countTL TIROS LIBRES PARA ",
                                                             "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Local",
-                                                            "tipoFrase" to "1",
-                                                            "tipoImg" to "5"
-                                                        ) as Map<String?, Any?>
-                                                        listRegistros.add(registro)
-
-                                                    } else if (view.findViewById<RadioButton>(R.id.rb1tlF).isChecked) {
-
-                                                        jugador["tlF"] =
-                                                            jugador["tlF"].toString().toInt() + 1
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Tiro Libre del jugador " + lista[i].textOn + " fallado",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        val registro = hashMapOf(
-                                                            "cuarto" to cuarto,
-                                                            "dorsal" to lista[i].text,
-                                                            "nombre" to jugador["nombre"],
-                                                            "frase" to "TIRO LIBRE FALLADO",
-                                                            "resultado" to "",
-                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                            "equipo" to "Local",
                                                             "tipoFrase" to "3",
-                                                            "tipoImg" to "6"
+                                                            "tipoImg" to "4"
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
-                                                    }
+                                                        if (view.findViewById<RadioButton>(R.id.rb1tlA).isChecked) {
+                                                            jugador["tlA"] =
+                                                                jugador["tlA"].toString().toInt() + 1
+                                                            jugador["puntos"] =
+                                                                jugador["puntos"].toString().toInt() + 1
+                                                            binding.txtPuntosLocal.text =
+                                                                (binding.txtPuntosLocal.text.toString()
+                                                                    .toInt() + 1).toString()
 
-                                                    if (view.findViewById<RadioButton>(R.id.rb2tlA).isChecked) {
+                                                            actualizaResultado()
 
-                                                        jugador["tlA"] =
-                                                            jugador["tlA"].toString().toInt() + 1
-                                                        jugador["puntos"] =
-                                                            jugador["puntos"].toString().toInt() + 1
-                                                        binding.txtPuntosLocal.text =
-                                                            (binding.txtPuntosLocal.text.toString()
-                                                                .toInt() + 1).toString()
-
-                                                        actualizaResultado()
-
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Tiro Libre del jugador " + lista[i].textOn + " anotado",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        val registro = hashMapOf(
-                                                            "cuarto" to cuarto,
-                                                            "dorsal" to lista[i].text,
-                                                            "nombre" to jugador["nombre"],
-                                                            "frase" to "TIRO LIBRE ANOTADO",
-                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                            "equipo" to "Local",
-                                                            "tipoFrase" to "1",
-                                                            "tipoImg" to "5"
-                                                        ) as Map<String?, Any?>
-                                                        listRegistros.add(registro)
-
-                                                    } else if (view.findViewById<RadioButton>(R.id.rb2tlF).isChecked) {
-
-                                                        jugador["tlF"] =
-                                                            jugador["tlF"].toString().toInt() + 1
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Tiro Libre del jugador " + lista[i].textOn + " fallado",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        val registro = hashMapOf(
-                                                            "cuarto" to cuarto,
-                                                            "dorsal" to lista[i].text,
-                                                            "nombre" to jugador["nombre"],
-                                                            "frase" to "TIRO LIBRE FALLADO",
-                                                            "resultado" to "",
-                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                            "equipo" to "Local",
-                                                            "tipoFrase" to "3",
-                                                            "tipoImg" to "6"
-                                                        ) as Map<String?, Any?>
-                                                        listRegistros.add(registro)
-
-                                                    }
-
-                                                    if (view.findViewById<RadioButton>(R.id.rb3tlA).isChecked) {
-
-                                                        jugador["tlA"] =
-                                                            jugador["tlA"].toString().toInt() + 1
-                                                        jugador["puntos"] =
-                                                            jugador["puntos"].toString().toInt() + 1
-                                                        binding.txtPuntosLocal.text =
-                                                            (binding.txtPuntosLocal.text.toString()
-                                                                .toInt() + 1).toString()
-
-                                                        actualizaResultado()
-
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Tiro Libre del jugador " + lista[i].textOn + " anotado",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        val registro = hashMapOf(
-                                                            "cuarto" to cuarto,
-                                                            "dorsal" to lista[i].text,
-                                                            "nombre" to jugador["nombre"],
-                                                            "frase" to "TIRO LIBRE ANOTADO",
-                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                            "equipo" to "Local",
-                                                            "tipoFrase" to "1",
-                                                            "tipoImg" to "5"
-                                                        ) as Map<String?, Any?>
-                                                        listRegistros.add(registro)
-
-                                                    } else if (view.findViewById<RadioButton>(R.id.rb3tlF).isChecked) {
-
-                                                        jugador["tlF"] =
-                                                            jugador["tlF"].toString().toInt() + 1
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Tiro Libre del jugador " + lista[i].textOn + " fallado",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        val registro = hashMapOf(
-                                                            "cuarto" to cuarto,
-                                                            "dorsal" to lista[i].text,
-                                                            "nombre" to jugador["nombre"],
-                                                            "frase" to "TIRO LIBRE FALLADO",
-                                                            "resultado" to "",
-                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                            "equipo" to "Local",
-                                                            "tipoFrase" to "3",
-                                                            "tipoImg" to "6"
-                                                        ) as Map<String?, Any?>
-                                                        listRegistros.add(registro)
-
-                                                    }
-
-                                                    db.collection("Estadisticas")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                listJugador[j] to jugador
-                                                            ) as Map<String, Any>
-                                                        ).addOnSuccessListener {
-                                                            calcularVal(listJugador[j], jugador)
-                                                        }
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                "registro" to listRegistros,
+                                                            Toast.makeText(
+                                                                binding.root.context,
+                                                                "Tiro Libre del jugador " + lista[i].textOn + " anotado",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val registro = hashMapOf(
+                                                                "cuarto" to cuarto,
+                                                                "dorsal" to lista[i].text,
+                                                                "nombre" to jugador["nombre"],
+                                                                "frase" to "TIRO LIBRE ANOTADO",
+                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                "equipo" to "Local",
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "5"
                                                             ) as Map<String?, Any?>
-                                                        )
-                                                }
+                                                            listRegistros.add(registro)
 
+                                                        } else if (view.findViewById<RadioButton>(R.id.rb1tlF).isChecked) {
+
+                                                            jugador["tlF"] =
+                                                                jugador["tlF"].toString().toInt() + 1
+                                                            Toast.makeText(
+                                                                binding.root.context,
+                                                                "Tiro Libre del jugador " + lista[i].textOn + " fallado",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val registro = hashMapOf(
+                                                                "cuarto" to cuarto,
+                                                                "dorsal" to lista[i].text,
+                                                                "nombre" to jugador["nombre"],
+                                                                "frase" to "TIRO LIBRE FALLADO",
+                                                                "resultado" to "",
+                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                "equipo" to "Local",
+                                                                "tipoFrase" to "3",
+                                                                "tipoImg" to "6"
+                                                            ) as Map<String?, Any?>
+                                                            listRegistros.add(registro)
+
+                                                        }
+
+                                                        if (view.findViewById<RadioButton>(R.id.rb2tlA).isChecked) {
+
+                                                            jugador["tlA"] =
+                                                                jugador["tlA"].toString().toInt() + 1
+                                                            jugador["puntos"] =
+                                                                jugador["puntos"].toString().toInt() + 1
+                                                            binding.txtPuntosLocal.text =
+                                                                (binding.txtPuntosLocal.text.toString()
+                                                                    .toInt() + 1).toString()
+
+                                                            actualizaResultado()
+
+                                                            Toast.makeText(
+                                                                binding.root.context,
+                                                                "Tiro Libre del jugador " + lista[i].textOn + " anotado",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val registro = hashMapOf(
+                                                                "cuarto" to cuarto,
+                                                                "dorsal" to lista[i].text,
+                                                                "nombre" to jugador["nombre"],
+                                                                "frase" to "TIRO LIBRE ANOTADO",
+                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                "equipo" to "Local",
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "5"
+                                                            ) as Map<String?, Any?>
+                                                            listRegistros.add(registro)
+
+                                                        } else if (view.findViewById<RadioButton>(R.id.rb2tlF).isChecked) {
+
+                                                            jugador["tlF"] =
+                                                                jugador["tlF"].toString().toInt() + 1
+                                                            Toast.makeText(
+                                                                binding.root.context,
+                                                                "Tiro Libre del jugador " + lista[i].textOn + " fallado",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val registro = hashMapOf(
+                                                                "cuarto" to cuarto,
+                                                                "dorsal" to lista[i].text,
+                                                                "nombre" to jugador["nombre"],
+                                                                "frase" to "TIRO LIBRE FALLADO",
+                                                                "resultado" to "",
+                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                "equipo" to "Local",
+                                                                "tipoFrase" to "3",
+                                                                "tipoImg" to "6"
+                                                            ) as Map<String?, Any?>
+                                                            listRegistros.add(registro)
+
+                                                        }
+
+                                                        if (view.findViewById<RadioButton>(R.id.rb3tlA).isChecked) {
+
+                                                            jugador["tlA"] =
+                                                                jugador["tlA"].toString().toInt() + 1
+                                                            jugador["puntos"] =
+                                                                jugador["puntos"].toString().toInt() + 1
+                                                            binding.txtPuntosLocal.text =
+                                                                (binding.txtPuntosLocal.text.toString()
+                                                                    .toInt() + 1).toString()
+
+                                                            actualizaResultado()
+
+                                                            Toast.makeText(
+                                                                binding.root.context,
+                                                                "Tiro Libre del jugador " + lista[i].textOn + " anotado",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val registro = hashMapOf(
+                                                                "cuarto" to cuarto,
+                                                                "dorsal" to lista[i].text,
+                                                                "nombre" to jugador["nombre"],
+                                                                "frase" to "TIRO LIBRE ANOTADO",
+                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                "equipo" to "Local",
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "5"
+                                                            ) as Map<String?, Any?>
+                                                            listRegistros.add(registro)
+
+                                                        } else if (view.findViewById<RadioButton>(R.id.rb3tlF).isChecked) {
+
+                                                            jugador["tlF"] =
+                                                                jugador["tlF"].toString().toInt() + 1
+                                                            Toast.makeText(
+                                                                binding.root.context,
+                                                                "Tiro Libre del jugador " + lista[i].textOn + " fallado",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val registro = hashMapOf(
+                                                                "cuarto" to cuarto,
+                                                                "dorsal" to lista[i].text,
+                                                                "nombre" to jugador["nombre"],
+                                                                "frase" to "TIRO LIBRE FALLADO",
+                                                                "resultado" to "",
+                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                "equipo" to "Local",
+                                                                "tipoFrase" to "3",
+                                                                "tipoImg" to "6"
+                                                            ) as Map<String?, Any?>
+                                                            listRegistros.add(registro)
+
+                                                        }
+
+                                                        db.collection("Estadisticas")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    listJugador[j] to jugador
+                                                                ) as Map<String, Any>
+                                                            ).addOnSuccessListener {
+                                                                calcularVal(listJugador[j], jugador)
+                                                            }
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    "registro" to listRegistros,
+                                                                ) as Map<String?, Any?>
+                                                            )
+                                                    }
+
+                                            }
                                         }
                                     }
-                                }
-                        } else {
+                            } else {
 
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    var countTL = 0
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        var countTL = 0
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
 
-                                            if (view.findViewById<RadioButton>(R.id.rb1tlA).isChecked || view.findViewById<RadioButton>(
-                                                    R.id.rb1tlF
-                                                ).isChecked
-                                            )
-                                                countTL++
-                                            if (view.findViewById<RadioButton>(R.id.rb2tlA).isChecked || view.findViewById<RadioButton>(
-                                                    R.id.rb2tlF
-                                                ).isChecked
-                                            )
-                                                countTL++
-                                            if (view.findViewById<RadioButton>(R.id.rb3tlA).isChecked || view.findViewById<RadioButton>(
-                                                    R.id.rb3tlF
-                                                ).isChecked
-                                            )
-                                                countTL++
+                                                if (view.findViewById<RadioButton>(R.id.rb1tlA).isChecked || view.findViewById<RadioButton>(
+                                                        R.id.rb1tlF
+                                                    ).isChecked
+                                                )
+                                                    countTL++
+                                                if (view.findViewById<RadioButton>(R.id.rb2tlA).isChecked || view.findViewById<RadioButton>(
+                                                        R.id.rb2tlF
+                                                    ).isChecked
+                                                )
+                                                    countTL++
+                                                if (view.findViewById<RadioButton>(R.id.rb3tlA).isChecked || view.findViewById<RadioButton>(
+                                                        R.id.rb3tlF
+                                                    ).isChecked
+                                                )
+                                                    countTL++
 
-                                            db.collection("MinutoaMinuto")
-                                                .document(idPartido).get()
-                                                .addOnSuccessListener { it2 ->
-                                                    val listRegistros =
-                                                        it2.get("registro") as ArrayList<Map<String?, Any?>>
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to lista[i].text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "$countTL TIROS LIBRES PARA",
-                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Visitante",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "4",
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-
-                                                    if (view.findViewById<RadioButton>(R.id.rb1tlA).isChecked) {
-                                                        jugador["tlA"] =
-                                                            jugador["tlA"].toString().toInt() + 1
-                                                        jugador["puntos"] =
-                                                            jugador["puntos"].toString().toInt() + 1
-                                                        binding.txtPuntosVisitante.text =
-                                                            (binding.txtPuntosVisitante.text.toString()
-                                                                .toInt() + 1).toString()
-
-                                                        actualizaResultado()
-
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Tiro Libre del jugador " + lista[i].textOn + " anotado",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
+                                                db.collection("MinutoaMinuto")
+                                                    .document(idPartido).get()
+                                                    .addOnSuccessListener { it2 ->
+                                                        val listRegistros =
+                                                            it2.get("registro") as ArrayList<Map<String?, Any?>>
                                                         val registro = hashMapOf(
                                                             "cuarto" to cuarto,
                                                             "dorsal" to lista[i].text,
                                                             "nombre" to jugador["nombre"],
-                                                            "frase" to "TIRO LIBRE ANOTADO",
+                                                            "frase" to "$countTL TIROS LIBRES PARA",
                                                             "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
                                                             "tiempo" to binding.TiempoCuarto.text.toString(),
                                                             "equipo" to "Visitante",
-                                                            "tipoFrase" to "1",
-                                                            "tipoImg" to "5"
-                                                        ) as Map<String?, Any?>
-                                                        listRegistros.add(registro)
-
-                                                    } else if (view.findViewById<RadioButton>(R.id.rb1tlF).isChecked) {
-
-                                                        jugador["tlF"] =
-                                                            jugador["tlF"].toString().toInt() + 1
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Tiro Libre del jugador " + lista[i].textOn + " fallado",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        val registro = hashMapOf(
-                                                            "cuarto" to cuarto,
-                                                            "dorsal" to lista[i].text,
-                                                            "nombre" to jugador["nombre"],
-                                                            "frase" to "TIRO LIBRE FALLADO",
-                                                            "resultado" to "",
-                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                            "equipo" to "Visitante",
                                                             "tipoFrase" to "3",
-                                                            "tipoImg" to "6"
+                                                            "tipoImg" to "4",
                                                         ) as Map<String?, Any?>
                                                         listRegistros.add(registro)
 
-                                                    }
+                                                        if (view.findViewById<RadioButton>(R.id.rb1tlA).isChecked) {
+                                                            jugador["tlA"] =
+                                                                jugador["tlA"].toString().toInt() + 1
+                                                            jugador["puntos"] =
+                                                                jugador["puntos"].toString().toInt() + 1
+                                                            binding.txtPuntosVisitante.text =
+                                                                (binding.txtPuntosVisitante.text.toString()
+                                                                    .toInt() + 1).toString()
 
-                                                    if (view.findViewById<RadioButton>(R.id.rb2tlA).isChecked) {
+                                                            actualizaResultado()
 
-                                                        jugador["tlA"] =
-                                                            jugador["tlA"].toString().toInt() + 1
-                                                        jugador["puntos"] =
-                                                            jugador["puntos"].toString().toInt() + 1
-                                                        binding.txtPuntosVisitante.text =
-                                                            (binding.txtPuntosVisitante.text.toString()
-                                                                .toInt() + 1).toString()
-
-                                                        actualizaResultado()
-
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Tiro Libre del jugador " + lista[i].textOn + " anotado",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        val registro = hashMapOf(
-                                                            "cuarto" to cuarto,
-                                                            "dorsal" to lista[i].text,
-                                                            "nombre" to jugador["nombre"],
-                                                            "frase" to "TIRO LIBRE ANOTADO",
-                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                            "equipo" to "Visitante",
-                                                            "tipoFrase" to "1",
-                                                            "tipoImg" to "5"
-                                                        ) as Map<String?, Any?>
-                                                        listRegistros.add(registro)
-
-                                                    } else if (view.findViewById<RadioButton>(R.id.rb2tlF).isChecked) {
-
-                                                        jugador["tlF"] =
-                                                            jugador["tlF"].toString().toInt() + 1
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Tiro Libre del jugador " + lista[i].textOn + " fallado",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        val registro = hashMapOf(
-                                                            "cuarto" to cuarto,
-                                                            "dorsal" to lista[i].text,
-                                                            "nombre" to jugador["nombre"],
-                                                            "frase" to "TIRO LIBRE FALLADO",
-                                                            "resultado" to "",
-                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                            "equipo" to "Visitante",
-                                                            "tipoFrase" to "3",
-                                                            "tipoImg" to "6"
-                                                        ) as Map<String?, Any?>
-                                                        listRegistros.add(registro)
-
-                                                    }
-
-                                                    if (view.findViewById<RadioButton>(R.id.rb3tlA).isChecked) {
-
-                                                        jugador["tlA"] =
-                                                            jugador["tlA"].toString().toInt() + 1
-                                                        jugador["puntos"] =
-                                                            jugador["puntos"].toString().toInt() + 1
-                                                        binding.txtPuntosVisitante.text =
-                                                            (binding.txtPuntosVisitante.text.toString()
-                                                                .toInt() + 1).toString()
-
-                                                        actualizaResultado()
-
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Tiro Libre del jugador " + lista[i].textOn + " anotado",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        val registro = hashMapOf(
-                                                            "cuarto" to cuarto,
-                                                            "dorsal" to lista[i].text,
-                                                            "nombre" to jugador["nombre"],
-                                                            "frase" to "TIRO LIBRE ANOTADO",
-                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                            "equipo" to "Visitante",
-                                                            "tipoFrase" to "1",
-                                                            "tipoImg" to "5"
-                                                        ) as Map<String?, Any?>
-                                                        listRegistros.add(registro)
-
-                                                    } else if (view.findViewById<RadioButton>(R.id.rb3tlF).isChecked) {
-
-                                                        jugador["tlF"] =
-                                                            jugador["tlF"].toString().toInt() + 1
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Tiro Libre del jugador " + lista[i].textOn + " fallado",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        val registro = hashMapOf(
-                                                            "cuarto" to cuarto,
-                                                            "dorsal" to lista[i].text,
-                                                            "nombre" to jugador["nombre"],
-                                                            "frase" to "TIRO LIBRE FALLADO",
-                                                            "resultado" to "",
-                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                            "equipo" to "Visitante",
-                                                            "tipoFrase" to "3",
-                                                            "tipoImg" to "6"
-                                                        ) as Map<String?, Any?>
-                                                        listRegistros.add(registro)
-
-                                                    }
-
-                                                    db.collection("Estadisticas")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                listJugador[j] to jugador
-                                                            ) as Map<String, Any>
-                                                        ).addOnSuccessListener {
-                                                            calcularVal(listJugador[j], jugador)
-                                                        }
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                "registro" to listRegistros,
+                                                            Toast.makeText(
+                                                                binding.root.context,
+                                                                "Tiro Libre del jugador " + lista[i].textOn + " anotado",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val registro = hashMapOf(
+                                                                "cuarto" to cuarto,
+                                                                "dorsal" to lista[i].text,
+                                                                "nombre" to jugador["nombre"],
+                                                                "frase" to "TIRO LIBRE ANOTADO",
+                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                "equipo" to "Visitante",
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "5"
                                                             ) as Map<String?, Any?>
-                                                        )
-                                                }
+                                                            listRegistros.add(registro)
 
+                                                        } else if (view.findViewById<RadioButton>(R.id.rb1tlF).isChecked) {
+
+                                                            jugador["tlF"] =
+                                                                jugador["tlF"].toString().toInt() + 1
+                                                            Toast.makeText(
+                                                                binding.root.context,
+                                                                "Tiro Libre del jugador " + lista[i].textOn + " fallado",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val registro = hashMapOf(
+                                                                "cuarto" to cuarto,
+                                                                "dorsal" to lista[i].text,
+                                                                "nombre" to jugador["nombre"],
+                                                                "frase" to "TIRO LIBRE FALLADO",
+                                                                "resultado" to "",
+                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                "equipo" to "Visitante",
+                                                                "tipoFrase" to "3",
+                                                                "tipoImg" to "6"
+                                                            ) as Map<String?, Any?>
+                                                            listRegistros.add(registro)
+
+                                                        }
+
+                                                        if (view.findViewById<RadioButton>(R.id.rb2tlA).isChecked) {
+
+                                                            jugador["tlA"] =
+                                                                jugador["tlA"].toString().toInt() + 1
+                                                            jugador["puntos"] =
+                                                                jugador["puntos"].toString().toInt() + 1
+                                                            binding.txtPuntosVisitante.text =
+                                                                (binding.txtPuntosVisitante.text.toString()
+                                                                    .toInt() + 1).toString()
+
+                                                            actualizaResultado()
+
+                                                            Toast.makeText(
+                                                                binding.root.context,
+                                                                "Tiro Libre del jugador " + lista[i].textOn + " anotado",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val registro = hashMapOf(
+                                                                "cuarto" to cuarto,
+                                                                "dorsal" to lista[i].text,
+                                                                "nombre" to jugador["nombre"],
+                                                                "frase" to "TIRO LIBRE ANOTADO",
+                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                "equipo" to "Visitante",
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "5"
+                                                            ) as Map<String?, Any?>
+                                                            listRegistros.add(registro)
+
+                                                        } else if (view.findViewById<RadioButton>(R.id.rb2tlF).isChecked) {
+
+                                                            jugador["tlF"] =
+                                                                jugador["tlF"].toString().toInt() + 1
+                                                            Toast.makeText(
+                                                                binding.root.context,
+                                                                "Tiro Libre del jugador " + lista[i].textOn + " fallado",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val registro = hashMapOf(
+                                                                "cuarto" to cuarto,
+                                                                "dorsal" to lista[i].text,
+                                                                "nombre" to jugador["nombre"],
+                                                                "frase" to "TIRO LIBRE FALLADO",
+                                                                "resultado" to "",
+                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                "equipo" to "Visitante",
+                                                                "tipoFrase" to "3",
+                                                                "tipoImg" to "6"
+                                                            ) as Map<String?, Any?>
+                                                            listRegistros.add(registro)
+
+                                                        }
+
+                                                        if (view.findViewById<RadioButton>(R.id.rb3tlA).isChecked) {
+
+                                                            jugador["tlA"] =
+                                                                jugador["tlA"].toString().toInt() + 1
+                                                            jugador["puntos"] =
+                                                                jugador["puntos"].toString().toInt() + 1
+                                                            binding.txtPuntosVisitante.text =
+                                                                (binding.txtPuntosVisitante.text.toString()
+                                                                    .toInt() + 1).toString()
+
+                                                            actualizaResultado()
+
+                                                            Toast.makeText(
+                                                                binding.root.context,
+                                                                "Tiro Libre del jugador " + lista[i].textOn + " anotado",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val registro = hashMapOf(
+                                                                "cuarto" to cuarto,
+                                                                "dorsal" to lista[i].text,
+                                                                "nombre" to jugador["nombre"],
+                                                                "frase" to "TIRO LIBRE ANOTADO",
+                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                "equipo" to "Visitante",
+                                                                "tipoFrase" to "1",
+                                                                "tipoImg" to "5"
+                                                            ) as Map<String?, Any?>
+                                                            listRegistros.add(registro)
+
+                                                        } else if (view.findViewById<RadioButton>(R.id.rb3tlF).isChecked) {
+
+                                                            jugador["tlF"] =
+                                                                jugador["tlF"].toString().toInt() + 1
+                                                            Toast.makeText(
+                                                                binding.root.context,
+                                                                "Tiro Libre del jugador " + lista[i].textOn + " fallado",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                            val registro = hashMapOf(
+                                                                "cuarto" to cuarto,
+                                                                "dorsal" to lista[i].text,
+                                                                "nombre" to jugador["nombre"],
+                                                                "frase" to "TIRO LIBRE FALLADO",
+                                                                "resultado" to "",
+                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                "equipo" to "Visitante",
+                                                                "tipoFrase" to "3",
+                                                                "tipoImg" to "6"
+                                                            ) as Map<String?, Any?>
+                                                            listRegistros.add(registro)
+
+                                                        }
+
+                                                        db.collection("Estadisticas")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    listJugador[j] to jugador
+                                                                ) as Map<String, Any>
+                                                            ).addOnSuccessListener {
+                                                                calcularVal(listJugador[j], jugador)
+                                                            }
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    "registro" to listRegistros,
+                                                                ) as Map<String?, Any?>
+                                                            )
+                                                    }
+
+                                            }
                                         }
                                     }
-                                }
 
+                            }
                         }
                     }
+                    dialog.hide()
+                    vaciarToggle(lista)
                 }
-                dialog.hide()
-                vaciarToggle(lista)
+                actualizaTiempo()
             }
-            actualizaTiempo()
         }
         binding.btnAsistencia.setOnClickListener {
+            if (estado != "Finalizado") {
+                val lista = llenarListToggle()
+                for (i in 0..<lista.count()) {
+                    if (lista[i].isChecked) {
+                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                            db.collection("Estadisticas").document(idPartido).get()
+                                .addOnSuccessListener {
+                                    val listJugador =
+                                        it.get("ListadoJugadores") as ArrayList<String>
+                                    for (j in 0..<listJugador.count()) {
+                                        val jugador =
+                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-            val lista = llenarListToggle()
-            for (i in 0..<lista.count()) {
-                if (lista[i].isChecked) {
-                    if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                        db.collection("Estadisticas").document(idPartido).get()
-                            .addOnSuccessListener {
-                                val listJugador =
-                                    it.get("ListadoJugadores") as ArrayList<String>
-                                for (j in 0..<listJugador.count()) {
-                                    val jugador =
-                                        (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                            jugador["asi"] = jugador["asi"].toString().toInt() + 1
+                                            db.collection("Estadisticas")
+                                                .document(idPartido)
+                                                .update(
+                                                    hashMapOf(
+                                                        listJugador[j] to jugador
+                                                    ) as Map<String, Any>
+                                                ).addOnSuccessListener {
+                                                    Toast.makeText(
+                                                        binding.root.context,
+                                                        "Asistencia del jugador " + lista[i].textOn,
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    calcularVal(listJugador[j], jugador)
+                                                }
 
-                                    if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                        jugador["asi"] = jugador["asi"].toString().toInt() + 1
-                                        db.collection("Estadisticas")
-                                            .document(idPartido)
-                                            .update(
-                                                hashMapOf(
-                                                    listJugador[j] to jugador
-                                                ) as Map<String, Any>
-                                            ).addOnSuccessListener {
-                                                Toast.makeText(
-                                                    binding.root.context,
-                                                    "Asistencia del jugador " + lista[i].textOn,
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                                calcularVal(listJugador[j], jugador)
-                                            }
-
-                                        db.collection("MinutoaMinuto").document(idPartido).get()
-                                            .addOnSuccessListener { min ->
-                                                val listRegistros =
-                                                    min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                val registro = hashMapOf(
-                                                    "cuarto" to cuarto,
-                                                    "dorsal" to lista[i].text,
-                                                    "nombre" to jugador["nombre"],
-                                                    "frase" to "ASISTENCIA",
-                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                    "equipo" to "Local",
-                                                    "tipoFrase" to "3",
-                                                    "tipoImg" to "9"
-                                                ) as Map<String?, Any?>
-                                                listRegistros.add(registro)
-                                                db.collection("MinutoaMinuto").document(idPartido)
-                                                    .update(
-                                                        hashMapOf(
-                                                            "registro" to listRegistros,
-                                                        ) as Map<String?, Any?>
-                                                    )
-                                            }
+                                            db.collection("MinutoaMinuto").document(idPartido).get()
+                                                .addOnSuccessListener { min ->
+                                                    val listRegistros =
+                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                    val registro = hashMapOf(
+                                                        "cuarto" to cuarto,
+                                                        "dorsal" to lista[i].text,
+                                                        "nombre" to jugador["nombre"],
+                                                        "frase" to "ASISTENCIA",
+                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                        "equipo" to "Local",
+                                                        "tipoFrase" to "3",
+                                                        "tipoImg" to "9"
+                                                    ) as Map<String?, Any?>
+                                                    listRegistros.add(registro)
+                                                    db.collection("MinutoaMinuto").document(idPartido)
+                                                        .update(
+                                                            hashMapOf(
+                                                                "registro" to listRegistros,
+                                                            ) as Map<String?, Any?>
+                                                        )
+                                                }
+                                        }
                                     }
+
                                 }
 
-                            }
+                        } else {
+                            db.collection("Estadisticas").document(idPartido).get()
+                                .addOnSuccessListener {
+                                    val listJugador =
+                                        it.get("ListadoJugadores") as ArrayList<String>
+                                    for (j in 0..<listJugador.count()) {
+                                        val jugador =
+                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                    } else {
-                        db.collection("Estadisticas").document(idPartido).get()
-                            .addOnSuccessListener {
-                                val listJugador =
-                                    it.get("ListadoJugadores") as ArrayList<String>
-                                for (j in 0..<listJugador.count()) {
-                                    val jugador =
-                                        (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                            jugador["asi"] = jugador["asi"].toString().toInt() + 1
+                                            db.collection("Estadisticas")
+                                                .document(idPartido)
+                                                .update(
+                                                    hashMapOf(
+                                                        listJugador[j] to jugador
+                                                    ) as Map<String, Any>
+                                                ).addOnSuccessListener {
+                                                    Toast.makeText(
+                                                        binding.root.context,
+                                                        "Asistencia del jugador " + lista[i].textOn,
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    calcularVal(listJugador[j], jugador)
+                                                }
 
-                                    if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                        jugador["asi"] = jugador["asi"].toString().toInt() + 1
-                                        db.collection("Estadisticas")
-                                            .document(idPartido)
-                                            .update(
-                                                hashMapOf(
-                                                    listJugador[j] to jugador
-                                                ) as Map<String, Any>
-                                            ).addOnSuccessListener {
-                                                Toast.makeText(
-                                                    binding.root.context,
-                                                    "Asistencia del jugador " + lista[i].textOn,
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                                calcularVal(listJugador[j], jugador)
-                                            }
-
-                                        db.collection("MinutoaMinuto").document(idPartido).get()
-                                            .addOnSuccessListener { min ->
-                                                val listRegistros =
-                                                    min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                val registro = hashMapOf(
-                                                    "cuarto" to cuarto,
-                                                    "dorsal" to lista[i].text,
-                                                    "nombre" to jugador["nombre"],
-                                                    "frase" to "ASISTENCIA",
-                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                    "equipo" to "Visitante",
-                                                    "tipoFrase" to "3",
-                                                    "tipoImg" to "9"
-                                                ) as Map<String?, Any?>
-                                                listRegistros.add(registro)
-                                                db.collection("MinutoaMinuto").document(idPartido)
-                                                    .update(
-                                                        hashMapOf(
-                                                            "registro" to listRegistros,
-                                                        ) as Map<String?, Any?>
-                                                    )
-                                            }
+                                            db.collection("MinutoaMinuto").document(idPartido).get()
+                                                .addOnSuccessListener { min ->
+                                                    val listRegistros =
+                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                    val registro = hashMapOf(
+                                                        "cuarto" to cuarto,
+                                                        "dorsal" to lista[i].text,
+                                                        "nombre" to jugador["nombre"],
+                                                        "frase" to "ASISTENCIA",
+                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                        "equipo" to "Visitante",
+                                                        "tipoFrase" to "3",
+                                                        "tipoImg" to "9"
+                                                    ) as Map<String?, Any?>
+                                                    listRegistros.add(registro)
+                                                    db.collection("MinutoaMinuto").document(idPartido)
+                                                        .update(
+                                                            hashMapOf(
+                                                                "registro" to listRegistros,
+                                                            ) as Map<String?, Any?>
+                                                        )
+                                                }
+                                        }
                                     }
+
                                 }
 
-                            }
-
+                        }
                     }
                 }
+                vaciarToggle(lista)
+                actualizaTiempo()
             }
-            vaciarToggle(lista)
-            actualizaTiempo()
         }
         binding.btnT2p.setOnClickListener {
+            if (estado != "Finalizado") {
+                val builder = AlertDialog.Builder(binding.root.context)
+                val view = layoutInflater.inflate(R.layout.accion_partido, null)
+                builder.setView(view)
+                val dialog = builder.create()
+                dialog.show()
 
-            val builder = AlertDialog.Builder(binding.root.context)
-            val view = layoutInflater.inflate(R.layout.accion_partido, null)
-            builder.setView(view)
-            val dialog = builder.create()
-            dialog.show()
+                view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
+                    val lista = llenarListToggle()
+                    for (i in 0..<lista.count()) {
+                        if (lista[i].isChecked) {
+                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
 
-            view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
-                val lista = llenarListToggle()
-                for (i in 0..<lista.count()) {
-                    if (lista[i].isChecked) {
-                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                                jugador["tc2pA"] =
+                                                    jugador["tc2pA"].toString().toInt() + 1
+                                                jugador["puntos"] =
+                                                    jugador["puntos"].toString().toInt() + 2
+                                                binding.txtPuntosLocal.text =
+                                                    (binding.txtPuntosLocal.text.toString()
+                                                        .toInt() + 2).toString()
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                            jugador["tc2pA"] =
-                                                jugador["tc2pA"].toString().toInt() + 1
-                                            jugador["puntos"] =
-                                                jugador["puntos"].toString().toInt() + 2
-                                            binding.txtPuntosLocal.text =
-                                                (binding.txtPuntosLocal.text.toString()
-                                                    .toInt() + 2).toString()
+                                                actualizaResultado()
 
-                                            actualizaResultado()
-
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Canasta del jugador " + lista[i].textOn + " de 2p",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido).get()
-                                                        .addOnSuccessListener { it2 ->
-                                                            val listRegistros =
-                                                                it2.get("registro") as ArrayList<Map<String?, Any?>>
-                                                            val registro = hashMapOf(
-                                                                "cuarto" to cuarto,
-                                                                "dorsal" to lista[i].text,
-                                                                "nombre" to jugador["nombre"],
-                                                                "frase" to "CANASTA DE 2 PUNTOS",
-                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                "equipo" to "Local",
-                                                                "tipoFrase" to "1",
-                                                                "tipoImg" to "7"
-                                                            ) as Map<String?, Any?>
-                                                            listRegistros.add(registro)
-                                                            db.collection("MinutoaMinuto")
-                                                                .document(idPartido)
-                                                                .update(
-                                                                    hashMapOf(
-                                                                        "registro" to listRegistros,
-                                                                    ) as Map<String?, Any?>
-                                                                )
-                                                        }
-                                                }
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Canasta del jugador " + lista[i].textOn + " de 2p",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido).get()
+                                                            .addOnSuccessListener { it2 ->
+                                                                val listRegistros =
+                                                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
+                                                                val registro = hashMapOf(
+                                                                    "cuarto" to cuarto,
+                                                                    "dorsal" to lista[i].text,
+                                                                    "nombre" to jugador["nombre"],
+                                                                    "frase" to "CANASTA DE 2 PUNTOS",
+                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                    "equipo" to "Local",
+                                                                    "tipoFrase" to "1",
+                                                                    "tipoImg" to "7"
+                                                                ) as Map<String?, Any?>
+                                                                listRegistros.add(registro)
+                                                                db.collection("MinutoaMinuto")
+                                                                    .document(idPartido)
+                                                                    .update(
+                                                                        hashMapOf(
+                                                                            "registro" to listRegistros,
+                                                                        ) as Map<String?, Any?>
+                                                                    )
+                                                            }
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
 
+                            } else {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                        } else {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                                jugador["tc2pA"] =
+                                                    jugador["tc2pA"].toString().toInt() + 1
+                                                jugador["puntos"] =
+                                                    jugador["puntos"].toString().toInt() + 2
+                                                binding.txtPuntosVisitante.text =
+                                                    (binding.txtPuntosVisitante.text.toString()
+                                                        .toInt() + 2).toString()
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                            jugador["tc2pA"] =
-                                                jugador["tc2pA"].toString().toInt() + 1
-                                            jugador["puntos"] =
-                                                jugador["puntos"].toString().toInt() + 2
-                                            binding.txtPuntosVisitante.text =
-                                                (binding.txtPuntosVisitante.text.toString()
-                                                    .toInt() + 2).toString()
+                                                actualizaResultado()
 
-                                            actualizaResultado()
-
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Canasta del jugador " + lista[i].textOn + " de 2p",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido).get()
-                                                        .addOnSuccessListener { it2 ->
-                                                            val listRegistros =
-                                                                it2.get("registro") as ArrayList<Map<String?, Any?>>
-                                                            val registro = hashMapOf(
-                                                                "cuarto" to cuarto,
-                                                                "dorsal" to lista[i].text,
-                                                                "nombre" to jugador["nombre"],
-                                                                "frase" to "CANASTA DE 2 PUNTOS",
-                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                "equipo" to "Visitante",
-                                                                "tipoFrase" to "1",
-                                                                "tipoImg" to "7"
-                                                            ) as Map<String?, Any?>
-                                                            listRegistros.add(registro)
-                                                            db.collection("MinutoaMinuto")
-                                                                .document(idPartido)
-                                                                .update(
-                                                                    hashMapOf(
-                                                                        "registro" to listRegistros,
-                                                                    ) as Map<String?, Any?>
-                                                                )
-                                                        }
-                                                }
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Canasta del jugador " + lista[i].textOn + " de 2p",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido).get()
+                                                            .addOnSuccessListener { it2 ->
+                                                                val listRegistros =
+                                                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
+                                                                val registro = hashMapOf(
+                                                                    "cuarto" to cuarto,
+                                                                    "dorsal" to lista[i].text,
+                                                                    "nombre" to jugador["nombre"],
+                                                                    "frase" to "CANASTA DE 2 PUNTOS",
+                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                    "equipo" to "Visitante",
+                                                                    "tipoFrase" to "1",
+                                                                    "tipoImg" to "7"
+                                                                ) as Map<String?, Any?>
+                                                                listRegistros.add(registro)
+                                                                db.collection("MinutoaMinuto")
+                                                                    .document(idPartido)
+                                                                    .update(
+                                                                        hashMapOf(
+                                                                            "registro" to listRegistros,
+                                                                        ) as Map<String?, Any?>
+                                                                    )
+                                                            }
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
-
+                            }
                         }
                     }
+                    vaciarToggle(lista)
+                    dialog.hide()
                 }
-                vaciarToggle(lista)
-                dialog.hide()
-            }
 
-            view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
-                val lista = llenarListToggle()
-                for (i in 0..<lista.count()) {
-                    if (lista[i].isChecked) {
-                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
+                    val lista = llenarListToggle()
+                    for (i in 0..<lista.count()) {
+                        if (lista[i].isChecked) {
+                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                            jugador["tc2pF"] =
-                                                jugador["tc2pF"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Canasta fallada del jugador " + lista[i].textOn + " de 2p",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido).get()
-                                                        .addOnSuccessListener { it2 ->
-                                                            val listRegistros =
-                                                                it2.get("registro") as ArrayList<Map<String?, Any?>>
-                                                            val registro = hashMapOf(
-                                                                "cuarto" to cuarto,
-                                                                "dorsal" to lista[i].text,
-                                                                "nombre" to jugador["nombre"],
-                                                                "frase" to "TIRO DE 2 FALLADO",
-                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                "equipo" to "Local",
-                                                                "tipoFrase" to "3",
-                                                                "tipoImg" to "6"
-                                                            ) as Map<String?, Any?>
-                                                            listRegistros.add(registro)
-                                                            db.collection("MinutoaMinuto")
-                                                                .document(idPartido)
-                                                                .update(
-                                                                    hashMapOf(
-                                                                        "registro" to listRegistros,
-                                                                    ) as Map<String?, Any?>
-                                                                )
-                                                        }
-                                                }
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                                jugador["tc2pF"] =
+                                                    jugador["tc2pF"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Canasta fallada del jugador " + lista[i].textOn + " de 2p",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido).get()
+                                                            .addOnSuccessListener { it2 ->
+                                                                val listRegistros =
+                                                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
+                                                                val registro = hashMapOf(
+                                                                    "cuarto" to cuarto,
+                                                                    "dorsal" to lista[i].text,
+                                                                    "nombre" to jugador["nombre"],
+                                                                    "frase" to "TIRO DE 2 FALLADO",
+                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                    "equipo" to "Local",
+                                                                    "tipoFrase" to "3",
+                                                                    "tipoImg" to "6"
+                                                                ) as Map<String?, Any?>
+                                                                listRegistros.add(registro)
+                                                                db.collection("MinutoaMinuto")
+                                                                    .document(idPartido)
+                                                                    .update(
+                                                                        hashMapOf(
+                                                                            "registro" to listRegistros,
+                                                                        ) as Map<String?, Any?>
+                                                                    )
+                                                            }
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
 
+                            } else {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                        } else {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
-
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                            jugador["tc2pF"] =
-                                                jugador["tc2pF"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Canasta fallada del jugador " + lista[i].textOn + " de 2p",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido).get()
-                                                        .addOnSuccessListener { it2 ->
-                                                            val listRegistros =
-                                                                it2.get("registro") as ArrayList<Map<String?, Any?>>
-                                                            val registro = hashMapOf(
-                                                                "cuarto" to cuarto,
-                                                                "dorsal" to lista[i].text,
-                                                                "nombre" to jugador["nombre"],
-                                                                "frase" to "TIRO DE 2 FALLADO",
-                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                "equipo" to "Visitante",
-                                                                "tipoFrase" to "3",
-                                                                "tipoImg" to "6"
-                                                            ) as Map<String?, Any?>
-                                                            listRegistros.add(registro)
-                                                            db.collection("MinutoaMinuto")
-                                                                .document(idPartido)
-                                                                .update(
-                                                                    hashMapOf(
-                                                                        "registro" to listRegistros,
-                                                                    ) as Map<String?, Any?>
-                                                                )
-                                                        }
-                                                }
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                                jugador["tc2pF"] =
+                                                    jugador["tc2pF"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Canasta fallada del jugador " + lista[i].textOn + " de 2p",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido).get()
+                                                            .addOnSuccessListener { it2 ->
+                                                                val listRegistros =
+                                                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
+                                                                val registro = hashMapOf(
+                                                                    "cuarto" to cuarto,
+                                                                    "dorsal" to lista[i].text,
+                                                                    "nombre" to jugador["nombre"],
+                                                                    "frase" to "TIRO DE 2 FALLADO",
+                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                    "equipo" to "Visitante",
+                                                                    "tipoFrase" to "3",
+                                                                    "tipoImg" to "6"
+                                                                ) as Map<String?, Any?>
+                                                                listRegistros.add(registro)
+                                                                db.collection("MinutoaMinuto")
+                                                                    .document(idPartido)
+                                                                    .update(
+                                                                        hashMapOf(
+                                                                            "registro" to listRegistros,
+                                                                        ) as Map<String?, Any?>
+                                                                    )
+                                                            }
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
-
+                            }
                         }
                     }
+                    vaciarToggle(lista)
+                    dialog.hide()
                 }
-                vaciarToggle(lista)
-                dialog.hide()
+
+                actualizaTiempo()
             }
 
-            actualizaTiempo()
         }
         binding.btnT3p.setOnClickListener {
+            if (estado != "Finalizado") {
+                val builder = AlertDialog.Builder(binding.root.context)
+                val view = layoutInflater.inflate(R.layout.accion_partido, null)
+                builder.setView(view)
+                val dialog = builder.create()
+                dialog.show()
 
-            val builder = AlertDialog.Builder(binding.root.context)
-            val view = layoutInflater.inflate(R.layout.accion_partido, null)
-            builder.setView(view)
-            val dialog = builder.create()
-            dialog.show()
+                view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
 
-            view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
+                    val lista = llenarListToggle()
+                    for (i in 0..<lista.count()) {
+                        if (lista[i].isChecked) {
+                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                val lista = llenarListToggle()
-                for (i in 0..<lista.count()) {
-                    if (lista[i].isChecked) {
-                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                                jugador["tc3pA"] =
+                                                    jugador["tc3pA"].toString().toInt() + 1
+                                                jugador["puntos"] =
+                                                    jugador["puntos"].toString().toInt() + 3
+                                                binding.txtPuntosLocal.text =
+                                                    (binding.txtPuntosLocal.text.toString()
+                                                        .toInt() + 3).toString()
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                            jugador["tc3pA"] =
-                                                jugador["tc3pA"].toString().toInt() + 1
-                                            jugador["puntos"] =
-                                                jugador["puntos"].toString().toInt() + 3
-                                            binding.txtPuntosLocal.text =
-                                                (binding.txtPuntosLocal.text.toString()
-                                                    .toInt() + 3).toString()
+                                                actualizaResultado()
 
-                                            actualizaResultado()
-
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Canasta del jugador " + lista[i].textOn + " de 3p",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido).get()
-                                                        .addOnSuccessListener { it2 ->
-                                                            val listRegistros =
-                                                                it2.get("registro") as ArrayList<Map<String?, Any?>>
-                                                            val registro = hashMapOf(
-                                                                "cuarto" to cuarto,
-                                                                "dorsal" to lista[i].text,
-                                                                "nombre" to jugador["nombre"],
-                                                                "frase" to "TRIPLE",
-                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                "equipo" to "Local",
-                                                                "tipoFrase" to "1",
-                                                                "tipoImg" to "8"
-                                                            ) as Map<String?, Any?>
-                                                            listRegistros.add(registro)
-                                                            db.collection("MinutoaMinuto")
-                                                                .document(idPartido)
-                                                                .update(
-                                                                    hashMapOf(
-                                                                        "registro" to listRegistros,
-                                                                    ) as Map<String?, Any?>
-                                                                )
-                                                        }
-                                                }
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Canasta del jugador " + lista[i].textOn + " de 3p",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido).get()
+                                                            .addOnSuccessListener { it2 ->
+                                                                val listRegistros =
+                                                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
+                                                                val registro = hashMapOf(
+                                                                    "cuarto" to cuarto,
+                                                                    "dorsal" to lista[i].text,
+                                                                    "nombre" to jugador["nombre"],
+                                                                    "frase" to "TRIPLE",
+                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                    "equipo" to "Local",
+                                                                    "tipoFrase" to "1",
+                                                                    "tipoImg" to "8"
+                                                                ) as Map<String?, Any?>
+                                                                listRegistros.add(registro)
+                                                                db.collection("MinutoaMinuto")
+                                                                    .document(idPartido)
+                                                                    .update(
+                                                                        hashMapOf(
+                                                                            "registro" to listRegistros,
+                                                                        ) as Map<String?, Any?>
+                                                                    )
+                                                            }
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
 
+                            } else {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                        } else {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                                jugador["tc3pA"] =
+                                                    jugador["tc3pA"].toString().toInt() + 1
+                                                jugador["puntos"] =
+                                                    jugador["puntos"].toString().toInt() + 3
+                                                binding.txtPuntosVisitante.text =
+                                                    (binding.txtPuntosVisitante.text.toString()
+                                                        .toInt() + 3).toString()
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                            jugador["tc3pA"] =
-                                                jugador["tc3pA"].toString().toInt() + 1
-                                            jugador["puntos"] =
-                                                jugador["puntos"].toString().toInt() + 3
-                                            binding.txtPuntosVisitante.text =
-                                                (binding.txtPuntosVisitante.text.toString()
-                                                    .toInt() + 3).toString()
+                                                actualizaResultado()
 
-                                            actualizaResultado()
-
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Canasta del jugador " + lista[i].textOn + " de 3p",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido).get()
-                                                        .addOnSuccessListener { it2 ->
-                                                            val listRegistros =
-                                                                it2.get("registro") as ArrayList<Map<String?, Any?>>
-                                                            val registro = hashMapOf(
-                                                                "cuarto" to cuarto,
-                                                                "dorsal" to lista[i].text,
-                                                                "nombre" to jugador["nombre"],
-                                                                "frase" to "TRIPLE",
-                                                                "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                "equipo" to "Visitante",
-                                                                "tipoFrase" to "1",
-                                                                "tipoImg" to "8"
-                                                            ) as Map<String?, Any?>
-                                                            listRegistros.add(registro)
-                                                            db.collection("MinutoaMinuto")
-                                                                .document(idPartido)
-                                                                .update(
-                                                                    hashMapOf(
-                                                                        "registro" to listRegistros,
-                                                                    ) as Map<String?, Any?>
-                                                                )
-                                                        }
-                                                }
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Canasta del jugador " + lista[i].textOn + " de 3p",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido).get()
+                                                            .addOnSuccessListener { it2 ->
+                                                                val listRegistros =
+                                                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
+                                                                val registro = hashMapOf(
+                                                                    "cuarto" to cuarto,
+                                                                    "dorsal" to lista[i].text,
+                                                                    "nombre" to jugador["nombre"],
+                                                                    "frase" to "TRIPLE",
+                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                                    "equipo" to "Visitante",
+                                                                    "tipoFrase" to "1",
+                                                                    "tipoImg" to "8"
+                                                                ) as Map<String?, Any?>
+                                                                listRegistros.add(registro)
+                                                                db.collection("MinutoaMinuto")
+                                                                    .document(idPartido)
+                                                                    .update(
+                                                                        hashMapOf(
+                                                                            "registro" to listRegistros,
+                                                                        ) as Map<String?, Any?>
+                                                                    )
+                                                            }
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
-
+                            }
                         }
                     }
+                    vaciarToggle(lista)
+                    dialog.hide()
                 }
-                vaciarToggle(lista)
-                dialog.hide()
-            }
 
-            view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
+                view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
 
-                val lista = llenarListToggle()
-                for (i in 0..<lista.count()) {
-                    if (lista[i].isChecked) {
-                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                    val lista = llenarListToggle()
+                    for (i in 0..<lista.count()) {
+                        if (lista[i].isChecked) {
+                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                            jugador["tc3pF"] =
-                                                jugador["tc3pF"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Canasta fallada del jugador " + lista[i].textOn + " de 3p",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                }
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                                jugador["tc3pF"] =
+                                                    jugador["tc3pF"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Canasta fallada del jugador " + lista[i].textOn + " de 3p",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                    }
 
-                                            db.collection("MinutoaMinuto").document(idPartido).get()
-                                                .addOnSuccessListener { min ->
-                                                    val listRegistros =
-                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to lista[i].text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "TIRO DE 3 FALLADO",
-                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Local",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "6"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                "registro" to listRegistros,
-                                                            ) as Map<String?, Any?>
-                                                        )
-                                                }
+                                                db.collection("MinutoaMinuto").document(idPartido).get()
+                                                    .addOnSuccessListener { min ->
+                                                        val listRegistros =
+                                                            min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                        val registro = hashMapOf(
+                                                            "cuarto" to cuarto,
+                                                            "dorsal" to lista[i].text,
+                                                            "nombre" to jugador["nombre"],
+                                                            "frase" to "TIRO DE 3 FALLADO",
+                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                            "equipo" to "Local",
+                                                            "tipoFrase" to "3",
+                                                            "tipoImg" to "6"
+                                                        ) as Map<String?, Any?>
+                                                        listRegistros.add(registro)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    "registro" to listRegistros,
+                                                                ) as Map<String?, Any?>
+                                                            )
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
 
+                            } else {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                        } else {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                                jugador["tc3pF"] =
+                                                    jugador["tc3pF"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Canasta fallada del jugador " + lista[i].textOn + " de 3p",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                    }
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                            jugador["tc3pF"] =
-                                                jugador["tc3pF"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Canasta fallada del jugador " + lista[i].textOn + " de 3p",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                }
-
-                                            db.collection("MinutoaMinuto").document(idPartido).get()
-                                                .addOnSuccessListener { min ->
-                                                    val listRegistros =
-                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to lista[i].text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "TIRO DE 3 FALLADO",
-                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Visitante",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "6"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                "registro" to listRegistros,
-                                                            ) as Map<String?, Any?>
-                                                        )
-                                                }
+                                                db.collection("MinutoaMinuto").document(idPartido).get()
+                                                    .addOnSuccessListener { min ->
+                                                        val listRegistros =
+                                                            min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                        val registro = hashMapOf(
+                                                            "cuarto" to cuarto,
+                                                            "dorsal" to lista[i].text,
+                                                            "nombre" to jugador["nombre"],
+                                                            "frase" to "TIRO DE 3 FALLADO",
+                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                            "equipo" to "Visitante",
+                                                            "tipoFrase" to "3",
+                                                            "tipoImg" to "6"
+                                                        ) as Map<String?, Any?>
+                                                        listRegistros.add(registro)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    "registro" to listRegistros,
+                                                                ) as Map<String?, Any?>
+                                                            )
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
-
+                            }
                         }
                     }
+                    vaciarToggle(lista)
+                    dialog.hide()
                 }
-                vaciarToggle(lista)
-                dialog.hide()
-            }
 
-            actualizaTiempo()
+                actualizaTiempo()
+            }
         }
         binding.btnPerdida.setOnClickListener {
+            if (estado != "Finalizado") {
+                val lista = llenarListToggle()
+                for (i in 0..<lista.count()) {
+                    if (lista[i].isChecked) {
+                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                            db.collection("Estadisticas").document(idPartido).get()
+                                .addOnSuccessListener {
+                                    val listJugador =
+                                        it.get("ListadoJugadores") as ArrayList<String>
+                                    for (j in 0..<listJugador.count()) {
+                                        val jugador =
+                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-            val lista = llenarListToggle()
-            for (i in 0..<lista.count()) {
-                if (lista[i].isChecked) {
-                    if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                        db.collection("Estadisticas").document(idPartido).get()
-                            .addOnSuccessListener {
-                                val listJugador =
-                                    it.get("ListadoJugadores") as ArrayList<String>
-                                for (j in 0..<listJugador.count()) {
-                                    val jugador =
-                                        (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                            jugador["per"] = jugador["per"].toString().toInt() + 1
+                                            db.collection("Estadisticas")
+                                                .document(idPartido)
+                                                .update(
+                                                    hashMapOf(
+                                                        listJugador[j] to jugador
+                                                    ) as Map<String, Any>
+                                                ).addOnSuccessListener {
+                                                    Toast.makeText(
+                                                        binding.root.context,
+                                                        "Pérdida del jugador " + lista[i].textOn,
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    calcularVal(listJugador[j], jugador)
+                                                }
 
-                                    if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                        jugador["per"] = jugador["per"].toString().toInt() + 1
-                                        db.collection("Estadisticas")
-                                            .document(idPartido)
-                                            .update(
-                                                hashMapOf(
-                                                    listJugador[j] to jugador
-                                                ) as Map<String, Any>
-                                            ).addOnSuccessListener {
-                                                Toast.makeText(
-                                                    binding.root.context,
-                                                    "Pérdida del jugador " + lista[i].textOn,
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                                calcularVal(listJugador[j], jugador)
-                                            }
-
-                                        db.collection("MinutoaMinuto").document(idPartido).get()
-                                            .addOnSuccessListener { min ->
-                                                val listRegistros =
-                                                    min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                val registro = hashMapOf(
-                                                    "cuarto" to cuarto,
-                                                    "dorsal" to lista[i].text,
-                                                    "nombre" to jugador["nombre"],
-                                                    "frase" to "PÉRDIDA",
-                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                    "equipo" to "Local",
-                                                    "tipoFrase" to "3",
-                                                    "tipoImg" to "10"
-                                                ) as Map<String?, Any?>
-                                                listRegistros.add(registro)
-                                                db.collection("MinutoaMinuto").document(idPartido)
-                                                    .update(
-                                                        hashMapOf(
-                                                            "registro" to listRegistros,
-                                                        ) as Map<String?, Any?>
-                                                    )
-                                            }
+                                            db.collection("MinutoaMinuto").document(idPartido).get()
+                                                .addOnSuccessListener { min ->
+                                                    val listRegistros =
+                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                    val registro = hashMapOf(
+                                                        "cuarto" to cuarto,
+                                                        "dorsal" to lista[i].text,
+                                                        "nombre" to jugador["nombre"],
+                                                        "frase" to "PÉRDIDA",
+                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                        "equipo" to "Local",
+                                                        "tipoFrase" to "3",
+                                                        "tipoImg" to "10"
+                                                    ) as Map<String?, Any?>
+                                                    listRegistros.add(registro)
+                                                    db.collection("MinutoaMinuto").document(idPartido)
+                                                        .update(
+                                                            hashMapOf(
+                                                                "registro" to listRegistros,
+                                                            ) as Map<String?, Any?>
+                                                        )
+                                                }
+                                        }
                                     }
+
                                 }
 
-                            }
 
+                        } else {
+                            db.collection("Estadisticas").document(idPartido).get()
+                                .addOnSuccessListener {
+                                    val listJugador =
+                                        it.get("ListadoJugadores") as ArrayList<String>
+                                    for (j in 0..<listJugador.count()) {
+                                        val jugador =
+                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                    } else {
-                        db.collection("Estadisticas").document(idPartido).get()
-                            .addOnSuccessListener {
-                                val listJugador =
-                                    it.get("ListadoJugadores") as ArrayList<String>
-                                for (j in 0..<listJugador.count()) {
-                                    val jugador =
-                                        (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                            jugador["per"] = jugador["per"].toString().toInt() + 1
+                                            db.collection("Estadisticas")
+                                                .document(idPartido)
+                                                .update(
+                                                    hashMapOf(
+                                                        listJugador[j] to jugador
+                                                    ) as Map<String, Any>
+                                                ).addOnSuccessListener {
+                                                    Toast.makeText(
+                                                        binding.root.context,
+                                                        "Pérdida del jugador " + lista[i].textOn,
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    calcularVal(listJugador[j], jugador)
+                                                }
 
-                                    if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                        jugador["per"] = jugador["per"].toString().toInt() + 1
-                                        db.collection("Estadisticas")
-                                            .document(idPartido)
-                                            .update(
-                                                hashMapOf(
-                                                    listJugador[j] to jugador
-                                                ) as Map<String, Any>
-                                            ).addOnSuccessListener {
-                                                Toast.makeText(
-                                                    binding.root.context,
-                                                    "Pérdida del jugador " + lista[i].textOn,
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                                calcularVal(listJugador[j], jugador)
-                                            }
-
-                                        db.collection("MinutoaMinuto").document(idPartido).get()
-                                            .addOnSuccessListener { min ->
-                                                val listRegistros =
-                                                    min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                val registro = hashMapOf(
-                                                    "cuarto" to cuarto,
-                                                    "dorsal" to lista[i].text,
-                                                    "nombre" to jugador["nombre"],
-                                                    "frase" to "PÉRDIDA",
-                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                    "equipo" to "Visitante",
-                                                    "tipoFrase" to "3",
-                                                    "tipoImg" to "10"
-                                                ) as Map<String?, Any?>
-                                                listRegistros.add(registro)
-                                                db.collection("MinutoaMinuto").document(idPartido)
-                                                    .update(
-                                                        hashMapOf(
-                                                            "registro" to listRegistros,
-                                                        ) as Map<String?, Any?>
-                                                    )
-                                            }
+                                            db.collection("MinutoaMinuto").document(idPartido).get()
+                                                .addOnSuccessListener { min ->
+                                                    val listRegistros =
+                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                    val registro = hashMapOf(
+                                                        "cuarto" to cuarto,
+                                                        "dorsal" to lista[i].text,
+                                                        "nombre" to jugador["nombre"],
+                                                        "frase" to "PÉRDIDA",
+                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                        "equipo" to "Visitante",
+                                                        "tipoFrase" to "3",
+                                                        "tipoImg" to "10"
+                                                    ) as Map<String?, Any?>
+                                                    listRegistros.add(registro)
+                                                    db.collection("MinutoaMinuto").document(idPartido)
+                                                        .update(
+                                                            hashMapOf(
+                                                                "registro" to listRegistros,
+                                                            ) as Map<String?, Any?>
+                                                        )
+                                                }
+                                        }
                                     }
+
                                 }
 
-                            }
-
+                        }
                     }
                 }
+                vaciarToggle(lista)
+                actualizaTiempo()
             }
-            vaciarToggle(lista)
-            actualizaTiempo()
         }
         binding.btnRecuperacion.setOnClickListener {
+            if (estado != "Finalizado") {
+                val lista = llenarListToggle()
+                for (i in 0..<lista.count()) {
+                    if (lista[i].isChecked) {
+                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                            db.collection("Estadisticas").document(idPartido).get()
+                                .addOnSuccessListener {
+                                    val listJugador =
+                                        it.get("ListadoJugadores") as ArrayList<String>
+                                    for (j in 0..<listJugador.count()) {
+                                        val jugador =
+                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-            val lista = llenarListToggle()
-            for (i in 0..<lista.count()) {
-                if (lista[i].isChecked) {
-                    if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                        db.collection("Estadisticas").document(idPartido).get()
-                            .addOnSuccessListener {
-                                val listJugador =
-                                    it.get("ListadoJugadores") as ArrayList<String>
-                                for (j in 0..<listJugador.count()) {
-                                    val jugador =
-                                        (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                            jugador["recu"] = jugador["recu"].toString().toInt() + 1
+                                            db.collection("Estadisticas")
+                                                .document(idPartido)
+                                                .update(
+                                                    hashMapOf(
+                                                        listJugador[j] to jugador
+                                                    ) as Map<String, Any>
+                                                ).addOnSuccessListener {
+                                                    Toast.makeText(
+                                                        binding.root.context,
+                                                        "Recuperación del jugador " + lista[i].textOn,
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    calcularVal(listJugador[j], jugador)
+                                                }
 
-                                    if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                        jugador["recu"] = jugador["recu"].toString().toInt() + 1
-                                        db.collection("Estadisticas")
-                                            .document(idPartido)
-                                            .update(
-                                                hashMapOf(
-                                                    listJugador[j] to jugador
-                                                ) as Map<String, Any>
-                                            ).addOnSuccessListener {
-                                                Toast.makeText(
-                                                    binding.root.context,
-                                                    "Recuperación del jugador " + lista[i].textOn,
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                                calcularVal(listJugador[j], jugador)
-                                            }
-
-                                        db.collection("MinutoaMinuto").document(idPartido).get()
-                                            .addOnSuccessListener { min ->
-                                                val listRegistros =
-                                                    min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                val registro = hashMapOf(
-                                                    "cuarto" to cuarto,
-                                                    "dorsal" to lista[i].text,
-                                                    "nombre" to jugador["nombre"],
-                                                    "frase" to "RECUPERACIÓN",
-                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                    "equipo" to "Local",
-                                                    "tipoFrase" to "3",
-                                                    "tipoImg" to "11"
-                                                ) as Map<String?, Any?>
-                                                listRegistros.add(registro)
-                                                db.collection("MinutoaMinuto").document(idPartido)
-                                                    .update(
-                                                        hashMapOf(
-                                                            "registro" to listRegistros,
-                                                        ) as Map<String?, Any?>
-                                                    )
-                                            }
+                                            db.collection("MinutoaMinuto").document(idPartido).get()
+                                                .addOnSuccessListener { min ->
+                                                    val listRegistros =
+                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                    val registro = hashMapOf(
+                                                        "cuarto" to cuarto,
+                                                        "dorsal" to lista[i].text,
+                                                        "nombre" to jugador["nombre"],
+                                                        "frase" to "RECUPERACIÓN",
+                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                        "equipo" to "Local",
+                                                        "tipoFrase" to "3",
+                                                        "tipoImg" to "11"
+                                                    ) as Map<String?, Any?>
+                                                    listRegistros.add(registro)
+                                                    db.collection("MinutoaMinuto").document(idPartido)
+                                                        .update(
+                                                            hashMapOf(
+                                                                "registro" to listRegistros,
+                                                            ) as Map<String?, Any?>
+                                                        )
+                                                }
+                                        }
                                     }
+
                                 }
 
-                            }
+                        } else {
+                            db.collection("Estadisticas").document(idPartido).get()
+                                .addOnSuccessListener {
+                                    val listJugador =
+                                        it.get("ListadoJugadores") as ArrayList<String>
+                                    for (j in 0..<listJugador.count()) {
+                                        val jugador =
+                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                    } else {
-                        db.collection("Estadisticas").document(idPartido).get()
-                            .addOnSuccessListener {
-                                val listJugador =
-                                    it.get("ListadoJugadores") as ArrayList<String>
-                                for (j in 0..<listJugador.count()) {
-                                    val jugador =
-                                        (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                            jugador["recu"] = jugador["recu"].toString().toInt() + 1
+                                            db.collection("Estadisticas")
+                                                .document(idPartido)
+                                                .update(
+                                                    hashMapOf(
+                                                        listJugador[j] to jugador
+                                                    ) as Map<String, Any>
+                                                ).addOnSuccessListener {
+                                                    Toast.makeText(
+                                                        binding.root.context,
+                                                        "Recuperación del jugador " + lista[i].textOn,
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                    calcularVal(listJugador[j], jugador)
+                                                }
 
-                                    if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                        jugador["recu"] = jugador["recu"].toString().toInt() + 1
-                                        db.collection("Estadisticas")
-                                            .document(idPartido)
-                                            .update(
-                                                hashMapOf(
-                                                    listJugador[j] to jugador
-                                                ) as Map<String, Any>
-                                            ).addOnSuccessListener {
-                                                Toast.makeText(
-                                                    binding.root.context,
-                                                    "Recuperación del jugador " + lista[i].textOn,
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                                calcularVal(listJugador[j], jugador)
-                                            }
-
-                                        db.collection("MinutoaMinuto").document(idPartido).get()
-                                            .addOnSuccessListener { min ->
-                                                val listRegistros =
-                                                    min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                val registro = hashMapOf(
-                                                    "cuarto" to cuarto,
-                                                    "dorsal" to lista[i].text,
-                                                    "nombre" to jugador["nombre"],
-                                                    "frase" to "RECUPERACIÓN",
-                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                    "equipo" to "Visitante",
-                                                    "tipoFrase" to "3",
-                                                    "tipoImg" to "11"
-                                                ) as Map<String?, Any?>
-                                                listRegistros.add(registro)
-                                                db.collection("MinutoaMinuto").document(idPartido)
-                                                    .update(
-                                                        hashMapOf(
-                                                            "registro" to listRegistros,
-                                                        ) as Map<String?, Any?>
-                                                    )
-                                            }
+                                            db.collection("MinutoaMinuto").document(idPartido).get()
+                                                .addOnSuccessListener { min ->
+                                                    val listRegistros =
+                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                    val registro = hashMapOf(
+                                                        "cuarto" to cuarto,
+                                                        "dorsal" to lista[i].text,
+                                                        "nombre" to jugador["nombre"],
+                                                        "frase" to "RECUPERACIÓN",
+                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                        "equipo" to "Visitante",
+                                                        "tipoFrase" to "3",
+                                                        "tipoImg" to "11"
+                                                    ) as Map<String?, Any?>
+                                                    listRegistros.add(registro)
+                                                    db.collection("MinutoaMinuto").document(idPartido)
+                                                        .update(
+                                                            hashMapOf(
+                                                                "registro" to listRegistros,
+                                                            ) as Map<String?, Any?>
+                                                        )
+                                                }
+                                        }
                                     }
+
                                 }
 
-                            }
-
+                        }
                     }
                 }
+                vaciarToggle(lista)
+                actualizaTiempo()
             }
-            vaciarToggle(lista)
-            actualizaTiempo()
         }
         binding.btnTapon.setOnClickListener {
+            if (estado != "Finalizado") {
+                val builder = AlertDialog.Builder(binding.root.context)
+                val view = layoutInflater.inflate(R.layout.accion_partido, null)
+                builder.setView(view)
+                view.findViewById<Button>(R.id.btnAnotar).text = "Recibido"
+                view.findViewById<Button>(R.id.btnFallar).text = "Cometido"
+                val dialog = builder.create()
+                dialog.show()
 
-            val builder = AlertDialog.Builder(binding.root.context)
-            val view = layoutInflater.inflate(R.layout.accion_partido, null)
-            builder.setView(view)
-            view.findViewById<Button>(R.id.btnAnotar).text = "Recibido"
-            view.findViewById<Button>(R.id.btnFallar).text = "Cometido"
-            val dialog = builder.create()
-            dialog.show()
+                view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
+                    val lista = llenarListToggle()
+                    for (i in 0..<lista.count()) {
+                        if (lista[i].isChecked) {
+                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-            view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
-                val lista = llenarListToggle()
-                for (i in 0..<lista.count()) {
-                    if (lista[i].isChecked) {
-                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                                jugador["taRec"] =
+                                                    jugador["taRec"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Tapón Recibido del jugador " + lista[i].textOn,
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                    }
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                            jugador["taRec"] =
-                                                jugador["taRec"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Tapón Recibido del jugador " + lista[i].textOn,
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                }
-
-                                            db.collection("MinutoaMinuto").document(idPartido).get()
-                                                .addOnSuccessListener { min ->
-                                                    val listRegistros =
-                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to lista[i].text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "TAPÓN RECIBIDO",
-                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Local",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "12"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                "registro" to listRegistros,
-                                                            ) as Map<String?, Any?>
-                                                        )
-                                                }
+                                                db.collection("MinutoaMinuto").document(idPartido).get()
+                                                    .addOnSuccessListener { min ->
+                                                        val listRegistros =
+                                                            min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                        val registro = hashMapOf(
+                                                            "cuarto" to cuarto,
+                                                            "dorsal" to lista[i].text,
+                                                            "nombre" to jugador["nombre"],
+                                                            "frase" to "TAPÓN RECIBIDO",
+                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                            "equipo" to "Local",
+                                                            "tipoFrase" to "3",
+                                                            "tipoImg" to "12"
+                                                        ) as Map<String?, Any?>
+                                                        listRegistros.add(registro)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    "registro" to listRegistros,
+                                                                ) as Map<String?, Any?>
+                                                            )
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
+                            } else {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                        } else {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                                jugador["taRec"] =
+                                                    jugador["taRec"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Tapón Recibido del jugador " + lista[i].textOn,
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                    }
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                            jugador["taRec"] =
-                                                jugador["taRec"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Tapón Recibido del jugador " + lista[i].textOn,
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                }
-
-                                            db.collection("MinutoaMinuto").document(idPartido).get()
-                                                .addOnSuccessListener { min ->
-                                                    val listRegistros =
-                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to lista[i].text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "TAPÓN RECIBIDO",
-                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Visitante",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "12"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                "registro" to listRegistros,
-                                                            ) as Map<String?, Any?>
-                                                        )
-                                                }
+                                                db.collection("MinutoaMinuto").document(idPartido).get()
+                                                    .addOnSuccessListener { min ->
+                                                        val listRegistros =
+                                                            min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                        val registro = hashMapOf(
+                                                            "cuarto" to cuarto,
+                                                            "dorsal" to lista[i].text,
+                                                            "nombre" to jugador["nombre"],
+                                                            "frase" to "TAPÓN RECIBIDO",
+                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                            "equipo" to "Visitante",
+                                                            "tipoFrase" to "3",
+                                                            "tipoImg" to "12"
+                                                        ) as Map<String?, Any?>
+                                                        listRegistros.add(registro)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    "registro" to listRegistros,
+                                                                ) as Map<String?, Any?>
+                                                            )
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
-
+                            }
                         }
                     }
+                    vaciarToggle(lista)
+                    dialog.hide()
                 }
-                vaciarToggle(lista)
-                dialog.hide()
-            }
 
-            view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
-                val lista = llenarListToggle()
-                for (i in 0..<lista.count()) {
-                    if (lista[i].isChecked) {
-                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
+                    val lista = llenarListToggle()
+                    for (i in 0..<lista.count()) {
+                        if (lista[i].isChecked) {
+                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                            jugador["taCom"] =
-                                                jugador["taCom"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Tapón Cometido del jugador " + lista[i].textOn,
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                }
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                                jugador["taCom"] =
+                                                    jugador["taCom"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Tapón Cometido del jugador " + lista[i].textOn,
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                    }
 
-                                            db.collection("MinutoaMinuto").document(idPartido).get()
-                                                .addOnSuccessListener { min ->
-                                                    val listRegistros =
-                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to lista[i].text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "TAPÓN COMETIDO",
-                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Local",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "13"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                "registro" to listRegistros,
-                                                            ) as Map<String?, Any?>
-                                                        )
-                                                }
+                                                db.collection("MinutoaMinuto").document(idPartido).get()
+                                                    .addOnSuccessListener { min ->
+                                                        val listRegistros =
+                                                            min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                        val registro = hashMapOf(
+                                                            "cuarto" to cuarto,
+                                                            "dorsal" to lista[i].text,
+                                                            "nombre" to jugador["nombre"],
+                                                            "frase" to "TAPÓN COMETIDO",
+                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                            "equipo" to "Local",
+                                                            "tipoFrase" to "3",
+                                                            "tipoImg" to "13"
+                                                        ) as Map<String?, Any?>
+                                                        listRegistros.add(registro)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    "registro" to listRegistros,
+                                                                ) as Map<String?, Any?>
+                                                            )
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
+                            } else {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                        } else {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                                jugador["taCom"] =
+                                                    jugador["taCom"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Tapón Cometido del jugador " + lista[i].textOn,
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                    }
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                            jugador["taCom"] =
-                                                jugador["taCom"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Tapón Cometido del jugador " + lista[i].textOn,
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                }
-
-                                            db.collection("MinutoaMinuto").document(idPartido).get()
-                                                .addOnSuccessListener { min ->
-                                                    val listRegistros =
-                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to lista[i].text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "TAPÓN COMETIDO",
-                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Visitante",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "13"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                "registro" to listRegistros,
-                                                            ) as Map<String?, Any?>
-                                                        )
-                                                }
+                                                db.collection("MinutoaMinuto").document(idPartido).get()
+                                                    .addOnSuccessListener { min ->
+                                                        val listRegistros =
+                                                            min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                        val registro = hashMapOf(
+                                                            "cuarto" to cuarto,
+                                                            "dorsal" to lista[i].text,
+                                                            "nombre" to jugador["nombre"],
+                                                            "frase" to "TAPÓN COMETIDO",
+                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                            "equipo" to "Visitante",
+                                                            "tipoFrase" to "3",
+                                                            "tipoImg" to "13"
+                                                        ) as Map<String?, Any?>
+                                                        listRegistros.add(registro)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    "registro" to listRegistros,
+                                                                ) as Map<String?, Any?>
+                                                            )
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
-
+                            }
                         }
                     }
+                    vaciarToggle(lista)
+                    dialog.hide()
                 }
-                vaciarToggle(lista)
-                dialog.hide()
+                actualizaTiempo()
             }
-            actualizaTiempo()
+
         }
         binding.btnRebote.setOnClickListener {
+            if (estado != "Finalizado") {
+                val builder = AlertDialog.Builder(binding.root.context)
+                val view = layoutInflater.inflate(R.layout.accion_partido, null)
+                builder.setView(view)
+                view.findViewById<Button>(R.id.btnAnotar).text = "Ofensivo"
+                view.findViewById<Button>(R.id.btnFallar).text = "Defensivo"
+                val dialog = builder.create()
+                dialog.show()
 
-            val builder = AlertDialog.Builder(binding.root.context)
-            val view = layoutInflater.inflate(R.layout.accion_partido, null)
-            builder.setView(view)
-            view.findViewById<Button>(R.id.btnAnotar).text = "Ofensivo"
-            view.findViewById<Button>(R.id.btnFallar).text = "Defensivo"
-            val dialog = builder.create()
-            dialog.show()
+                view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
 
-            view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
+                    val lista = llenarListToggle()
+                    for (i in 0..<lista.count()) {
+                        if (lista[i].isChecked) {
+                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                val lista = llenarListToggle()
-                for (i in 0..<lista.count()) {
-                    if (lista[i].isChecked) {
-                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                                jugador["rebO"] =
+                                                    jugador["rebO"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Rebote Ofensivo del jugador " + lista[i].textOn,
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                    }
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                            jugador["rebO"] =
-                                                jugador["rebO"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Rebote Ofensivo del jugador " + lista[i].textOn,
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                }
-
-                                            db.collection("MinutoaMinuto").document(idPartido).get()
-                                                .addOnSuccessListener { min ->
-                                                    val listRegistros =
-                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to lista[i].text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "REBOTE OFENSIVO",
-                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Local",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "14"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                "registro" to listRegistros,
-                                                            ) as Map<String?, Any?>
-                                                        )
-                                                }
+                                                db.collection("MinutoaMinuto").document(idPartido).get()
+                                                    .addOnSuccessListener { min ->
+                                                        val listRegistros =
+                                                            min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                        val registro = hashMapOf(
+                                                            "cuarto" to cuarto,
+                                                            "dorsal" to lista[i].text,
+                                                            "nombre" to jugador["nombre"],
+                                                            "frase" to "REBOTE OFENSIVO",
+                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                            "equipo" to "Local",
+                                                            "tipoFrase" to "3",
+                                                            "tipoImg" to "14"
+                                                        ) as Map<String?, Any?>
+                                                        listRegistros.add(registro)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    "registro" to listRegistros,
+                                                                ) as Map<String?, Any?>
+                                                            )
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
+                            } else {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                        } else {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                                jugador["rebO"] =
+                                                    jugador["rebO"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Rebote Ofensivo del jugador " + lista[i].textOn,
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                    }
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                            jugador["rebO"] =
-                                                jugador["rebO"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Rebote Ofensivo del jugador " + lista[i].textOn,
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                }
-
-                                            db.collection("MinutoaMinuto").document(idPartido).get()
-                                                .addOnSuccessListener { min ->
-                                                    val listRegistros =
-                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to lista[i].text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "REBOTE OFENSIVO",
-                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Visitante",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "14"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                "registro" to listRegistros,
-                                                            ) as Map<String?, Any?>
-                                                        )
-                                                }
+                                                db.collection("MinutoaMinuto").document(idPartido).get()
+                                                    .addOnSuccessListener { min ->
+                                                        val listRegistros =
+                                                            min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                        val registro = hashMapOf(
+                                                            "cuarto" to cuarto,
+                                                            "dorsal" to lista[i].text,
+                                                            "nombre" to jugador["nombre"],
+                                                            "frase" to "REBOTE OFENSIVO",
+                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                            "equipo" to "Visitante",
+                                                            "tipoFrase" to "3",
+                                                            "tipoImg" to "14"
+                                                        ) as Map<String?, Any?>
+                                                        listRegistros.add(registro)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    "registro" to listRegistros,
+                                                                ) as Map<String?, Any?>
+                                                            )
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
-
+                            }
                         }
                     }
+                    vaciarToggle(lista)
+                    dialog.hide()
                 }
-                vaciarToggle(lista)
-                dialog.hide()
-            }
 
-            view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
+                view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
 
-                val lista = llenarListToggle()
-                for (i in 0..<lista.count()) {
-                    if (lista[i].isChecked) {
-                        if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                    val lista = llenarListToggle()
+                    for (i in 0..<lista.count()) {
+                        if (lista[i].isChecked) {
+                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                            jugador["rebD"] =
-                                                jugador["rebD"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Rebote Defensivo del jugador " + lista[i].textOn,
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                }
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
+                                                jugador["rebD"] =
+                                                    jugador["rebD"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Rebote Defensivo del jugador " + lista[i].textOn,
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                    }
 
-                                            db.collection("MinutoaMinuto").document(idPartido).get()
-                                                .addOnSuccessListener { min ->
-                                                    val listRegistros =
-                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to lista[i].text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "REBOTE DEFENSIVO",
-                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Local",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "14"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                "registro" to listRegistros,
-                                                            ) as Map<String?, Any?>
-                                                        )
-                                                }
+                                                db.collection("MinutoaMinuto").document(idPartido).get()
+                                                    .addOnSuccessListener { min ->
+                                                        val listRegistros =
+                                                            min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                        val registro = hashMapOf(
+                                                            "cuarto" to cuarto,
+                                                            "dorsal" to lista[i].text,
+                                                            "nombre" to jugador["nombre"],
+                                                            "frase" to "REBOTE DEFENSIVO",
+                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                            "equipo" to "Local",
+                                                            "tipoFrase" to "3",
+                                                            "tipoImg" to "14"
+                                                        ) as Map<String?, Any?>
+                                                        listRegistros.add(registro)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    "registro" to listRegistros,
+                                                                ) as Map<String?, Any?>
+                                                            )
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
+                            } else {
+                                db.collection("Estadisticas").document(idPartido).get()
+                                    .addOnSuccessListener {
+                                        val listJugador =
+                                            it.get("ListadoJugadores") as ArrayList<String>
+                                        for (j in 0..<listJugador.count()) {
+                                            val jugador =
+                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
 
-                        } else {
-                            db.collection("Estadisticas").document(idPartido).get()
-                                .addOnSuccessListener {
-                                    val listJugador =
-                                        it.get("ListadoJugadores") as ArrayList<String>
-                                    for (j in 0..<listJugador.count()) {
-                                        val jugador =
-                                            (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
+                                                jugador["rebD"] =
+                                                    jugador["rebD"].toString().toInt() + 1
+                                                db.collection("Estadisticas")
+                                                    .document(idPartido)
+                                                    .update(
+                                                        hashMapOf(
+                                                            listJugador[j] to jugador
+                                                        ) as Map<String, Any>
+                                                    ).addOnSuccessListener {
+                                                        Toast.makeText(
+                                                            binding.root.context,
+                                                            "Rebote Defensivo del jugador " + lista[i].textOn,
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                        calcularVal(listJugador[j], jugador)
+                                                    }
 
-                                        if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                            jugador["rebD"] =
-                                                jugador["rebD"].toString().toInt() + 1
-                                            db.collection("Estadisticas")
-                                                .document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        listJugador[j] to jugador
-                                                    ) as Map<String, Any>
-                                                ).addOnSuccessListener {
-                                                    Toast.makeText(
-                                                        binding.root.context,
-                                                        "Rebote Defensivo del jugador " + lista[i].textOn,
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    calcularVal(listJugador[j], jugador)
-                                                }
-
-                                            db.collection("MinutoaMinuto").document(idPartido).get()
-                                                .addOnSuccessListener { min ->
-                                                    val listRegistros =
-                                                        min.get("registro") as ArrayList<Map<String?, Any?>>
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to lista[i].text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "REBOTE DEFENSIVO",
-                                                        "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Visitante",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "14"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-                                                    db.collection("MinutoaMinuto")
-                                                        .document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                "registro" to listRegistros,
-                                                            ) as Map<String?, Any?>
-                                                        )
-                                                }
+                                                db.collection("MinutoaMinuto").document(idPartido).get()
+                                                    .addOnSuccessListener { min ->
+                                                        val listRegistros =
+                                                            min.get("registro") as ArrayList<Map<String?, Any?>>
+                                                        val registro = hashMapOf(
+                                                            "cuarto" to cuarto,
+                                                            "dorsal" to lista[i].text,
+                                                            "nombre" to jugador["nombre"],
+                                                            "frase" to "REBOTE DEFENSIVO",
+                                                            "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
+                                                            "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                            "equipo" to "Visitante",
+                                                            "tipoFrase" to "3",
+                                                            "tipoImg" to "14"
+                                                        ) as Map<String?, Any?>
+                                                        listRegistros.add(registro)
+                                                        db.collection("MinutoaMinuto")
+                                                            .document(idPartido)
+                                                            .update(
+                                                                hashMapOf(
+                                                                    "registro" to listRegistros,
+                                                                ) as Map<String?, Any?>
+                                                            )
+                                                    }
+                                            }
                                         }
+
                                     }
 
-                                }
-
+                            }
                         }
                     }
+                    vaciarToggle(lista)
+                    dialog.hide()
                 }
-                vaciarToggle(lista)
-                dialog.hide()
+                actualizaTiempo()
             }
-            actualizaTiempo()
         }
 
         return root
@@ -2456,6 +2470,7 @@ class PartidoFragment : Fragment() {
                 falV = it.get("FaltaV").toString().toInt()
                 tmL = it.get("TiempoML").toString().toInt()
                 tmV = it.get("TiempoMV").toString().toInt()
+                estado = it.get("Estado").toString()
                 resultado = it.get("Resultado").toString()
                 quintetoL = it.get("QuintetoL") as ArrayList<String>
                 quintetoV = it.get("QuintetoV") as ArrayList<String>
@@ -2547,7 +2562,7 @@ class PartidoFragment : Fragment() {
     }
 
     private fun play() {
-        if (!isPlay) {
+        if (!isPlay && estado != "Finalizado") {
             binding.TiempoCuarto.base = SystemClock.elapsedRealtime() + pauseOffSet
             binding.TiempoCuarto.setTextColor(Color.WHITE)
             binding.TiempoCuarto.start()
@@ -2571,50 +2586,11 @@ class PartidoFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun gestionCrononometro(chronometer: Chronometer) {
-        if (chronometer.text.toString() == "00:00") {
+        if (chronometer.text.toString() == "00:00" && estado != "Finalizado") {
             val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
             val idPartido = prefs.getString("idPartido", "").toString()
-            if (cuarto == 4) {
-                db.collection("MinutoaMinuto").document(idPartido).get()
-                    .addOnSuccessListener { it2 ->
-                        val listRegistros =
-                            it2.get("registro") as ArrayList<Map<String?, Any?>>
-                        val registro = hashMapOf(
-                            "cuarto" to cuarto,
-                            "dorsal" to "",
-                            "frase" to "FIN DEL PERIODO",
-                            "resultado" to "",
-                            "tiempo" to "",
-                            "equipo" to "",
-                            "tipoFrase" to "4"
-                        ) as Map<String?, Any?>
-                        listRegistros.add(registro)
 
-                        val registro2 = hashMapOf(
-                            "cuarto" to "",
-                            "dorsal" to "",
-                            "frase" to "FIN DEL PARTIDO",
-                            "resultado" to "",
-                            "tiempo" to "",
-                            "equipo" to "",
-                            "tipoFrase" to "4"
-                        ) as Map<String?, Any?>
-                        listRegistros.add(registro2)
-
-                        db.collection("MinutoaMinuto")
-                            .document(idPartido)
-                            .update(
-                                hashMapOf(
-                                    "registro" to listRegistros,
-                                ) as Map<String?, Any?>
-                            )
-                    }
-                db.collection("Partidos").document(idPartido).update(
-                    hashMapOf(
-                        "Estado" to "Finalizado",
-                    ) as Map<String?, Any?>
-                )
-            } else {
+            if (cuarto == 1 || cuarto == 2 || cuarto == 3) {
                 falL = 0
                 falV = 0
                 if (cuarto == 2) {
@@ -2676,8 +2652,151 @@ class PartidoFragment : Fragment() {
                                         "Tiempo" to tiempo
                                     ) as Map<String?, Any?>
                                 )
+                                mostrarJugadoresCampo()
                             }
                     }
+
+            } else if (cuarto == 4 && binding.txtPuntosLocal.text != binding.txtPuntosVisitante.text) {
+                binding.TiempoCuarto.stop()
+
+                db.collection("MinutoaMinuto").document(idPartido).get()
+                    .addOnSuccessListener { it2 ->
+                        val listRegistros = it2.get("registro") as ArrayList<Map<String?, Any?>>
+                        val registro = hashMapOf(
+                            "cuarto" to cuarto,
+                            "dorsal" to "",
+                            "frase" to "FIN DEL PERIODO",
+                            "resultado" to "",
+                            "tiempo" to "",
+                            "equipo" to "",
+                            "tipoFrase" to "4"
+                        ) as Map<String?, Any?>
+                        listRegistros.add(registro)
+
+                        val registro2 = hashMapOf(
+                            "cuarto" to "",
+                            "dorsal" to "",
+                            "frase" to "FIN DEL PARTIDO",
+                            "resultado" to "",
+                            "tiempo" to "",
+                            "equipo" to "",
+                            "tipoFrase" to "4"
+                        ) as Map<String?, Any?>
+                        listRegistros.add(registro2)
+
+                        db.collection("MinutoaMinuto")
+                            .document(idPartido)
+                            .update(
+                                hashMapOf(
+                                    "registro" to listRegistros,
+                                ) as Map<String?, Any?>
+                            )
+                    }
+                db.collection("Partidos").document(idPartido).update(
+                    hashMapOf(
+                        "Estado" to "Finalizado",
+                    ) as Map<String?, Any?>
+                )
+            } else if (cuarto >= 4 && binding.txtPuntosLocal.text == binding.txtPuntosVisitante.text) {
+                db.collection("MinutoaMinuto").document(idPartido).get()
+                    .addOnSuccessListener { it2 ->
+                        val listRegistros = it2.get("registro") as ArrayList<Map<String?, Any?>>
+
+                        val registro = hashMapOf(
+                            "cuarto" to cuarto,
+                            "dorsal" to "",
+                            "frase" to "FIN DEL PERIODO",
+                            "resultado" to "",
+                            "tiempo" to "",
+                            "equipo" to "",
+                            "tipoFrase" to "4"
+                        ) as Map<String?, Any?>
+                        listRegistros.add(registro)
+
+                        val registro2 = hashMapOf(
+                            "cuarto" to cuarto + 1,
+                            "dorsal" to "",
+                            "frase" to "INICIO DEL PERIODO",
+                            "resultado" to "",
+                            "tiempo" to "",
+                            "equipo" to "",
+                            "tipoFrase" to "2"
+                        ) as Map<String?, Any?>
+                        listRegistros.add(registro2)
+
+                        db.collection("MinutoaMinuto")
+                            .document(idPartido)
+                            .update(
+                                hashMapOf(
+                                    "registro" to listRegistros,
+                                ) as Map<String?, Any?>
+                            ).addOnSuccessListener {
+                                binding.TiempoCuarto.stop()
+                                cuarto++
+                                tmL = 1
+                                tmV = 1
+                                binding.txtTiemposMLocal.text = tmL.toString()
+                                binding.txtTiemposMVisitante.text = tmV.toString()
+                                binding.txtCuartoPartido.text = "Cuarto $cuarto"
+                                tiempo = "05:00"
+                                binding.TiempoCuarto.text = tiempo
+                                isPlay = false
+                                pauseOffSet = pauseOffSetProrroga
+                                db.collection("Partidos").document(idPartido).update(
+                                    hashMapOf(
+                                        "TiempoML" to tmL,
+                                        "TiempoMV" to tmV,
+                                        "FaltaL" to falL,
+                                        "FaltaV" to falV,
+                                        "Cuarto" to cuarto,
+                                        "Tiempo" to tiempo
+                                    ) as Map<String?, Any?>
+                                )
+                                mostrarJugadoresCampo()
+                            }
+                    }
+            } else if (cuarto > 4 && binding.txtPuntosLocal.text != binding.txtPuntosVisitante.text) {
+                binding.TiempoCuarto.stop()
+
+                db.collection("MinutoaMinuto").document(idPartido).get()
+                    .addOnSuccessListener { it2 ->
+                        val listRegistros =
+                            it2.get("registro") as ArrayList<Map<String?, Any?>>
+                        val registro = hashMapOf(
+                            "cuarto" to cuarto,
+                            "dorsal" to "",
+                            "frase" to "FIN DEL PERIODO",
+                            "resultado" to "",
+                            "tiempo" to "",
+                            "equipo" to "",
+                            "tipoFrase" to "4"
+                        ) as Map<String?, Any?>
+                        listRegistros.add(registro)
+
+                        val registro2 = hashMapOf(
+                            "cuarto" to "",
+                            "dorsal" to "",
+                            "frase" to "FIN DEL PARTIDO",
+                            "resultado" to "",
+                            "tiempo" to "",
+                            "equipo" to "",
+                            "tipoFrase" to "4"
+                        ) as Map<String?, Any?>
+                        listRegistros.add(registro2)
+
+                        db.collection("MinutoaMinuto")
+                            .document(idPartido)
+                            .update(
+                                hashMapOf(
+                                    "registro" to listRegistros,
+                                ) as Map<String?, Any?>
+                            )
+                    }
+                db.collection("Partidos").document(idPartido).update(
+                    hashMapOf(
+                        "Estado" to "Finalizado",
+                    ) as Map<String?, Any?>
+                )
             }
         }
     }
@@ -2706,7 +2825,8 @@ class PartidoFragment : Fragment() {
         db.collection("Estadisticas").document(idPartido).get()
             .addOnSuccessListener { esta ->
                 val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
-                val listToggleButton: ArrayList<ToggleButton> = java.util.ArrayList<ToggleButton>()
+                val listToggleButton: ArrayList<ToggleButton> =
+                    java.util.ArrayList<ToggleButton>()
 
                 for (j in listJugador) {
                     val jugador = esta.get(j) as Map<String?, Any?>
@@ -2736,9 +2856,17 @@ class PartidoFragment : Fragment() {
                             if (toggleButton.isChecked) {
                                 if (quinteto < 5) {
                                     if (equipo == "Local")
-                                        toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocalactivado))
+                                        toggleButton.setBackgroundDrawable(
+                                            resources.getDrawable(
+                                                R.drawable.togglebuttonlocalactivado
+                                            )
+                                        )
                                     else
-                                        toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitanteactivo))
+                                        toggleButton.setBackgroundDrawable(
+                                            resources.getDrawable(
+                                                R.drawable.togglebuttonvisitanteactivo
+                                            )
+                                        )
                                     quinteto++
                                 } else {
                                     toggleButton.isChecked = false
@@ -2751,9 +2879,17 @@ class PartidoFragment : Fragment() {
                             } else {
                                 if (quinteto > 0) {
                                     if (equipo == "Local")
-                                        toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocaldesactivado))
+                                        toggleButton.setBackgroundDrawable(
+                                            resources.getDrawable(
+                                                R.drawable.togglebuttonlocaldesactivado
+                                            )
+                                        )
                                     else
-                                        toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitantedesactivado))
+                                        toggleButton.setBackgroundDrawable(
+                                            resources.getDrawable(
+                                                R.drawable.togglebuttonvisitantedesactivado
+                                            )
+                                        )
                                     quinteto--
                                 }
                             }
@@ -2795,39 +2931,50 @@ class PartidoFragment : Fragment() {
                                             when (cont) {
                                                 0 -> {
                                                     binding.TBLocal1.text = toggleButton.text
-                                                    binding.TBLocal1.textOff = toggleButton.textOff
-                                                    binding.TBLocal1.textOn = toggleButton.textOn
+                                                    binding.TBLocal1.textOff =
+                                                        toggleButton.textOff
+                                                    binding.TBLocal1.textOn =
+                                                        toggleButton.textOn
                                                 }
 
                                                 1 -> {
                                                     binding.TBLocal2.text = toggleButton.text
-                                                    binding.TBLocal2.textOff = toggleButton.textOff
-                                                    binding.TBLocal2.textOn = toggleButton.textOn
+                                                    binding.TBLocal2.textOff =
+                                                        toggleButton.textOff
+                                                    binding.TBLocal2.textOn =
+                                                        toggleButton.textOn
                                                 }
 
                                                 2 -> {
                                                     binding.TBLocal3.text = toggleButton.text
-                                                    binding.TBLocal3.textOff = toggleButton.textOff
-                                                    binding.TBLocal3.textOn = toggleButton.textOn
+                                                    binding.TBLocal3.textOff =
+                                                        toggleButton.textOff
+                                                    binding.TBLocal3.textOn =
+                                                        toggleButton.textOn
                                                 }
 
                                                 3 -> {
                                                     binding.TBLocal4.text = toggleButton.text
-                                                    binding.TBLocal4.textOff = toggleButton.textOff
-                                                    binding.TBLocal4.textOn = toggleButton.textOn
+                                                    binding.TBLocal4.textOff =
+                                                        toggleButton.textOff
+                                                    binding.TBLocal4.textOn =
+                                                        toggleButton.textOn
                                                 }
 
                                                 4 -> {
                                                     binding.TBLocal5.text = toggleButton.text
-                                                    binding.TBLocal5.textOff = toggleButton.textOff
-                                                    binding.TBLocal5.textOn = toggleButton.textOn
+                                                    binding.TBLocal5.textOff =
+                                                        toggleButton.textOff
+                                                    binding.TBLocal5.textOn =
+                                                        toggleButton.textOn
                                                 }
                                             }
                                             quintetoL.add(toggleButton.text.toString())
                                         } else {
                                             when (cont) {
                                                 0 -> {
-                                                    binding.TBVisitante1.text = toggleButton.text
+                                                    binding.TBVisitante1.text =
+                                                        toggleButton.text
                                                     binding.TBVisitante1.textOff =
                                                         toggleButton.textOff
                                                     binding.TBVisitante1.textOn =
@@ -2835,7 +2982,8 @@ class PartidoFragment : Fragment() {
                                                 }
 
                                                 1 -> {
-                                                    binding.TBVisitante2.text = toggleButton.text
+                                                    binding.TBVisitante2.text =
+                                                        toggleButton.text
                                                     binding.TBVisitante2.textOff =
                                                         toggleButton.textOff
                                                     binding.TBVisitante2.textOn =
@@ -2843,7 +2991,8 @@ class PartidoFragment : Fragment() {
                                                 }
 
                                                 2 -> {
-                                                    binding.TBVisitante3.text = toggleButton.text
+                                                    binding.TBVisitante3.text =
+                                                        toggleButton.text
                                                     binding.TBVisitante3.textOff =
                                                         toggleButton.textOff
                                                     binding.TBVisitante3.textOn =
@@ -2851,7 +3000,8 @@ class PartidoFragment : Fragment() {
                                                 }
 
                                                 3 -> {
-                                                    binding.TBVisitante4.text = toggleButton.text
+                                                    binding.TBVisitante4.text =
+                                                        toggleButton.text
                                                     binding.TBVisitante4.textOff =
                                                         toggleButton.textOff
                                                     binding.TBVisitante4.textOn =
@@ -2859,7 +3009,8 @@ class PartidoFragment : Fragment() {
                                                 }
 
                                                 4 -> {
-                                                    binding.TBVisitante5.text = toggleButton.text
+                                                    binding.TBVisitante5.text =
+                                                        toggleButton.text
                                                     binding.TBVisitante5.textOff =
                                                         toggleButton.textOff
                                                     binding.TBVisitante5.textOn =
@@ -2871,7 +3022,7 @@ class PartidoFragment : Fragment() {
 
                                         for (j in listJugador) {
                                             val jugador = esta.get(j) as Map<String?, Any?>
-                                            if(jugador["dorsal"].toString() == toggleButton.text && jugador["equipo"].toString() == equipo){
+                                            if (jugador["dorsal"].toString() == toggleButton.text && jugador["equipo"].toString() == equipo) {
                                                 val registro = hashMapOf(
                                                     "cuarto" to cuarto,
                                                     "dorsal" to toggleButton.text,
@@ -2928,89 +3079,90 @@ class PartidoFragment : Fragment() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun hacerCambiosLocal(lista: ArrayList<ToggleButton>, toggleButtonSale: ToggleButton) {
-        val builder = AlertDialog.Builder(binding.root.context)
-        val view = layoutInflater.inflate(R.layout.cambios_equipo, null)
+        if (estado != "Finalizado") {
+            val builder = AlertDialog.Builder(binding.root.context)
+            val view = layoutInflater.inflate(R.layout.cambios_equipo, null)
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-        val idPartido = prefs.getString("idPartido", "").toString()
-        var contLoca: Int = 0
-        var quinteto: Int = 0
+            val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+            val idPartido = prefs.getString("idPartido", "").toString()
+            var contLoca: Int = 0
+            var quinteto: Int = 0
 
-        db.collection("Estadisticas").document(idPartido).get()
-            .addOnSuccessListener { esta ->
-                val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
+            db.collection("Estadisticas").document(idPartido).get()
+                .addOnSuccessListener { esta ->
+                    val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
 
-                val listToggleButton: ArrayList<ToggleButton> =
-                    java.util.ArrayList<ToggleButton>()
+                    val listToggleButton: ArrayList<ToggleButton> =
+                        java.util.ArrayList<ToggleButton>()
 
-                for (i in 0..<listJugador.count()) {
-                    val jugador = esta.get(listJugador[i].toString()) as Map<String?, Any?>
-                    if (jugador["equipo"].toString() == "Local" && jugador["falC"].toString() != "5") {
-                        if (jugador["dorsal"] != lista[0].text && jugador["dorsal"] != lista[1].text && jugador["dorsal"] != lista[2].text && jugador["dorsal"] != lista[3].text && jugador["dorsal"] != lista[4].text) {
+                    for (i in 0..<listJugador.count()) {
+                        val jugador = esta.get(listJugador[i].toString()) as Map<String?, Any?>
+                        if (jugador["equipo"].toString() == "Local" && jugador["falC"].toString() != "5") {
+                            if (jugador["dorsal"] != lista[0].text && jugador["dorsal"] != lista[1].text && jugador["dorsal"] != lista[2].text && jugador["dorsal"] != lista[3].text && jugador["dorsal"] != lista[4].text) {
 
-                            val toggleButton: ToggleButton = ToggleButton(view.context)
-                            toggleButton.text = jugador["dorsal"].toString()
-                            toggleButton.id = contLoca
-                            toggleButton.textOff = jugador["dorsal"].toString()
-                            toggleButton.textOn = jugador["dorsal"].toString()
-                            toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocaldesactivado))
-                            toggleButton.setTextColor(Color.BLACK)
+                                val toggleButton: ToggleButton = ToggleButton(view.context)
+                                toggleButton.text = jugador["dorsal"].toString()
+                                toggleButton.id = contLoca
+                                toggleButton.textOff = jugador["dorsal"].toString()
+                                toggleButton.textOn = jugador["dorsal"].toString()
+                                toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocaldesactivado))
+                                toggleButton.setTextColor(Color.BLACK)
 
-                            if (contLoca < 5)
-                                view.findViewById<LinearLayout>(R.id.ContenedorCambios)
-                                    .addView(toggleButton)
-                            else
-                                view.findViewById<LinearLayout>(R.id.ContenedorCambios2)
-                                    .addView(toggleButton)
+                                if (contLoca < 5)
+                                    view.findViewById<LinearLayout>(R.id.ContenedorCambios)
+                                        .addView(toggleButton)
+                                else
+                                    view.findViewById<LinearLayout>(R.id.ContenedorCambios2)
+                                        .addView(toggleButton)
 
-                            toggleButton.setOnCheckedChangeListener { _, _ ->
+                                toggleButton.setOnCheckedChangeListener { _, _ ->
 
-                                if (toggleButton.isChecked) {
-                                    if (quinteto < 1) {
-                                        toggleButton.setBackgroundDrawable(
-                                            resources.getDrawable(
-                                                R.drawable.togglebuttonlocalactivado
+                                    if (toggleButton.isChecked) {
+                                        if (quinteto < 1) {
+                                            toggleButton.setBackgroundDrawable(
+                                                resources.getDrawable(
+                                                    R.drawable.togglebuttonlocalactivado
+                                                )
                                             )
-                                        )
-                                        quinteto++
+                                            quinteto++
+                                        } else {
+                                            toggleButton.isChecked = false
+                                            Toast.makeText(
+                                                binding.root.context,
+                                                "Solo se puede seleccionar 1 jugador",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
                                     } else {
-                                        toggleButton.isChecked = false
-                                        Toast.makeText(
-                                            binding.root.context,
-                                            "Solo se puede seleccionar 1 jugador",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                } else {
-                                    if (quinteto > 0) {
-                                        toggleButton.setBackgroundDrawable(
-                                            resources.getDrawable(
-                                                R.drawable.togglebuttonlocaldesactivado
+                                        if (quinteto > 0) {
+                                            toggleButton.setBackgroundDrawable(
+                                                resources.getDrawable(
+                                                    R.drawable.togglebuttonlocaldesactivado
+                                                )
                                             )
-                                        )
-                                        quinteto--
+                                            quinteto--
+                                        }
                                     }
                                 }
+                                listToggleButton.add(toggleButton)
+                                contLoca++
                             }
-                            listToggleButton.add(toggleButton)
-                            contLoca++
                         }
+
                     }
 
-                }
+                    builder.setView(view)
 
-                builder.setView(view)
+                    val dialog = builder.create()
+                    dialog.show()
 
-                val dialog = builder.create()
-                dialog.show()
-
-                view.findViewById<Button>(R.id.btnGuardarPlantillaCambios).setOnClickListener {
-                    if (quinteto == 1) {
-                        var cont = 0
-                        db.collection("MinutoaMinuto").document(idPartido).get()
-                            .addOnSuccessListener { it2 ->
-                                val listRegistros =
-                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
+                    view.findViewById<Button>(R.id.btnGuardarPlantillaCambios).setOnClickListener {
+                        if (quinteto == 1) {
+                            var cont = 0
+                            db.collection("MinutoaMinuto").document(idPartido).get()
+                                .addOnSuccessListener { it2 ->
+                                    val listRegistros =
+                                        it2.get("registro") as ArrayList<Map<String?, Any?>>
                                     for (j in listJugador) {
                                         val jugador = esta.get(j) as Map<String?, Any?>
                                         if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Local") {
@@ -3030,216 +3182,218 @@ class PartidoFragment : Fragment() {
                                         }
                                     }
 
-                                for (i in 0..<listToggleButton.count()) {
-                                    val toggleButton = listToggleButton[i]
-                                    if (toggleButton.isChecked) {
-                                        if (cont == 0) {
-                                            toggleButtonSale.text = toggleButton.text
-                                            toggleButtonSale.textOff = toggleButton.textOff
-                                            toggleButtonSale.textOn = toggleButton.textOn
-                                        }
-                                        for (j in listJugador) {
-                                            val jugador = esta.get(j) as Map<String?, Any?>
-                                            if (jugador["dorsal"].toString() == toggleButton.text && jugador["equipo"].toString() == "Local") {
-                                                val registro = hashMapOf(
-                                                    "cuarto" to cuarto,
-                                                    "dorsal" to toggleButton.text,
-                                                    "nombre" to jugador["nombre"],
-                                                    "frase" to "ENTRA A LA PISTA EL ",
-                                                    "resultado" to "",
-                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                    "equipo" to "Local",
-                                                    "tipoFrase" to "3",
-                                                    "tipoImg" to "1"
-                                                ) as Map<String?, Any?>
-                                                listRegistros.add(registro)
-                                                cont++
-                                                quintetoL.add(toggleButton.text.toString())
-                                                actualizaQuinteto("QuintetoL")
+                                    for (i in 0..<listToggleButton.count()) {
+                                        val toggleButton = listToggleButton[i]
+                                        if (toggleButton.isChecked) {
+                                            if (cont == 0) {
+                                                toggleButtonSale.text = toggleButton.text
+                                                toggleButtonSale.textOff = toggleButton.textOff
+                                                toggleButtonSale.textOn = toggleButton.textOn
+                                            }
+                                            for (j in listJugador) {
+                                                val jugador = esta.get(j) as Map<String?, Any?>
+                                                if (jugador["dorsal"].toString() == toggleButton.text && jugador["equipo"].toString() == "Local") {
+                                                    val registro = hashMapOf(
+                                                        "cuarto" to cuarto,
+                                                        "dorsal" to toggleButton.text,
+                                                        "nombre" to jugador["nombre"],
+                                                        "frase" to "ENTRA A LA PISTA EL ",
+                                                        "resultado" to "",
+                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                        "equipo" to "Local",
+                                                        "tipoFrase" to "3",
+                                                        "tipoImg" to "1"
+                                                    ) as Map<String?, Any?>
+                                                    listRegistros.add(registro)
+                                                    cont++
+                                                    quintetoL.add(toggleButton.text.toString())
+                                                    actualizaQuinteto("QuintetoL")
+                                                }
                                             }
                                         }
                                     }
+                                    db.collection("MinutoaMinuto")
+                                        .document(idPartido)
+                                        .update(
+                                            hashMapOf(
+                                                "registro" to listRegistros,
+                                            ) as Map<String?, Any?>
+                                        )
                                 }
-                                db.collection("MinutoaMinuto")
-                                    .document(idPartido)
-                                    .update(
-                                        hashMapOf(
-                                            "registro" to listRegistros,
-                                        ) as Map<String?, Any?>
-                                    )
-                            }
-                        dialog.hide()
-                    } else {
-                        Toast.makeText(
-                            binding.root.context,
-                            "Seleccione a 1 jugador para continuar",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            dialog.hide()
+                        } else {
+                            Toast.makeText(
+                                binding.root.context,
+                                "Seleccione a 1 jugador para continuar",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
-            }
-        vaciarToggle(llenarListToggle())
-        paraCronometro()
+            vaciarToggle(llenarListToggle())
+            paraCronometro()
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    private fun hacerCambiosVisitante(lista: ArrayList<ToggleButton>,toggleButtonSale: ToggleButton) {
-        val builder = AlertDialog.Builder(binding.root.context)
-        val view = layoutInflater.inflate(R.layout.cambios_equipo, null)
+    private fun hacerCambiosVisitante(lista: ArrayList<ToggleButton>, toggleButtonSale: ToggleButton) {
+        if (estado != "Finalizado") {
+            val builder = AlertDialog.Builder(binding.root.context)
+            val view = layoutInflater.inflate(R.layout.cambios_equipo, null)
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-        val idPartido = prefs.getString("idPartido", "").toString()
-        var contLoca: Int = 0
-        var quinteto: Int = 0
+            val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+            val idPartido = prefs.getString("idPartido", "").toString()
+            var contLoca: Int = 0
+            var quinteto: Int = 0
 
-        db.collection("Estadisticas").document(idPartido).get()
-            .addOnSuccessListener { esta->
-                val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
+            db.collection("Estadisticas").document(idPartido).get()
+                .addOnSuccessListener { esta ->
+                    val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
 
-                val listToggleButton: ArrayList<ToggleButton> =
-                    java.util.ArrayList<ToggleButton>()
+                    val listToggleButton: ArrayList<ToggleButton> =
+                        java.util.ArrayList<ToggleButton>()
 
-                for (i in 0..<listJugador.count()) {
-                    val jugador = esta.get(listJugador[i].toString()) as Map<String?, Any?>
-                    if (jugador["equipo"].toString() == "Visitante" && jugador["falC"].toString() != "5") {
-                        if (jugador["dorsal"] != lista[0].text && jugador["dorsal"] != lista[1].text && jugador["dorsal"] != lista[2].text && jugador["dorsal"] != lista[3].text && jugador["dorsal"] != lista[4].text) {
+                    for (i in 0..<listJugador.count()) {
+                        val jugador = esta.get(listJugador[i].toString()) as Map<String?, Any?>
+                        if (jugador["equipo"].toString() == "Visitante" && jugador["falC"].toString() != "5") {
+                            if (jugador["dorsal"] != lista[0].text && jugador["dorsal"] != lista[1].text && jugador["dorsal"] != lista[2].text && jugador["dorsal"] != lista[3].text && jugador["dorsal"] != lista[4].text) {
 
-                            val toggleButton: ToggleButton = ToggleButton(view.context)
-                            toggleButton.text = jugador["dorsal"].toString()
-                            toggleButton.id = contLoca
-                            toggleButton.textOff = jugador["dorsal"].toString()
-                            toggleButton.textOn = jugador["dorsal"].toString()
-                            toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitantedesactivado))
-                            toggleButton.setTextColor(Color.BLACK)
+                                val toggleButton: ToggleButton = ToggleButton(view.context)
+                                toggleButton.text = jugador["dorsal"].toString()
+                                toggleButton.id = contLoca
+                                toggleButton.textOff = jugador["dorsal"].toString()
+                                toggleButton.textOn = jugador["dorsal"].toString()
+                                toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitantedesactivado))
+                                toggleButton.setTextColor(Color.BLACK)
 
-                            if (contLoca < 5)
-                                view.findViewById<LinearLayout>(R.id.ContenedorCambios)
-                                    .addView(toggleButton)
-                            else
-                                view.findViewById<LinearLayout>(R.id.ContenedorCambios2)
-                                    .addView(toggleButton)
+                                if (contLoca < 5)
+                                    view.findViewById<LinearLayout>(R.id.ContenedorCambios)
+                                        .addView(toggleButton)
+                                else
+                                    view.findViewById<LinearLayout>(R.id.ContenedorCambios2)
+                                        .addView(toggleButton)
 
-                            toggleButton.setOnCheckedChangeListener { _, _ ->
+                                toggleButton.setOnCheckedChangeListener { _, _ ->
 
-                                if (toggleButton.isChecked) {
-                                    if (quinteto < 1) {
-                                        toggleButton.setBackgroundDrawable(
-                                            resources.getDrawable(
-                                                R.drawable.togglebuttonvisitanteactivo
+                                    if (toggleButton.isChecked) {
+                                        if (quinteto < 1) {
+                                            toggleButton.setBackgroundDrawable(
+                                                resources.getDrawable(
+                                                    R.drawable.togglebuttonvisitanteactivo
+                                                )
                                             )
-                                        )
-                                        quinteto++
+                                            quinteto++
+                                        } else {
+                                            toggleButton.isChecked = false
+                                            Toast.makeText(
+                                                binding.root.context,
+                                                "Solo se puede seleccionar 1 jugador",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
                                     } else {
-                                        toggleButton.isChecked = false
-                                        Toast.makeText(
-                                            binding.root.context,
-                                            "Solo se puede seleccionar 1 jugador",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                } else {
-                                    if (quinteto > 0) {
-                                        toggleButton.setBackgroundDrawable(
-                                            resources.getDrawable(
-                                                R.drawable.togglebuttonvisitantedesactivado
+                                        if (quinteto > 0) {
+                                            toggleButton.setBackgroundDrawable(
+                                                resources.getDrawable(
+                                                    R.drawable.togglebuttonvisitantedesactivado
+                                                )
                                             )
-                                        )
-                                        quinteto--
+                                            quinteto--
+                                        }
                                     }
                                 }
+                                listToggleButton.add(toggleButton)
+                                contLoca++
                             }
-                            listToggleButton.add(toggleButton)
-                            contLoca++
                         }
+
                     }
 
-                }
+                    builder.setView(view)
 
-                builder.setView(view)
+                    val dialog = builder.create()
+                    dialog.show()
 
-                val dialog = builder.create()
-                dialog.show()
+                    view.findViewById<Button>(R.id.btnGuardarPlantillaCambios).setOnClickListener {
+                        if (quinteto == 1) {
+                            var cont = 0
+                            db.collection("MinutoaMinuto").document(idPartido).get()
+                                .addOnSuccessListener { it2 ->
+                                    val listRegistros =
+                                        it2.get("registro") as ArrayList<Map<String?, Any?>>
 
-                view.findViewById<Button>(R.id.btnGuardarPlantillaCambios).setOnClickListener {
-                    if (quinteto == 1) {
-                        var cont = 0
-                        db.collection("MinutoaMinuto").document(idPartido).get()
-                            .addOnSuccessListener { it2 ->
-                                val listRegistros =
-                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
-
-                                for (j in listJugador) {
-                                    val jugador = esta.get(j) as Map<String?, Any?>
-                                    if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Visitante") {
-                                        val registro = hashMapOf(
-                                            "cuarto" to cuarto,
-                                            "dorsal" to toggleButtonSale.text,
-                                            "nombre" to jugador["nombre"],
-                                            "frase" to "ABANDONA LA PISTA EL ",
-                                            "resultado" to "",
-                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                            "equipo" to "Visitante",
-                                            "tipoFrase" to "3",
-                                            "tipoImg" to "1"
-                                        ) as Map<String?, Any?>
-                                        listRegistros.add(registro)
-                                        quintetoV.remove(toggleButtonSale.text.toString())
-                                    }
-                                }
-
-
-                                for (i in 0..<listToggleButton.count()) {
-                                    val toggleButton = listToggleButton[i]
-                                    if (toggleButton.isChecked) {
-                                        if (cont == 0) {
-                                            toggleButtonSale.text = toggleButton.text
-                                            toggleButtonSale.textOff = toggleButton.textOff
-                                            toggleButtonSale.textOn = toggleButton.textOn
+                                    for (j in listJugador) {
+                                        val jugador = esta.get(j) as Map<String?, Any?>
+                                        if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Visitante") {
+                                            val registro = hashMapOf(
+                                                "cuarto" to cuarto,
+                                                "dorsal" to toggleButtonSale.text,
+                                                "nombre" to jugador["nombre"],
+                                                "frase" to "ABANDONA LA PISTA EL ",
+                                                "resultado" to "",
+                                                "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                "equipo" to "Visitante",
+                                                "tipoFrase" to "3",
+                                                "tipoImg" to "1"
+                                            ) as Map<String?, Any?>
+                                            listRegistros.add(registro)
+                                            quintetoV.remove(toggleButtonSale.text.toString())
                                         }
+                                    }
 
-                                        for (j in listJugador) {
-                                            val jugador = esta.get(j) as Map<String?, Any?>
-                                            if (jugador["dorsal"] == toggleButton.text && jugador["equipo"] == "Visitante") {
-                                                val registro = hashMapOf(
-                                                    "cuarto" to cuarto,
-                                                    "dorsal" to toggleButton.text,
-                                                    "nombre" to jugador["nombre"],
-                                                    "frase" to "ENTRA A LA PISTA EL ",
-                                                    "resultado" to "",
-                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                    "equipo" to "Visitante",
-                                                    "tipoFrase" to "3",
-                                                    "tipoImg" to "1"
-                                                ) as Map<String?, Any?>
-                                                listRegistros.add(registro)
-                                                cont++
-                                                quintetoV.add(toggleButton.text.toString())
-                                                actualizaQuinteto("QuintetoV")
+
+                                    for (i in 0..<listToggleButton.count()) {
+                                        val toggleButton = listToggleButton[i]
+                                        if (toggleButton.isChecked) {
+                                            if (cont == 0) {
+                                                toggleButtonSale.text = toggleButton.text
+                                                toggleButtonSale.textOff = toggleButton.textOff
+                                                toggleButtonSale.textOn = toggleButton.textOn
+                                            }
+
+                                            for (j in listJugador) {
+                                                val jugador = esta.get(j) as Map<String?, Any?>
+                                                if (jugador["dorsal"] == toggleButton.text && jugador["equipo"] == "Visitante") {
+                                                    val registro = hashMapOf(
+                                                        "cuarto" to cuarto,
+                                                        "dorsal" to toggleButton.text,
+                                                        "nombre" to jugador["nombre"],
+                                                        "frase" to "ENTRA A LA PISTA EL ",
+                                                        "resultado" to "",
+                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
+                                                        "equipo" to "Visitante",
+                                                        "tipoFrase" to "3",
+                                                        "tipoImg" to "1"
+                                                    ) as Map<String?, Any?>
+                                                    listRegistros.add(registro)
+                                                    cont++
+                                                    quintetoV.add(toggleButton.text.toString())
+                                                    actualizaQuinteto("QuintetoV")
+                                                }
                                             }
                                         }
                                     }
+                                    db.collection("MinutoaMinuto")
+                                        .document(idPartido)
+                                        .update(
+                                            hashMapOf(
+                                                "registro" to listRegistros,
+                                            ) as Map<String?, Any?>
+                                        )
                                 }
-                                db.collection("MinutoaMinuto")
-                                    .document(idPartido)
-                                    .update(
-                                        hashMapOf(
-                                            "registro" to listRegistros,
-                                        ) as Map<String?, Any?>
-                                    )
-                            }
-                        dialog.hide()
-                    } else {
-                        Toast.makeText(
-                            binding.root.context,
-                            "Seleccione a 1 jugador para continuar",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            dialog.hide()
+                        } else {
+                            Toast.makeText(
+                                binding.root.context,
+                                "Seleccione a 1 jugador para continuar",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
-            }
-        vaciarToggle(llenarListToggle())
-        paraCronometro()
-
+            vaciarToggle(llenarListToggle())
+            paraCronometro()
+        }
     }
 
     @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
@@ -3322,7 +3476,7 @@ class PartidoFragment : Fragment() {
                 dialog.show()
 
                 view.findViewById<Button>(R.id.btnGuardarPlantillaCambios).setOnClickListener {
-                    if (quinteto == 1) {
+                    if (quinteto == 1 && contLoca > 0) {
                         var cont = 0
                         db.collection("MinutoaMinuto").document(idPartido).get()
                             .addOnSuccessListener { it2 ->
@@ -3345,6 +3499,7 @@ class PartidoFragment : Fragment() {
                                         ) as Map<String?, Any?>
                                         listRegistros.add(registro)
                                         quintetoL.remove(toggleButtonSale.text.toString())
+                                        actualizaQuinteto("QuintetoL")
                                     }
                                 }
 
@@ -3388,6 +3543,44 @@ class PartidoFragment : Fragment() {
                                     )
                             }
                         dialog.hide()
+                    } else if (quinteto == 0 && contLoca == 0) {
+                        db.collection("MinutoaMinuto").document(idPartido).get()
+                            .addOnSuccessListener { it2 ->
+                                val listRegistros =
+                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
+
+                                for (j in listJugador) {
+                                    val jugador = esta.get(j) as Map<String?, Any?>
+                                    if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Local") {
+                                        val registro = hashMapOf(
+                                            "cuarto" to cuarto,
+                                            "dorsal" to toggleButtonSale.text,
+                                            "nombre" to jugador["nombre"],
+                                            "frase" to "ABANDONA LA PISTA EL ",
+                                            "resultado" to "",
+                                            "tiempo" to binding.TiempoCuarto.text.toString(),
+                                            "equipo" to "Local",
+                                            "tipoFrase" to "3",
+                                            "tipoImg" to "1"
+                                        ) as Map<String?, Any?>
+                                        listRegistros.add(registro)
+                                        quintetoL.remove(toggleButtonSale.text.toString())
+                                        actualizaQuinteto("QuintetoL")
+                                        toggleButtonSale.text = " "
+                                        toggleButtonSale.textOff = " "
+                                        toggleButtonSale.textOn = " "
+                                    }
+                                }
+                                db.collection("MinutoaMinuto")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            "registro" to listRegistros,
+                                        ) as Map<String?, Any?>
+                                    )
+                            }
+                        dialog.hide()
+
                     } else {
                         Toast.makeText(
                             binding.root.context,
@@ -3426,7 +3619,6 @@ class PartidoFragment : Fragment() {
                     val jugador = esta.get(listJugador[i].toString()) as Map<String?, Any?>
                     if (jugador["equipo"].toString() == "Visitante" && jugador["falC"].toString() != "5") {
                         if (jugador["dorsal"] != lista[0].text && jugador["dorsal"] != lista[1].text && jugador["dorsal"] != lista[2].text && jugador["dorsal"] != lista[3].text && jugador["dorsal"] != lista[4].text) {
-
                             val toggleButton: ToggleButton = ToggleButton(view.context)
                             toggleButton.text = jugador["dorsal"].toString()
                             toggleButton.id = contLoca
@@ -3484,7 +3676,7 @@ class PartidoFragment : Fragment() {
                 dialog.show()
 
                 view.findViewById<Button>(R.id.btnGuardarPlantillaCambios).setOnClickListener {
-                    if (quinteto == 1) {
+                    if (quinteto == 1 && contLoca > 0) {
                         var cont = 0
                         db.collection("MinutoaMinuto").document(idPartido).get()
                             .addOnSuccessListener { it2 ->
@@ -3507,6 +3699,7 @@ class PartidoFragment : Fragment() {
                                         ) as Map<String?, Any?>
                                         listRegistros.add(registro)
                                         quintetoV.remove(toggleButtonSale.text.toString())
+                                        actualizaQuinteto("QuintetoV")
                                     }
                                 }
 
@@ -3549,6 +3742,43 @@ class PartidoFragment : Fragment() {
                                     )
                             }
                         dialog.hide()
+                    } else if (quinteto == 0 && contLoca == 0) {
+                        db.collection("MinutoaMinuto").document(idPartido).get()
+                            .addOnSuccessListener { it2 ->
+                                val listRegistros =
+                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
+
+                                for (j in listJugador) {
+                                    val jugador = esta.get(j) as Map<String?, Any?>
+                                    if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Visitante") {
+                                        val registro = hashMapOf(
+                                            "cuarto" to cuarto,
+                                            "dorsal" to toggleButtonSale.text,
+                                            "nombre" to jugador["nombre"],
+                                            "frase" to "ABANDONA LA PISTA EL ",
+                                            "resultado" to "",
+                                            "tiempo" to binding.TiempoCuarto.text.toString(),
+                                            "equipo" to "Visitante",
+                                            "tipoFrase" to "3",
+                                            "tipoImg" to "1"
+                                        ) as Map<String?, Any?>
+                                        listRegistros.add(registro)
+                                        quintetoV.remove(toggleButtonSale.text.toString())
+                                        actualizaQuinteto("QuintetoV")
+                                        toggleButtonSale.text = " "
+                                        toggleButtonSale.textOff = " "
+                                        toggleButtonSale.textOn = " "
+                                    }
+                                }
+                                db.collection("MinutoaMinuto")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            "registro" to listRegistros,
+                                        ) as Map<String?, Any?>
+                                    )
+                            }
+                        dialog.hide()
                     } else {
                         Toast.makeText(
                             binding.root.context,
@@ -3564,17 +3794,80 @@ class PartidoFragment : Fragment() {
     }
 
     private fun colocarQuinteto(equipo: String, listToggleButton: ArrayList<ToggleButton>) {
-        for ((cont, toggleButton) in listToggleButton.withIndex()) {
-            if (equipo == "Local") {
-                toggleButton.text = quintetoL[cont]
-                toggleButton.textOff = quintetoL[cont]
-                toggleButton.textOn = quintetoL[cont]
-            } else {
-                toggleButton.text = quintetoV[cont]
-                toggleButton.textOff = quintetoV[cont]
-                toggleButton.textOn = quintetoV[cont]
+        if (equipo == "Local") {
+            for ((cont, quin) in quintetoL.withIndex()) {
+                listToggleButton[cont].text = quin
+                listToggleButton[cont].textOff = quin
+                listToggleButton[cont].textOn = quin
+            }
+        } else {
+            for ((cont, quin) in quintetoV.withIndex()) {
+                listToggleButton[cont].text = quin
+                listToggleButton[cont].textOff = quin
+                listToggleButton[cont].textOn = quin
             }
         }
+    }
+
+    private fun mostrarJugadoresCampo() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+
+        db.collection("Estadisticas").document(idPartido).get()
+            .addOnSuccessListener { esta ->
+                val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
+                db.collection("MinutoaMinuto").document(idPartido).get()
+                    .addOnSuccessListener { it2 ->
+                        val listRegistros = it2.get("registro") as ArrayList<Map<String?, Any?>>
+
+                        for (j in listJugador) {
+                            val jugador = esta.get(j) as Map<String?, Any?>
+                            for (campo in quintetoL) {
+                                if (jugador["dorsal"].toString() == campo && jugador["equipo"].toString() == "Local") {
+                                    val registro = hashMapOf(
+                                        "cuarto" to cuarto,
+                                        "dorsal" to campo,
+                                        "nombre" to jugador["nombre"],
+                                        "frase" to "ENTRA A LA PISTA EL ",
+                                        "resultado" to "",
+                                        "tiempo" to binding.TiempoCuarto.text.toString(),
+                                        "equipo" to "Local",
+                                        "tipoFrase" to "3",
+                                        "tipoImg" to "1"
+                                    ) as Map<String?, Any?>
+                                    listRegistros.add(registro)
+                                }
+                            }
+                        }
+                        for (j in listJugador) {
+                            val jugador = esta.get(j) as Map<String?, Any?>
+                            for (campo in quintetoV) {
+                                if (jugador["dorsal"].toString() == campo && jugador["equipo"].toString() == "Visitante") {
+                                    val registro = hashMapOf(
+                                        "cuarto" to cuarto,
+                                        "dorsal" to campo,
+                                        "nombre" to jugador["nombre"],
+                                        "frase" to "ENTRA A LA PISTA EL ",
+                                        "resultado" to "",
+                                        "tiempo" to binding.TiempoCuarto.text.toString(),
+                                        "equipo" to "Visitante",
+                                        "tipoFrase" to "3",
+                                        "tipoImg" to "1"
+                                    ) as Map<String?, Any?>
+                                    listRegistros.add(registro)
+                                }
+                            }
+                        }
+
+                        db.collection("MinutoaMinuto")
+                            .document(idPartido)
+                            .update(
+                                hashMapOf(
+                                    "registro" to listRegistros,
+                                ) as Map<String?, Any?>
+                            )
+                    }
+            }
     }
 
     @SuppressLint("CutPasteId")
@@ -3644,17 +3937,12 @@ class PartidoFragment : Fragment() {
     private fun calcularVal(idJugador: String, jugador: MutableMap<String?, Any?>) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
         val idPartido = prefs.getString("idPartido", "").toString()
-        val valoracion: Int =
-            (jugador["puntos"].toString().toInt() + jugador["tc2pA"].toString()
-                .toInt() + jugador["tc3pA"].toString().toInt() +
-                    jugador["asi"].toString().toInt() + jugador["rebO"].toString()
-                .toInt() + jugador["rebD"].toString().toInt() +
-                    jugador["recu"].toString().toInt() + jugador["taCom"].toString()
-                .toInt() + jugador["tlA"].toString().toInt()) + jugador["falR"].toString()
-                .toInt() - (jugador["falC"].toString().toInt() + jugador["tc2pF"].toString()
-                .toInt() + jugador["tc3pF"].toString()
-                .toInt() + jugador["per"].toString().toInt() + jugador["taRec"].toString()
-                .toInt() + jugador["tlF"].toString().toInt())
+        val valoracion: Int = (
+                jugador["puntos"].toString().toInt() + jugador["asi"].toString().toInt() + jugador["rebO"].toString()
+                    .toInt() + jugador["rebD"].toString().toInt() + jugador["recu"].toString().toInt() + jugador["taCom"].toString()
+                    .toInt() + jugador["falR"].toString().toInt()) - (jugador["falC"].toString().toInt() + jugador["tc2pF"].toString()
+            .toInt() + jugador["tc3pF"].toString().toInt() + jugador["per"].toString().toInt() + jugador["taRec"].toString()
+            .toInt() + jugador["tlF"].toString().toInt())
         jugador["val"] = valoracion
         db.collection("Estadisticas")
             .document(idPartido)

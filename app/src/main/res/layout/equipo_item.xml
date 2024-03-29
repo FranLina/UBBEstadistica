@@ -32,7 +32,7 @@
                     android:id="@+id/imageLVEquipo"
                     android:layout_width="100sp"
                     android:layout_height="100sp"
-                    app:srcCompat="@drawable/ic_launcher_foreground" />
+                    app:srcCompat="@drawable/escudo_equipo" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

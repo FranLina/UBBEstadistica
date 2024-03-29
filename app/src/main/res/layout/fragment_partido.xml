@@ -227,10 +227,9 @@
                     android:layout_marginBottom="5sp"
                     android:layout_weight="1"
                     android:background="@drawable/togglebuttonlocaldesactivado"
-                    android:text="ToggleButton"
                     android:textColor="#000000"
-                    android:textOff="1"
-                    android:textOn="1"
+                    android:textOff=" "
+                    android:textOn=" "
                     android:textStyle="bold" />
 
                 <ToggleButton
@@ -240,10 +239,9 @@
                     android:layout_marginBottom="5sp"
                     android:layout_weight="1"
                     android:background="@drawable/togglebuttonlocaldesactivado"
-                    android:text="ToggleButton"
                     android:textColor="#000000"
-                    android:textOff="2"
-                    android:textOn="2"
+                    android:textOff=" "
+                    android:textOn=" "
                     android:textStyle="bold" />
 
                 <ToggleButton
@@ -253,10 +251,9 @@
                     android:layout_marginBottom="5sp"
                     android:layout_weight="1"
                     android:background="@drawable/togglebuttonlocaldesactivado"
-                    android:text="ToggleButton"
                     android:textColor="#000000"
-                    android:textOff="3"
-                    android:textOn="3"
+                    android:textOff=" "
+                    android:textOn=" "
                     android:textStyle="bold" />
 
                 <ToggleButton
@@ -266,10 +263,9 @@
                     android:layout_marginBottom="5sp"
                     android:layout_weight="1"
                     android:background="@drawable/togglebuttonlocaldesactivado"
-                    android:text="ToggleButton"
                     android:textColor="#000000"
-                    android:textOff="4"
-                    android:textOn="4"
+                    android:textOff=" "
+                    android:textOn=" "
                     android:textStyle="bold" />
 
                 <ToggleButton
@@ -279,10 +275,9 @@
                     android:layout_marginBottom="5sp"
                     android:layout_weight="1"
                     android:background="@drawable/togglebuttonlocaldesactivado"
-                    android:text="ToggleButton"
                     android:textColor="#000000"
-                    android:textOff="5"
-                    android:textOn="5"
+                    android:textOff=" "
+                    android:textOn=" "
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -305,10 +300,9 @@
                     android:layout_marginBottom="5sp"
                     android:layout_weight="1"
                     android:background="@drawable/togglebuttonvisitantedesactivado"
-                    android:text="ToggleButton"
                     android:textColor="#000000"
-                    android:textOff="1"
-                    android:textOn="1"
+                    android:textOff=" "
+                    android:textOn=" "
                     android:textStyle="bold" />
 
                 <ToggleButton
@@ -318,10 +312,9 @@
                     android:layout_marginBottom="5sp"
                     android:layout_weight="1"
                     android:background="@drawable/togglebuttonvisitantedesactivado"
-                    android:text="ToggleButton"
                     android:textColor="#000000"
-                    android:textOff="2"
-                    android:textOn="2"
+                    android:textOff=" "
+                    android:textOn=" "
                     android:textStyle="bold" />
 
                 <ToggleButton
@@ -331,10 +324,9 @@
                     android:layout_marginBottom="5sp"
                     android:layout_weight="1"
                     android:background="@drawable/togglebuttonvisitantedesactivado"
-                    android:text="ToggleButton"
                     android:textColor="#000000"
-                    android:textOff="3"
-                    android:textOn="3"
+                    android:textOff=" "
+                    android:textOn=" "
                     android:textStyle="bold" />
 
                 <ToggleButton
@@ -344,10 +336,9 @@
                     android:layout_marginBottom="5sp"
                     android:layout_weight="1"
                     android:background="@drawable/togglebuttonvisitantedesactivado"
-                    android:text="ToggleButton"
                     android:textColor="#000000"
-                    android:textOff="4"
-                    android:textOn="4"
+                    android:textOff=" "
+                    android:textOn=" "
                     android:textStyle="bold" />
 
                 <ToggleButton
@@ -357,10 +348,9 @@
                     android:layout_marginBottom="5sp"
                     android:layout_weight="1"
                     android:background="@drawable/togglebuttonvisitantedesactivado"
-                    android:text="ToggleButton"
                     android:textColor="#000000"
-                    android:textOff="5"
-                    android:textOn="5"
+                    android:textOff=" "
+                    android:textOn=" "
                     android:textStyle="bold" />
             </LinearLayout>
 

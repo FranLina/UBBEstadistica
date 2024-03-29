@@ -28,8 +28,8 @@ class AdaptadorEquipo(private val mcontext: Context, private val listaEquipo: Li
         if (equipo.foto != "") {
             Picasso.get()
                 .load(equipo.foto)
-                .placeholder(R.drawable.escudopredeterminado)
-                .error(R.drawable.escudopredeterminado)
+                .placeholder(R.drawable.escudo_equipo)
+                .error(R.drawable.escudo_equipo)
                 .into(layout.findViewById<ImageView>(R.id.imageLVEquipo))
         }
 

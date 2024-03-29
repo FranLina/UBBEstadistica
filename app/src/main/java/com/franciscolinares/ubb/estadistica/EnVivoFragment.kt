@@ -195,9 +195,11 @@ class EnVivoFragment : Fragment() {
         db.collection("Partidos").document(idPartido).get()
             .addOnSuccessListener {
                 binding.txtNombreELocal.text = "  " + it.get("EquipoLocal").toString().toUpperCase(
-                    Locale.ROOT)
+                    Locale.ROOT
+                )
                 binding.txtNombreEVisitante.text = "  " + it.get("EquipoVisitante").toString().toUpperCase(
-                    Locale.ROOT)
+                    Locale.ROOT
+                )
                 binding.txtEquipoLJC.text = it.get("EquipoLocal").toString().toUpperCase(Locale.ROOT)
                 binding.txtEquipoVJC.text = it.get("EquipoVisitante").toString().toUpperCase(Locale.ROOT)
                 binding.txtPuntosLocalPartido.text =
@@ -251,9 +253,9 @@ class EnVivoFragment : Fragment() {
 
                     for (j in 0..<listJugador.count()) {
                         val player = it.get(listJugador[j]) as HashMap<String?, Any?>
-                        if (player["dorsal"] == jugador["dorsal"] && player["equipo"]==jugador["equipo"]){
+                        if (player["dorsal"] == jugador["dorsal"] && player["equipo"] == jugador["equipo"]) {
                             db.collection("Jugadores").document(listJugador[j]).get()
-                                .addOnSuccessListener { p->
+                                .addOnSuccessListener { p ->
                                     if (p.get("UrlFoto") != "") {
                                         Picasso.get()
                                             .load(p.get("UrlFoto").toString())
