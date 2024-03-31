@@ -1,6 +1,7 @@
 package com.franciscolinares.ubb.estadistica
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Color
@@ -12,6 +13,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import com.franciscolinares.ubb.R
@@ -114,7 +117,8 @@ class EstadisticasFragment : Fragment() {
         db.collection("Partidos").document(idPartido).get()
             .addOnSuccessListener {
                 binding.txtNombreELocal.text = "  " + it.get("EquipoLocal").toString().toUpperCase(
-                    Locale.ROOT)
+                    Locale.ROOT
+                )
                 binding.txtNombreEVisitante.text = "  " + it.get("EquipoVisitante").toString().toUpperCase(Locale.ROOT)
                 binding.txtNombreELocalEsta.text = it.get("EquipoLocal").toString().toUpperCase(Locale.ROOT)
                 binding.txtNombreEVisitanteEsta.text = it.get("EquipoVisitante").toString().toUpperCase(Locale.ROOT)
@@ -126,7 +130,7 @@ class EstadisticasFragment : Fragment() {
             }
     }
 
-    @SuppressLint("SetTextI18n", "InflateParams", "ResourceAsColor")
+    @SuppressLint("SetTextI18n", "InflateParams", "ResourceAsColor", "MissingInflatedId")
     private fun recuperaDatosEstadistica(
         jugadores: ArrayList<Map<String?, Any?>>
     ) {
@@ -231,6 +235,8 @@ class EstadisticasFragment : Fragment() {
                     " " + jugador["dorsal"].toString() + " " + jugador["nombre"].toString()
                         .toUpperCase()
                 }
+            registroN.tag = jugador["dorsal"].toString()
+            registro.tag = jugador["dorsal"].toString()
 
             registro.findViewById<TextView>(R.id.txtEPuntos).text = jugador["puntos"].toString()
             registro.findViewById<TextView>(R.id.txtETC2P1).text =
@@ -316,22 +322,22 @@ class EstadisticasFragment : Fragment() {
         val registroL = LayoutInflater.from(binding.root.context)
             .inflate(R.layout.row_estadistica_total_datos, null, false)
         registroL.findViewById<TextView>(R.id.txtEPuntos).text = ptsL.toString()
-        registroL.findViewById<TextView>(R.id.txtETC2P1).text = tc2AL.toString()+"/"+(tc2AL+tc2FL).toString()
+        registroL.findViewById<TextView>(R.id.txtETC2P1).text = tc2AL.toString() + "/" + (tc2AL + tc2FL).toString()
         registroL.findViewById<TextView>(R.id.txtETC2P2).text = ((tc2AL.toDouble() / (tc2AL.toDouble() + tc2FL.toDouble())) * 100).toInt().toString()
-        registroL.findViewById<TextView>(R.id.txtETC3P1).text = tc3AL.toString()+"/"+(tc3AL+tc3FL).toString()
+        registroL.findViewById<TextView>(R.id.txtETC3P1).text = tc3AL.toString() + "/" + (tc3AL + tc3FL).toString()
         registroL.findViewById<TextView>(R.id.txtETC3P2).text = ((tc3AL.toDouble() / (tc3AL.toDouble() + tc3FL.toDouble())) * 100).toInt().toString()
-        registroL.findViewById<TextView>(R.id.txtETL1).text = tlAL.toString()+"/"+(tlAL+tlFL).toString()
+        registroL.findViewById<TextView>(R.id.txtETL1).text = tlAL.toString() + "/" + (tlAL + tlFL).toString()
         registroL.findViewById<TextView>(R.id.txtETL2).text = ((tlAL.toDouble() / (tlAL.toDouble() + tlFL.toDouble())) * 100).toInt().toString()
         registroL.findViewById<TextView>(R.id.txtERebO).text = rebOL.toString()
         registroL.findViewById<TextView>(R.id.txtERebD).text = rebDL.toString()
         registroL.findViewById<TextView>(R.id.txtERebT).text = (rebOL + rebDL).toString()
         registroL.findViewById<TextView>(R.id.txtEAsi).text = asiL.toString()
-        registroL.findViewById<TextView>(R.id.txtERec).text =recL.toString()
+        registroL.findViewById<TextView>(R.id.txtERec).text = recL.toString()
         registroL.findViewById<TextView>(R.id.txtEPer).text = perL.toString()
         registroL.findViewById<TextView>(R.id.txtETapC).text = tapCL.toString()
         registroL.findViewById<TextView>(R.id.txtETapR).text = tapRL.toString()
         registroL.findViewById<TextView>(R.id.txtEFalC).text = falCL.toString()
-        registroL.findViewById<TextView>(R.id.txtEFalR).text =falRL.toString()
+        registroL.findViewById<TextView>(R.id.txtEFalR).text = falRL.toString()
         registroL.findViewById<TextView>(R.id.txtEVal).text = valL.toString()
         binding.TLLocal.addView(registroL)
 
@@ -343,25 +349,102 @@ class EstadisticasFragment : Fragment() {
         val registroV = LayoutInflater.from(binding.root.context)
             .inflate(R.layout.row_estadistica_total_datos, null, false)
         registroV.findViewById<TextView>(R.id.txtEPuntos).text = ptsV.toString()
-        registroV.findViewById<TextView>(R.id.txtETC2P1).text = tc2AV.toString()+"/"+(tc2AV+tc2FV).toString()
+        registroV.findViewById<TextView>(R.id.txtETC2P1).text = tc2AV.toString() + "/" + (tc2AV + tc2FV).toString()
         registroV.findViewById<TextView>(R.id.txtETC2P2).text = ((tc2AV.toDouble() / (tc2AV.toDouble() + tc2FV.toDouble())) * 100).toInt().toString()
-        registroV.findViewById<TextView>(R.id.txtETC3P1).text = tc3AV.toString()+"/"+(tc3AV+tc3FV).toString()
+        registroV.findViewById<TextView>(R.id.txtETC3P1).text = tc3AV.toString() + "/" + (tc3AV + tc3FV).toString()
         registroV.findViewById<TextView>(R.id.txtETC3P2).text = ((tc3AV.toDouble() / (tc3AV.toDouble() + tc3FV.toDouble())) * 100).toInt().toString()
-        registroV.findViewById<TextView>(R.id.txtETL1).text = tlAV.toString()+"/"+(tlAV+tlFV).toString()
+        registroV.findViewById<TextView>(R.id.txtETL1).text = tlAV.toString() + "/" + (tlAV + tlFV).toString()
         registroV.findViewById<TextView>(R.id.txtETL2).text = ((tlAV.toDouble() / (tlAV.toDouble() + tlFV.toDouble())) * 100).toInt().toString()
         registroV.findViewById<TextView>(R.id.txtERebO).text = rebOV.toString()
         registroV.findViewById<TextView>(R.id.txtERebD).text = rebDV.toString()
         registroV.findViewById<TextView>(R.id.txtERebT).text = (rebOV + rebDV).toString()
         registroV.findViewById<TextView>(R.id.txtEAsi).text = asiV.toString()
-        registroV.findViewById<TextView>(R.id.txtERec).text =recV.toString()
+        registroV.findViewById<TextView>(R.id.txtERec).text = recV.toString()
         registroV.findViewById<TextView>(R.id.txtEPer).text = perV.toString()
         registroV.findViewById<TextView>(R.id.txtETapC).text = tapCV.toString()
         registroV.findViewById<TextView>(R.id.txtETapR).text = tapRV.toString()
         registroV.findViewById<TextView>(R.id.txtEFalC).text = falCV.toString()
-        registroV.findViewById<TextView>(R.id.txtEFalR).text =falRV.toString()
+        registroV.findViewById<TextView>(R.id.txtEFalR).text = falRV.toString()
         registroV.findViewById<TextView>(R.id.txtEVal).text = valV.toString()
         binding.TLVisitante.addView(registroV)
 
+        mostrarEstadisticaJugador(binding.TLLocal,"Local")
+        mostrarEstadisticaJugador(binding.TLLocalNombre,"Local")
+        mostrarEstadisticaJugador(binding.TLVisitante,"Visitante")
+        mostrarEstadisticaJugador(binding.TLVisitanteNombre,"Visitante")
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun mostrarEstadisticaJugador(tableLayout: TableLayout, equipo: String) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+
+        for (i in 0 until tableLayout.childCount) {
+            if (i != 0 && i != 1 && i != tableLayout.childCount - 1) {
+                val rowView = tableLayout.getChildAt(i)
+                rowView.setOnClickListener {
+                    db.collection("Estadisticas").document(idPartido).get()
+                        .addOnSuccessListener { esta ->
+                            val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
+                            for (j in 0..<listJugador.count()) {
+                                val jugador = esta.get(listJugador[j]) as Map<String?, Any?>
+                                if (jugador["dorsal"].toString() == rowView.tag.toString() && jugador["equipo"] == equipo) {
+                                    val builder = AlertDialog.Builder(binding.root.context)
+                                    val view = layoutInflater.inflate(R.layout.estadistica_jugador_item, null)
+
+                                    db.collection("Jugadores").document(listJugador[j]).get()
+                                        .addOnSuccessListener { p ->
+                                            if (p.get("UrlFoto") != "") {
+                                                Picasso.get()
+                                                    .load(p.get("UrlFoto").toString())
+                                                    .placeholder(R.drawable.jugador_blanco)
+                                                    .error(R.drawable.jugador_blanco)
+                                                    .into(view.findViewById<ImageView>(R.id.imgMVPJugador))
+                                            }
+                                        }
+
+                                    db.collection("Partidos").document(idPartido).get()
+                                        .addOnSuccessListener { partido ->
+                                            val e: String = if (equipo == "Local")
+                                                partido.get("EquipoLocal").toString()
+                                            else
+                                                partido.get("EquipoVisitante").toString()
+
+                                            db.collection("Equipos").document(e).get()
+                                                .addOnSuccessListener {
+                                                    if (it.get("UrlFoto") != "") {
+                                                        Picasso.get()
+                                                            .load(it.get("UrlFoto").toString())
+                                                            .placeholder(R.drawable.escudo_equipo)
+                                                            .error(R.drawable.escudo_equipo)
+                                                            .into(view.findViewById<ImageView>(R.id.imgMVPEquipo))
+                                                    }
+                                                }
+                                        }
+
+                                    view.findViewById<TextView>(R.id.txtMVPNombre2).text = jugador["nombre"].toString().toUpperCase(Locale.ROOT)
+                                    view.findViewById<TextView>(R.id.txtMVPDorsal).text = jugador["dorsal"].toString()
+                                    view.findViewById<TextView>(R.id.txtMVPPuntos).text = jugador["puntos"].toString()
+                                    view.findViewById<TextView>(R.id.txtMVPRebotes).text =
+                                        (jugador["rebO"].toString().toInt() + jugador["rebD"].toString().toInt()).toString()
+                                    view.findViewById<TextView>(R.id.txtMVPAsistencias).text = jugador["asi"].toString()
+                                    view.findViewById<TextView>(R.id.txtMVPFaltas).text = jugador["falC"].toString()
+                                    view.findViewById<TextView>(R.id.txtMVPRecuperaciones).text = jugador["recu"].toString()
+                                    view.findViewById<TextView>(R.id.txtMVPPerdidas).text = jugador["per"].toString()
+                                    view.findViewById<TextView>(R.id.txtMVPTapones).text = jugador["taCom"].toString()
+                                    view.findViewById<TextView>(R.id.txtMVPValoracion).text = jugador["val"].toString()
+
+                                    builder.setView(view)
+                                    val dialog = builder.create()
+                                    dialog.show()
+                                }
+                            }
+                        }
+                }
+            }
+
+        }
     }
 
     private fun actualizaDatosEstadistica(
