@@ -57,26 +57,28 @@ class EnVivoFragment : Fragment() {
                 binding.contenedorJugCam.visibility = View.GONE
             } else {
                 recuperaQuinteto()
-                jugadores.clear()
-                db.collection("Estadisticas").document(idPartido).get()
-                    .addOnSuccessListener {
-                        val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                if (quintetoL.isNotEmpty() && quintetoV.isNotEmpty()) {
+                    jugadores.clear()
+                    db.collection("Estadisticas").document(idPartido).get()
+                        .addOnSuccessListener {
+                            val listJugador = it.get("ListadoJugadores") as ArrayList<String>
 
-                        for (j in 0..<listJugador.count()) {
-                            val jugador = it.get(listJugador[j]) as Map<String?, Any?>
-                            for (i in 0..<quintetoL.count()) {
-                                if (jugador["dorsal"] == quintetoL[i] && jugador["equipo"] == "Local")
-                                    jugadores.add(jugador)
-                            }
-                            for (i in 0..<quintetoV.count()) {
-                                if (jugador["dorsal"] == quintetoV[i] && jugador["equipo"] == "Visitante")
-                                    jugadores.add(jugador)
-                            }
+                            for (j in 0..<listJugador.count()) {
+                                val jugador = it.get(listJugador[j]) as Map<String?, Any?>
+                                for (i in 0..<quintetoL.count()) {
+                                    if (jugador["dorsal"] == quintetoL[i] && jugador["equipo"] == "Local")
+                                        jugadores.add(jugador)
+                                }
+                                for (i in 0..<quintetoV.count()) {
+                                    if (jugador["dorsal"] == quintetoV[i] && jugador["equipo"] == "Visitante")
+                                        jugadores.add(jugador)
+                                }
 
+                            }
+                            recuperaDatosEstadistica(jugadores)
+                            binding.contenedorJugCam.visibility = View.VISIBLE
                         }
-                        recuperaDatosEstadistica(jugadores)
-                        binding.contenedorJugCam.visibility = View.VISIBLE
-                    }
+                }
             }
         }
 
@@ -156,28 +158,30 @@ class EnVivoFragment : Fragment() {
                                     }
 
                                 recuperaQuinteto()
-                                db.collection("Estadisticas").document(idPartido).get()
-                                    .addOnSuccessListener {
-                                        val listJugador =
-                                            it.get("ListadoJugadores") as ArrayList<String>
-                                        val newJugadores: ArrayList<Map<String?, Any?>> =
-                                            arrayListOf()
+                                if (quintetoL.isNotEmpty() && quintetoV.isNotEmpty()) {
+                                    db.collection("Estadisticas").document(idPartido).get()
+                                        .addOnSuccessListener {
+                                            val listJugador =
+                                                it.get("ListadoJugadores") as ArrayList<String>
+                                            val newJugadores: ArrayList<Map<String?, Any?>> =
+                                                arrayListOf()
 
-                                        for (j in 0..<listJugador.count()) {
-                                            val jugador =
-                                                it.get(listJugador[j]) as Map<String?, Any?>
-                                            for (i in 0..<quintetoL.count()) {
-                                                if (jugador["dorsal"] == quintetoL[i] && jugador["equipo"] == "Local")
-                                                    newJugadores.add(jugador)
-                                            }
-                                            for (i in 0..<quintetoV.count()) {
-                                                if (jugador["dorsal"] == quintetoV[i] && jugador["equipo"] == "Visitante")
-                                                    newJugadores.add(jugador)
-                                            }
+                                            for (j in 0..<listJugador.count()) {
+                                                val jugador =
+                                                    it.get(listJugador[j]) as Map<String?, Any?>
+                                                for (i in 0..<quintetoL.count()) {
+                                                    if (jugador["dorsal"] == quintetoL[i] && jugador["equipo"] == "Local")
+                                                        newJugadores.add(jugador)
+                                                }
+                                                for (i in 0..<quintetoV.count()) {
+                                                    if (jugador["dorsal"] == quintetoV[i] && jugador["equipo"] == "Visitante")
+                                                        newJugadores.add(jugador)
+                                                }
 
+                                            }
+                                            actualizaDatosEstadistica(newJugadores)
                                         }
-                                        actualizaDatosEstadistica(newJugadores)
-                                    }
+                                }
                             }
                         }
                 }

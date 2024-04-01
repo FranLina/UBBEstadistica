@@ -16,15 +16,19 @@ import android.widget.Button
 import android.widget.Chronometer
 import android.widget.LinearLayout
 import android.widget.RadioButton
+import android.widget.TableLayout
+import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
+import androidx.core.graphics.toColor
 import androidx.core.view.marginLeft
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentPartidoBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import java.util.Locale
 
 class PartidoFragment : Fragment() {
 
@@ -233,6 +237,14 @@ class PartidoFragment : Fragment() {
             } else {
                 binding.TBVisitante5.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitantedesactivado))
             }
+        }
+
+        //Pulsar boton Falta
+        binding.imageFaltaL.setOnClickListener {
+            mostrarFaltasEquipo("Local")
+        }
+        binding.imageFaltaV.setOnClickListener {
+            mostrarFaltasEquipo("Visitante")
         }
 
         //Acciones Partido
@@ -3394,6 +3406,53 @@ class PartidoFragment : Fragment() {
             vaciarToggle(llenarListToggle())
             paraCronometro()
         }
+    }
+
+    @SuppressLint("MissingInflatedId", "ResourceAsColor")
+    private fun mostrarFaltasEquipo(equipo: String) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+
+        paraCronometro()
+
+        val builder = AlertDialog.Builder(binding.root.context)
+        val view = layoutInflater.inflate(R.layout.mostrar_falta_dialog, null)
+        builder.setView(view)
+
+        val tlMuestraFalta = view.findViewById<TableLayout>(R.id.muestraFaltas)
+        tlMuestraFalta.removeAllViews()
+
+        val cabeceraFalta = LayoutInflater.from(binding.root.context).inflate(R.layout.row_cabecera_falta, null, false)
+        tlMuestraFalta.addView(cabeceraFalta)
+
+        db.collection("Estadisticas").document(idPartido).get()
+            .addOnSuccessListener {
+                val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                for (j in 0..<listJugador.count()) {
+                    val jugador = it.get(listJugador[j]) as Map<String?, Any?>
+                    if (jugador["equipo"] == equipo) {
+                        val filaFalta = LayoutInflater.from(binding.root.context).inflate(R.layout.row_falta, null, false)
+
+                        if (j % 2 != 0) {
+                            filaFalta.findViewById<TableRow>(R.id.filaFalta).setBackgroundColor(
+                                Color.parseColor("#FFE4E4E4")
+                            )
+                        }
+
+                        filaFalta.findViewById<TextView>(R.id.txtFaltaDorsal).text = jugador["dorsal"].toString()
+                        filaFalta.findViewById<TextView>(R.id.txtFaltaNombre).text = jugador["nombre"].toString().toUpperCase(Locale.ROOT)
+                        filaFalta.findViewById<TextView>(R.id.txtFaltaFalta).text = jugador["falC"].toString()
+                        if (jugador["falC"].toString().toInt() == 5)
+                            filaFalta.findViewById<TextView>(R.id.txtFaltaFalta).setTextColor(Color.RED)
+                        else if (jugador["falC"].toString().toInt() >= 3)
+                            filaFalta.findViewById<TextView>(R.id.txtFaltaFalta).setTextColor(Color.parseColor("#FBC02D"))
+                        tlMuestraFalta.addView(filaFalta)
+                    }
+                }
+            }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 
     @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")

@@ -79,8 +79,8 @@ class FecharPartidoFragment : Fragment() {
                     "FaltaV" to 0,
                     "TiempoML" to 2,
                     "TiempoMV" to 2,
-                    "QuintetoL" to "",
-                    "QuintetoV" to ""
+                    "QuintetoL" to arrayListOf<String>(),
+                    "QuintetoV" to arrayListOf<String>()
                 ) as Map<String, Any>
             ).addOnSuccessListener {
                 Toast.makeText(

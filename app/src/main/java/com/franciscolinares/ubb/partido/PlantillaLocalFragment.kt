@@ -77,9 +77,10 @@ class PlantillaLocalFragment : Fragment() {
                         .addOnSuccessListener {
                             val checkbox: CheckBox = CheckBox(binding.root.context)
                             checkbox.text =
-                                it.get("Apellido1").toString() + " " +  it.get("Apellido2").toString() + ", " +
-                                          it.get("Nombre") + " , " + jugador.value
+                                it.get("Apellido1").toString() + " " + it.get("Apellido2").toString() + ", " +
+                                        it.get("Nombre") + " - " + jugador.value
                             checkbox.id = index
+                            checkbox.tag = jugador.value
                             index++
                             contenedor.addView(checkbox)
                             listCheckBox.add(checkbox)
@@ -112,8 +113,9 @@ class PlantillaLocalFragment : Fragment() {
                             listaDorsalesR += listaDorsalesI
                             if (!tieneNumerosRepetidos(listaDorsalesR)) {
                                 val checkbox: CheckBox = CheckBox(binding.root.context)
-                                checkbox.text = "$apellido1J $apellido2J, $nombreJ , $dorsalJ"
+                                checkbox.text = "$apellido1J $apellido2J, $nombreJ - $dorsalJ"
                                 checkbox.id = index
+                                checkbox.tag = dorsalJ
                                 listaIdJugadores.add(UUID.randomUUID().toString())
                                 index++
                                 contenedor.addView(checkbox)
@@ -172,12 +174,12 @@ class PlantillaLocalFragment : Fragment() {
                     val checkbox: CheckBox = listCheckBox[i]
                     if (checkbox.isChecked) {
 
-                        val jugadorCB = checkbox.text.split(" , ")
+                        val jugadorCB = checkbox.text.split(" - ")
                         val id = listaIdJugadores[i]
                         listJugadores.add(id)
 
                         val jugador = hashMapOf(
-                            "dorsal" to jugadorCB[1],
+                            "dorsal" to checkbox.tag,
                             "nombre" to jugadorCB[0],
                             "minutos" to 0,
                             "equipo" to "Local",
