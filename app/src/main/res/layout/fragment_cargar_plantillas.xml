@@ -84,18 +84,13 @@
                             android:layout_marginTop="15sp"
                             android:orientation="horizontal">
 
-                            <Space
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1" />
-
                             <Button
-                                android:id="@+id/btnEquipo"
+                                android:id="@+id/btnEquipoL"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:backgroundTint="@color/yellow_logo"
-                                android:text="Seleccionar jugadores Equipo"
+                                android:text="Equipo Local"
                                 android:textColor="@color/black"
                                 app:cornerRadius="30dp" />
 
@@ -103,17 +98,23 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1" />
+
+                            <Button
+                                android:id="@+id/btnEquipoV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:backgroundTint="@color/yellow_logo"
+                                android:text="Equipo Visitante"
+                                android:textColor="@color/black"
+                                app:cornerRadius="30dp" />
+
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal">
-
-                            <Space
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1" />
 
                             <Button
                                 android:id="@+id/btnIniciarPartido"
@@ -125,10 +126,6 @@
                                 android:textColor="@color/black"
                                 app:cornerRadius="30dp" />
 
-                            <Space
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1" />
                         </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

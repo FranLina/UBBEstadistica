@@ -42,20 +42,36 @@ class CargarPlantillasFragment : Fragment() {
                 editor.apply()
             }
 
-        binding.btnEquipo.setOnClickListener {
+        binding.btnEquipoL.setOnClickListener {
             Navigation.findNavController(binding.root)
                 .navigate(R.id.action_cargarPlantillasFragment_to_plantillaLocalFragment)
         }
 
+        binding.btnEquipoV.setOnClickListener {
+            db.collection("Partidos").document(idpartido.toString()).get()
+                .addOnSuccessListener {
+                    if (it.get("PlantillaL") == true) {
+                        Navigation.findNavController(binding.root)
+                            .navigate(R.id.action_cargarPlantillasFragment_to_plantillaVisitanteFragment)
+                    } else {
+                        Toast.makeText(
+                            binding.root.context,
+                            "Primero carga el equipo local ",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+        }
+
         binding.btnIniciarPartido.setOnClickListener {
 
-            db.collection("Estadisticas").document(idpartido.toString()).get()
+            db.collection("Partidos").document(idpartido.toString()).get()
                 .addOnSuccessListener {
                     val editor = prefs.edit()
                     editor.putString("idPartido", idpartido.toString())
                     editor.apply()
 
-                    if (it.exists())
+                    if (it.get("PlantillaL") == true && it.get("PlantillaV") == true)
                         Navigation.findNavController(binding.root)
                             .navigate(R.id.action_cargarPlantillasFragment_to_partidoFragment)
                     else

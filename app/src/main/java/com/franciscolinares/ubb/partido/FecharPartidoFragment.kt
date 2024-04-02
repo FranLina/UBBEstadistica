@@ -40,7 +40,7 @@ class FecharPartidoFragment : Fragment() {
         db.collection("Equipos").document(equipoLocal.toString())
             .get()
             .addOnSuccessListener {
-                binding.txtEENombreLocal.setText(it.get("Nombre").toString())
+                binding.txtEENombreLocal.text = it.get("Nombre").toString()
                 if (it.get("UrlFoto") != "") {
                     Picasso.get()
                         .load(it.get("UrlFoto").toString())
@@ -52,7 +52,7 @@ class FecharPartidoFragment : Fragment() {
         db.collection("Equipos").document(equipoVisitante.toString())
             .get()
             .addOnSuccessListener {
-                binding.txtEENombreVisitante.setText(it.get("Nombre").toString())
+                binding.txtEENombreVisitante.text = it.get("Nombre").toString()
                 if (it.get("UrlFoto") != "") {
                     Picasso.get()
                         .load(it.get("UrlFoto").toString())
@@ -79,6 +79,8 @@ class FecharPartidoFragment : Fragment() {
                     "FaltaV" to 0,
                     "TiempoML" to 2,
                     "TiempoMV" to 2,
+                    "PlantillaL" to false,
+                    "PlantillaV" to false,
                     "QuintetoL" to arrayListOf<String>(),
                     "QuintetoV" to arrayListOf<String>()
                 ) as Map<String, Any>

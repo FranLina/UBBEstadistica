@@ -146,6 +146,9 @@
         <action
             android:id="@+id/action_cargarPlantillasFragment_to_partidoFragment"
             app:destination="@id/partidoFragment" />
+        <action
+            android:id="@+id/action_cargarPlantillasFragment_to_plantillaVisitanteFragment"
+            app:destination="@id/plantillaVisitanteFragment" />
     </fragment>
     <fragment
         android:id="@+id/plantillaLocalFragment"
@@ -153,8 +156,8 @@
         android:label="Plantilla Local"
         tools:layout="@layout/fragment_plantilla_local" >
         <action
-            android:id="@+id/action_plantillaLocalFragment_to_plantillaVisitanteFragment"
-            app:destination="@id/plantillaVisitanteFragment" />
+            android:id="@+id/action_plantillaLocalFragment_to_cargarPlantillasFragment"
+            app:destination="@id/cargarPlantillasFragment" />
     </fragment>
     <fragment
         android:id="@+id/plantillaVisitanteFragment"
