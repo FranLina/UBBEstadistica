@@ -12,19 +12,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Button
 import android.widget.Chronometer
 import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.RadioButton
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
-import androidx.core.graphics.toColor
-import androidx.core.view.marginLeft
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentPartidoBinding
+import com.franciscolinares.ubb.estadistica.ListViewEstadistica.AdaptadorMinuto
+import com.franciscolinares.ubb.estadistica.ListViewEstadistica.MinutoAMinuto
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
@@ -49,6 +51,10 @@ class PartidoFragment : Fragment() {
     private var isPlay = false
     private var pauseOffSet: Long = 10 * 60 * 1000
     private var pauseOffSetProrroga: Long = 5 * 60 * 1000
+
+    companion object {
+        fun newInstance() = PartidoFragment()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -247,6 +253,77 @@ class PartidoFragment : Fragment() {
             mostrarFaltasEquipo("Visitante")
         }
 
+        //Pulsar boton Historial
+        binding.btnHistorialJugadas.setOnClickListener {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+            val idPartido = prefs.getString("idPartido", "").toString()
+
+            paraCronometro()
+
+            val builder = AlertDialog.Builder(binding.root.context)
+            val view = layoutInflater.inflate(R.layout.ver_historial, null)
+            builder.setView(view)
+
+            val listview = view.findViewById<ListView>(R.id.LVHistorial)
+
+            db.collection("MinutoaMinuto").document(idPartido).get().addOnSuccessListener {
+                val listaminuto = mutableListOf<MinutoAMinuto>()
+                val lista = it.get("registro") as ArrayList<Map<String?, Any?>>
+                for (i in (lista.count() - 1) downTo 0) {
+                    val minutoMap = lista[i]
+                    val minuto = MinutoAMinuto(
+                        minutoMap["cuarto"].toString(),
+                        minutoMap["dorsal"].toString(),
+                        minutoMap["nombre"].toString(),
+                        minutoMap["equipo"].toString(),
+                        minutoMap["frase"].toString(),
+                        minutoMap["resultado"].toString(),
+                        minutoMap["tiempo"].toString(),
+                        minutoMap["tipoFrase"].toString(),
+                        minutoMap["tipoImg"].toString()
+                    )
+                    listaminuto.add(minuto)
+                }
+                val myAdapter = AdaptadorMinuto(view.context, listaminuto)
+                listview.adapter = myAdapter
+                listview.onItemLongClickListener = AdapterView.OnItemLongClickListener { arg0, arg1, pos, id ->
+
+                    val builder2 = AlertDialog.Builder(binding.root.context)
+                    val view2 = layoutInflater.inflate(R.layout.borrardialog, null)
+                    builder2.setView(view2)
+                    view2.findViewById<TextView>(R.id.txtIdBorrar).text = listaminuto[pos].frase + " #" + listaminuto[pos].dorsal
+                    val dialog2 = builder2.create()
+                    dialog2.show()
+
+                    view2.findViewById<Button>(R.id.btnSi).setOnClickListener {
+                        borraJugada(listaminuto[pos])
+                        listaminuto.removeAt(pos)
+                        myAdapter.updateData(listaminuto)
+                        db.collection("MinutoaMinuto").document(idPartido).get().addOnSuccessListener {
+                            val lista2 = it.get("registro") as ArrayList<Map<String?, Any?>>
+                            lista2.removeAt((lista2.size - 1) - pos)
+                            db.collection("MinutoaMinuto").document(idPartido).update(
+                                hashMapOf(
+                                    "registro" to lista2
+                                ) as Map<String, Any>
+                            ).addOnSuccessListener {
+                                actualizaJugadaReciente()
+                                dialog2.hide()
+                            }
+                        }
+                    }
+                    view2.findViewById<Button>(R.id.btnNo).setOnClickListener {
+                        dialog2.hide()
+                    }
+
+                    true
+                }
+            }
+
+            val dialog = builder.create()
+            dialog.show()
+        }
+
         //Acciones Partido
         binding.imageTML.setOnClickListener {
             val tml = binding.txtTiemposMLocal.text.toString()
@@ -341,7 +418,9 @@ class PartidoFragment : Fragment() {
                                                                         hashMapOf(
                                                                             "registro" to listRegistros,
                                                                         ) as Map<String?, Any?>
-                                                                    )
+                                                                    ).addOnSuccessListener {
+                                                                        actualizaJugadaReciente()
+                                                                    }
                                                             }
                                                     }
                                             }
@@ -396,7 +475,9 @@ class PartidoFragment : Fragment() {
                                                                         hashMapOf(
                                                                             "registro" to listRegistros,
                                                                         ) as Map<String?, Any?>
-                                                                    )
+                                                                    ).addOnSuccessListener {
+                                                                        actualizaJugadaReciente()
+                                                                    }
                                                             }
                                                     }
                                             }
@@ -466,6 +547,7 @@ class PartidoFragment : Fragment() {
                                                                             "registro" to listRegistros,
                                                                         ) as Map<String?, Any?>
                                                                     ).addOnSuccessListener {
+                                                                        actualizaJugadaReciente()
                                                                         if (jugador["falC"].toString() == "5")
                                                                             faltas5Local(
                                                                                 llenarListToggleLocal(),
@@ -530,6 +612,7 @@ class PartidoFragment : Fragment() {
                                                                             "registro" to listRegistros,
                                                                         ) as Map<String?, Any?>
                                                                     ).addOnSuccessListener {
+                                                                        actualizaJugadaReciente()
                                                                         if (jugador["falC"].toString() == "5")
                                                                             faltas5Visitante(
                                                                                 llenarListToggleVisitante(),
@@ -787,7 +870,9 @@ class PartidoFragment : Fragment() {
                                                                 hashMapOf(
                                                                     "registro" to listRegistros,
                                                                 ) as Map<String?, Any?>
-                                                            )
+                                                            ).addOnSuccessListener {
+                                                                actualizaJugadaReciente()
+                                                            }
                                                     }
 
                                             }
@@ -1015,7 +1100,9 @@ class PartidoFragment : Fragment() {
                                                                 hashMapOf(
                                                                     "registro" to listRegistros,
                                                                 ) as Map<String?, Any?>
-                                                            )
+                                                            ).addOnSuccessListener {
+                                                                actualizaJugadaReciente()
+                                                            }
                                                     }
 
                                             }
@@ -1083,7 +1170,9 @@ class PartidoFragment : Fragment() {
                                                             hashMapOf(
                                                                 "registro" to listRegistros,
                                                             ) as Map<String?, Any?>
-                                                        )
+                                                        ).addOnSuccessListener {
+                                                            actualizaJugadaReciente()
+                                                        }
                                                 }
                                         }
                                     }
@@ -1137,7 +1226,9 @@ class PartidoFragment : Fragment() {
                                                             hashMapOf(
                                                                 "registro" to listRegistros,
                                                             ) as Map<String?, Any?>
-                                                        )
+                                                        ).addOnSuccessListener {
+                                                            actualizaJugadaReciente()
+                                                        }
                                                 }
                                         }
                                     }
@@ -1145,6 +1236,7 @@ class PartidoFragment : Fragment() {
                                 }
 
                         }
+
                     }
                 }
                 vaciarToggle(lista)
@@ -1220,7 +1312,9 @@ class PartidoFragment : Fragment() {
                                                                         hashMapOf(
                                                                             "registro" to listRegistros,
                                                                         ) as Map<String?, Any?>
-                                                                    )
+                                                                    ).addOnSuccessListener {
+                                                                        actualizaJugadaReciente()
+                                                                    }
                                                             }
                                                     }
                                             }
@@ -1285,7 +1379,9 @@ class PartidoFragment : Fragment() {
                                                                         hashMapOf(
                                                                             "registro" to listRegistros,
                                                                         ) as Map<String?, Any?>
-                                                                    )
+                                                                    ).addOnSuccessListener {
+                                                                        actualizaJugadaReciente()
+                                                                    }
                                                             }
                                                     }
                                             }
@@ -1294,6 +1390,7 @@ class PartidoFragment : Fragment() {
                                     }
 
                             }
+
                         }
                     }
                     vaciarToggle(lista)
@@ -1352,7 +1449,9 @@ class PartidoFragment : Fragment() {
                                                                         hashMapOf(
                                                                             "registro" to listRegistros,
                                                                         ) as Map<String?, Any?>
-                                                                    )
+                                                                    ).addOnSuccessListener {
+                                                                        actualizaJugadaReciente()
+                                                                    }
                                                             }
                                                     }
                                             }
@@ -1409,7 +1508,9 @@ class PartidoFragment : Fragment() {
                                                                         hashMapOf(
                                                                             "registro" to listRegistros,
                                                                         ) as Map<String?, Any?>
-                                                                    )
+                                                                    ).addOnSuccessListener {
+                                                                        actualizaJugadaReciente()
+                                                                    }
                                                             }
                                                     }
                                             }
@@ -1418,6 +1519,7 @@ class PartidoFragment : Fragment() {
                                     }
 
                             }
+
                         }
                     }
                     vaciarToggle(lista)
@@ -1497,7 +1599,9 @@ class PartidoFragment : Fragment() {
                                                                         hashMapOf(
                                                                             "registro" to listRegistros,
                                                                         ) as Map<String?, Any?>
-                                                                    )
+                                                                    ).addOnSuccessListener {
+                                                                        actualizaJugadaReciente()
+                                                                    }
                                                             }
                                                     }
                                             }
@@ -1562,7 +1666,9 @@ class PartidoFragment : Fragment() {
                                                                         hashMapOf(
                                                                             "registro" to listRegistros,
                                                                         ) as Map<String?, Any?>
-                                                                    )
+                                                                    ).addOnSuccessListener {
+                                                                        actualizaJugadaReciente()
+                                                                    }
                                                             }
                                                     }
                                             }
@@ -1571,6 +1677,7 @@ class PartidoFragment : Fragment() {
                                     }
 
                             }
+
                         }
                     }
                     vaciarToggle(lista)
@@ -1631,7 +1738,9 @@ class PartidoFragment : Fragment() {
                                                                 hashMapOf(
                                                                     "registro" to listRegistros,
                                                                 ) as Map<String?, Any?>
-                                                            )
+                                                            ).addOnSuccessListener {
+                                                                actualizaJugadaReciente()
+                                                            }
                                                     }
                                             }
                                         }
@@ -1688,7 +1797,9 @@ class PartidoFragment : Fragment() {
                                                                 hashMapOf(
                                                                     "registro" to listRegistros,
                                                                 ) as Map<String?, Any?>
-                                                            )
+                                                            ).addOnSuccessListener {
+                                                                actualizaJugadaReciente()
+                                                            }
                                                     }
                                             }
                                         }
@@ -1696,6 +1807,7 @@ class PartidoFragment : Fragment() {
                                     }
 
                             }
+
                         }
                     }
                     vaciarToggle(lista)
@@ -1757,7 +1869,9 @@ class PartidoFragment : Fragment() {
                                                             hashMapOf(
                                                                 "registro" to listRegistros,
                                                             ) as Map<String?, Any?>
-                                                        )
+                                                        ).addOnSuccessListener {
+                                                            actualizaJugadaReciente()
+                                                        }
                                                 }
                                         }
                                     }
@@ -1812,7 +1926,9 @@ class PartidoFragment : Fragment() {
                                                             hashMapOf(
                                                                 "registro" to listRegistros,
                                                             ) as Map<String?, Any?>
-                                                        )
+                                                        ).addOnSuccessListener {
+                                                            actualizaJugadaReciente()
+                                                        }
                                                 }
                                         }
                                     }
@@ -1820,6 +1936,7 @@ class PartidoFragment : Fragment() {
                                 }
 
                         }
+
                     }
                 }
                 vaciarToggle(lista)
@@ -1878,7 +1995,9 @@ class PartidoFragment : Fragment() {
                                                             hashMapOf(
                                                                 "registro" to listRegistros,
                                                             ) as Map<String?, Any?>
-                                                        )
+                                                        ).addOnSuccessListener {
+                                                            actualizaJugadaReciente()
+                                                        }
                                                 }
                                         }
                                     }
@@ -1932,7 +2051,9 @@ class PartidoFragment : Fragment() {
                                                             hashMapOf(
                                                                 "registro" to listRegistros,
                                                             ) as Map<String?, Any?>
-                                                        )
+                                                        ).addOnSuccessListener {
+                                                            actualizaJugadaReciente()
+                                                        }
                                                 }
                                         }
                                     }
@@ -1940,6 +2061,7 @@ class PartidoFragment : Fragment() {
                                 }
 
                         }
+
                     }
                 }
                 vaciarToggle(lista)
@@ -2009,7 +2131,9 @@ class PartidoFragment : Fragment() {
                                                                 hashMapOf(
                                                                     "registro" to listRegistros,
                                                                 ) as Map<String?, Any?>
-                                                            )
+                                                            ).addOnSuccessListener {
+                                                                actualizaJugadaReciente()
+                                                            }
                                                     }
                                             }
                                         }
@@ -2065,7 +2189,9 @@ class PartidoFragment : Fragment() {
                                                                 hashMapOf(
                                                                     "registro" to listRegistros,
                                                                 ) as Map<String?, Any?>
-                                                            )
+                                                            ).addOnSuccessListener {
+                                                                actualizaJugadaReciente()
+                                                            }
                                                     }
                                             }
                                         }
@@ -2073,6 +2199,7 @@ class PartidoFragment : Fragment() {
                                     }
 
                             }
+
                         }
                     }
                     vaciarToggle(lista)
@@ -2132,7 +2259,9 @@ class PartidoFragment : Fragment() {
                                                                 hashMapOf(
                                                                     "registro" to listRegistros,
                                                                 ) as Map<String?, Any?>
-                                                            )
+                                                            ).addOnSuccessListener {
+                                                                actualizaJugadaReciente()
+                                                            }
                                                     }
                                             }
                                         }
@@ -2188,7 +2317,9 @@ class PartidoFragment : Fragment() {
                                                                 hashMapOf(
                                                                     "registro" to listRegistros,
                                                                 ) as Map<String?, Any?>
-                                                            )
+                                                            ).addOnSuccessListener {
+                                                                actualizaJugadaReciente()
+                                                            }
                                                     }
                                             }
                                         }
@@ -2196,6 +2327,7 @@ class PartidoFragment : Fragment() {
                                     }
 
                             }
+
                         }
                     }
                     vaciarToggle(lista)
@@ -2269,7 +2401,9 @@ class PartidoFragment : Fragment() {
                                                                 hashMapOf(
                                                                     "registro" to listRegistros,
                                                                 ) as Map<String?, Any?>
-                                                            )
+                                                            ).addOnSuccessListener {
+                                                                actualizaJugadaReciente()
+                                                            }
                                                     }
                                             }
                                         }
@@ -2325,7 +2459,9 @@ class PartidoFragment : Fragment() {
                                                                 hashMapOf(
                                                                     "registro" to listRegistros,
                                                                 ) as Map<String?, Any?>
-                                                            )
+                                                            ).addOnSuccessListener {
+                                                                actualizaJugadaReciente()
+                                                            }
                                                     }
                                             }
                                         }
@@ -2333,6 +2469,7 @@ class PartidoFragment : Fragment() {
                                     }
 
                             }
+
                         }
                     }
                     vaciarToggle(lista)
@@ -2393,7 +2530,9 @@ class PartidoFragment : Fragment() {
                                                                 hashMapOf(
                                                                     "registro" to listRegistros,
                                                                 ) as Map<String?, Any?>
-                                                            )
+                                                            ).addOnSuccessListener {
+                                                                actualizaJugadaReciente()
+                                                            }
                                                     }
                                             }
                                         }
@@ -2449,7 +2588,9 @@ class PartidoFragment : Fragment() {
                                                                 hashMapOf(
                                                                     "registro" to listRegistros,
                                                                 ) as Map<String?, Any?>
-                                                            )
+                                                            ).addOnSuccessListener {
+                                                                actualizaJugadaReciente()
+                                                            }
                                                     }
                                             }
                                         }
@@ -2457,6 +2598,7 @@ class PartidoFragment : Fragment() {
                                     }
 
                             }
+
                         }
                     }
                     vaciarToggle(lista)
@@ -2500,6 +2642,7 @@ class PartidoFragment : Fragment() {
                 binding.txtPuntosVisitante.text = resultado.split(" - ")[1]
                 colocarQuinteto("Local", llenarListToggleLocal())
                 colocarQuinteto("Visitante", llenarListToggleVisitante())
+                actualizaJugadaReciente()
             }
     }
 
@@ -2514,6 +2657,20 @@ class PartidoFragment : Fragment() {
                     "Tiempo" to tiempo
                 ) as Map<String, Any>
             )
+    }
+
+    private fun actualizaTiempoMuertos() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+
+        binding.txtTiemposMLocal.text = tmL.toString()
+        binding.txtTiemposMVisitante.text = tmV.toString()
+        db.collection("Partidos").document(idPartido).update(
+            hashMapOf(
+                "TiempoML" to tmL,
+                "TiempoMV" to tmV
+            ) as Map<String?, Any?>
+        )
     }
 
     private fun actualizaResultado() {
@@ -2532,6 +2689,7 @@ class PartidoFragment : Fragment() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
         val idPartido = prefs.getString("idPartido", "").toString()
         if (equipo == "FaltaL") {
+            binding.txtFaltasLocal.text = falL.toString()
             db.collection("Partidos")
                 .document(idPartido)
                 .update(
@@ -2540,6 +2698,7 @@ class PartidoFragment : Fragment() {
                     ) as Map<String, Any>
                 )
         } else {
+            binding.txtFaltasVisitante.text = falV.toString()
             db.collection("Partidos")
                 .document(idPartido)
                 .update(
@@ -2576,7 +2735,7 @@ class PartidoFragment : Fragment() {
     private fun play() {
         if (!isPlay && estado != "Finalizado") {
             binding.TiempoCuarto.base = SystemClock.elapsedRealtime() + pauseOffSet
-            binding.TiempoCuarto.setTextColor(Color.WHITE)
+            binding.TiempoCuarto.setTextColor(Color.BLACK)
             binding.TiempoCuarto.start()
             isPlay = true
         } else {
@@ -3230,9 +3389,12 @@ class PartidoFragment : Fragment() {
                                             hashMapOf(
                                                 "registro" to listRegistros,
                                             ) as Map<String?, Any?>
-                                        )
+                                        ).addOnSuccessListener {
+                                            actualizaJugadaReciente()
+                                        }
                                 }
                             dialog.hide()
+
                         } else {
                             Toast.makeText(
                                 binding.root.context,
@@ -3391,9 +3553,12 @@ class PartidoFragment : Fragment() {
                                             hashMapOf(
                                                 "registro" to listRegistros,
                                             ) as Map<String?, Any?>
-                                        )
+                                        ).addOnSuccessListener {
+                                            actualizaJugadaReciente()
+                                        }
                                 }
                             dialog.hide()
+
                         } else {
                             Toast.makeText(
                                 binding.root.context,
@@ -3599,7 +3764,9 @@ class PartidoFragment : Fragment() {
                                         hashMapOf(
                                             "registro" to listRegistros,
                                         ) as Map<String?, Any?>
-                                    )
+                                    ).addOnSuccessListener {
+                                        actualizaJugadaReciente()
+                                    }
                             }
                         dialog.hide()
                     } else if (quinteto == 0 && contLoca == 0) {
@@ -3636,7 +3803,9 @@ class PartidoFragment : Fragment() {
                                         hashMapOf(
                                             "registro" to listRegistros,
                                         ) as Map<String?, Any?>
-                                    )
+                                    ).addOnSuccessListener {
+                                        actualizaJugadaReciente()
+                                    }
                             }
                         dialog.hide()
 
@@ -3647,6 +3816,7 @@ class PartidoFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
+
                 }
             }
         vaciarToggle(llenarListToggle())
@@ -3798,7 +3968,9 @@ class PartidoFragment : Fragment() {
                                         hashMapOf(
                                             "registro" to listRegistros,
                                         ) as Map<String?, Any?>
-                                    )
+                                    ).addOnSuccessListener {
+                                        actualizaJugadaReciente()
+                                    }
                             }
                         dialog.hide()
                     } else if (quinteto == 0 && contLoca == 0) {
@@ -3835,7 +4007,9 @@ class PartidoFragment : Fragment() {
                                         hashMapOf(
                                             "registro" to listRegistros,
                                         ) as Map<String?, Any?>
-                                    )
+                                    ).addOnSuccessListener {
+                                        actualizaJugadaReciente()
+                                    }
                             }
                         dialog.hide()
                     } else {
@@ -3845,6 +4019,7 @@ class PartidoFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
+
                 }
             }
         vaciarToggle(llenarListToggle())
@@ -3929,7 +4104,7 @@ class PartidoFragment : Fragment() {
             }
     }
 
-    @SuppressLint("CutPasteId")
+    @SuppressLint("CutPasteId", "SetTextI18n")
     private fun tiempoMuerto(equipo: String) {
 
         paraCronometro()
@@ -3983,12 +4158,361 @@ class PartidoFragment : Fragment() {
                         hashMapOf(
                             "registro" to listRegistros,
                         ) as Map<String?, Any?>
-                    )
+                    ).addOnSuccessListener {
+                        actualizaJugadaReciente()
+                    }
             }
 
         view.findViewById<Chronometer>(R.id.cronometroTM).setOnChronometerTickListener {
             if (it.text.toString() == "00:00") {
                 dialog.hide()
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun actualizaJugadaReciente() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+
+        db.collection("MinutoaMinuto").document(idPartido).get().addOnSuccessListener {
+            val listRegistros = it.get("registro") as ArrayList<Map<String?, Any?>>
+
+            val registro = listRegistros[listRegistros.size - 1]
+            if (registro["dorsal"] != "")
+                binding.txtJugadaReciente.text = registro["frase"].toString() + " #" + registro["dorsal"] + ", " + registro["equipo"].toString()
+                    .uppercase(Locale.getDefault())
+            else
+                binding.txtJugadaReciente.text = registro["frase"].toString() + ", " + registro["nombre"] + " " + registro["equipo"].toString()
+                    .uppercase(Locale.getDefault())
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun borraJugada(jugada: MinutoAMinuto) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+
+        when (jugada.imgAccion) {
+            //Cambios
+            "1" -> {
+
+            }
+            //Tiempo Muerto
+            "2" -> {
+                if (jugada.equipo == "Local") {
+                    tmL++
+                } else {
+                    tmV++
+                }
+                actualizaTiempoMuertos()
+            }
+            //Faltas
+            "3" -> {
+                db.collection("Estadisticas").document(idPartido).get()
+                    .addOnSuccessListener {
+                        val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                        for (j in 0..<listJugador.count()) {
+                            val jugador = (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
+
+                                if (jugada.frase == "FALTA RECIBIDA") {
+                                    jugador["falR"] = jugador["falR"].toString().toInt() - 1
+                                } else {
+                                    jugador["falC"] = jugador["falC"].toString().toInt() - 1
+                                    if (jugada.equipo == "Local") {
+                                        falL--
+                                        actualizaFaltaEquipo("FaltaL")
+                                    } else {
+                                        falV--
+                                        actualizaFaltaEquipo("FaltaV")
+                                    }
+                                }
+
+                                db.collection("Estadisticas")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            listJugador[j] to jugador
+                                        ) as Map<String, Any>
+                                    ).addOnSuccessListener {
+                                        calcularVal(listJugador[j], jugador)
+                                    }
+                                break
+                            }
+                        }
+                    }
+            }
+            //Tiros Libres
+            "4" -> {
+
+            }
+            //Tiro Libre anotado
+            "5" -> {
+                db.collection("Estadisticas").document(idPartido).get()
+                    .addOnSuccessListener {
+                        val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                        for (j in 0..<listJugador.count()) {
+                            val jugador = (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
+                                jugador["tlA"] = jugador["tlA"].toString().toInt() - 1
+                                jugador["puntos"] = jugador["puntos"].toString().toInt() - 1
+                                if (jugada.equipo == "Local") {
+                                    binding.txtPuntosLocal.text = "" + (binding.txtPuntosLocal.text.toString().toInt() - 1)
+                                } else {
+                                    binding.txtPuntosVisitante.text = "" + (binding.txtPuntosVisitante.text.toString().toInt() - 1)
+                                }
+                                actualizaResultado()
+                                db.collection("Estadisticas")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            listJugador[j] to jugador
+                                        ) as Map<String, Any>
+                                    ).addOnSuccessListener {
+                                        calcularVal(listJugador[j], jugador)
+                                    }
+                                break
+                            }
+                        }
+                    }
+            }
+            //Tiro Fallado
+            "6" -> {
+                db.collection("Estadisticas").document(idPartido).get()
+                    .addOnSuccessListener {
+                        val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                        for (j in 0..<listJugador.count()) {
+                            val jugador = (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
+
+                                when (jugada.frase) {
+                                    "TIRO LIBRE FALLADO" -> {
+                                        jugador["tlF"] = jugador["tlF"].toString().toInt() - 1
+                                    }
+                                    "TIRO DE 2 FALLADO" -> {
+                                        jugador["tc2pF"] = jugador["tc2pF"].toString().toInt() - 1
+                                    }
+                                    "TIRO DE 3 FALLADO" -> {
+                                        jugador["tc3pF"] = jugador["tc3pF"].toString().toInt() - 1
+                                    }
+                                }
+
+                                db.collection("Estadisticas")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            listJugador[j] to jugador
+                                        ) as Map<String, Any>
+                                    ).addOnSuccessListener {
+                                        calcularVal(listJugador[j], jugador)
+                                    }
+                                break
+                            }
+                        }
+                    }
+            }
+            //Tiro 2 anotado
+            "7" -> {
+                db.collection("Estadisticas").document(idPartido).get()
+                    .addOnSuccessListener {
+                        val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                        for (j in 0..<listJugador.count()) {
+                            val jugador = (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
+                                jugador["tc2pA"] = jugador["tc2pA"].toString().toInt() - 1
+                                jugador["puntos"] = jugador["puntos"].toString().toInt() - 2
+                                if (jugada.equipo == "Local") {
+                                    binding.txtPuntosLocal.text = "" + (binding.txtPuntosLocal.text.toString().toInt() - 2)
+                                } else {
+                                    binding.txtPuntosVisitante.text = "" + (binding.txtPuntosVisitante.text.toString().toInt() - 2)
+                                }
+                                actualizaResultado()
+                                db.collection("Estadisticas")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            listJugador[j] to jugador
+                                        ) as Map<String, Any>
+                                    ).addOnSuccessListener {
+                                        calcularVal(listJugador[j], jugador)
+                                    }
+                                break
+                            }
+                        }
+                    }
+            }
+            //Tiro 3 anotado
+            "8" -> {
+                db.collection("Estadisticas").document(idPartido).get()
+                    .addOnSuccessListener {
+                        val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                        for (j in 0..<listJugador.count()) {
+                            val jugador = (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
+                                jugador["tc3pA"] = jugador["tc3pA"].toString().toInt() - 1
+                                jugador["puntos"] = jugador["puntos"].toString().toInt() - 3
+                                if (jugada.equipo == "Local") {
+                                    binding.txtPuntosLocal.text = "" + (binding.txtPuntosLocal.text.toString().toInt() - 3)
+                                } else {
+                                    binding.txtPuntosVisitante.text = "" + (binding.txtPuntosVisitante.text.toString().toInt() - 3)
+                                }
+                                actualizaResultado()
+                                db.collection("Estadisticas")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            listJugador[j] to jugador
+                                        ) as Map<String, Any>
+                                    ).addOnSuccessListener {
+                                        calcularVal(listJugador[j], jugador)
+                                    }
+                                break
+                            }
+                        }
+                    }
+            }
+            //Asistencia
+            "9" -> {
+                db.collection("Estadisticas").document(idPartido).get()
+                    .addOnSuccessListener {
+                        val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                        for (j in 0..<listJugador.count()) {
+                            val jugador = (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
+                                jugador["asi"] = jugador["asi"].toString().toInt() - 1
+                                db.collection("Estadisticas")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            listJugador[j] to jugador
+                                        ) as Map<String, Any>
+                                    ).addOnSuccessListener {
+                                        calcularVal(listJugador[j], jugador)
+                                    }
+                                break
+                            }
+                        }
+                    }
+            }
+            //Perdidas
+            "10" -> {
+                db.collection("Estadisticas").document(idPartido).get()
+                    .addOnSuccessListener {
+                        val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                        for (j in 0..<listJugador.count()) {
+                            val jugador = (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
+                                jugador["per"] = jugador["per"].toString().toInt() - 1
+                                db.collection("Estadisticas")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            listJugador[j] to jugador
+                                        ) as Map<String, Any>
+                                    ).addOnSuccessListener {
+                                        calcularVal(listJugador[j], jugador)
+                                    }
+                                break
+                            }
+                        }
+                    }
+            }
+            //Recuperacion
+            "11" -> {
+                db.collection("Estadisticas").document(idPartido).get()
+                    .addOnSuccessListener {
+                        val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                        for (j in 0..<listJugador.count()) {
+                            val jugador = (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
+                                jugador["recu"] = jugador["recu"].toString().toInt() - 1
+                                db.collection("Estadisticas")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            listJugador[j] to jugador
+                                        ) as Map<String, Any>
+                                    ).addOnSuccessListener {
+                                        calcularVal(listJugador[j], jugador)
+                                    }
+                                break
+                            }
+                        }
+                    }
+            }
+            //Tapon recibido
+            "12" -> {
+                db.collection("Estadisticas").document(idPartido).get()
+                    .addOnSuccessListener {
+                        val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                        for (j in 0..<listJugador.count()) {
+                            val jugador = (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
+                                jugador["taRec"] = jugador["taRec"].toString().toInt() - 1
+                                db.collection("Estadisticas")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            listJugador[j] to jugador
+                                        ) as Map<String, Any>
+                                    ).addOnSuccessListener {
+                                        calcularVal(listJugador[j], jugador)
+                                    }
+                                break
+                            }
+                        }
+                    }
+            }
+            //Tapon cometido
+            "13" -> {
+                db.collection("Estadisticas").document(idPartido).get()
+                    .addOnSuccessListener {
+                        val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                        for (j in 0..<listJugador.count()) {
+                            val jugador = (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
+                                jugador["taCom"] = jugador["taCom"].toString().toInt() - 1
+                                db.collection("Estadisticas")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            listJugador[j] to jugador
+                                        ) as Map<String, Any>
+                                    ).addOnSuccessListener {
+                                        calcularVal(listJugador[j], jugador)
+                                    }
+                                break
+                            }
+                        }
+                    }
+            }
+            //Rebotes
+            "14" -> {
+                db.collection("Estadisticas").document(idPartido).get()
+                    .addOnSuccessListener {
+                        val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                        for (j in 0..<listJugador.count()) {
+                            val jugador = (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
+                                if (jugada.frase == "REBOTE OFENSIVO") {
+                                    jugador["rebO"] = jugador["rebO"].toString().toInt() - 1
+                                } else {
+                                    jugador["rebD"] = jugador["rebD"].toString().toInt() - 1
+                                }
+                                db.collection("Estadisticas")
+                                    .document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            listJugador[j] to jugador
+                                        ) as Map<String, Any>
+                                    ).addOnSuccessListener {
+                                        calcularVal(listJugador[j], jugador)
+                                    }
+                                break
+                            }
+                        }
+                    }
             }
         }
     }

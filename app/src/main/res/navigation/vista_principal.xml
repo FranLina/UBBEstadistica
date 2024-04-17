@@ -144,11 +144,11 @@
             android:id="@+id/action_cargarPlantillasFragment_to_plantillaLocalFragment"
             app:destination="@id/plantillaLocalFragment" />
         <action
-            android:id="@+id/action_cargarPlantillasFragment_to_partidoFragment"
-            app:destination="@id/partidoFragment" />
-        <action
             android:id="@+id/action_cargarPlantillasFragment_to_plantillaVisitanteFragment"
             app:destination="@id/plantillaVisitanteFragment" />
+        <action
+            android:id="@+id/action_cargarPlantillasFragment_to_mainPartidoActivity"
+            app:destination="@id/mainPartidoActivity" />
     </fragment>
     <fragment
         android:id="@+id/plantillaLocalFragment"
@@ -169,11 +169,6 @@
             app:destination="@id/cargarPlantillasFragment" />
     </fragment>
     <fragment
-        android:id="@+id/partidoFragment"
-        android:name="com.franciscolinares.ubb.partido.PartidoFragment"
-        android:label="Partido"
-        tools:layout="@layout/fragment_partido" />
-    <fragment
         android:id="@+id/cargarPartidosEstadisticaFragment"
         android:name="com.franciscolinares.ubb.estadistica.CargarPartidosEstadisticaFragment"
         android:label="Partidos"
@@ -187,4 +182,9 @@
         android:name="com.franciscolinares.ubb.estadistica.CargaPartidoActivity"
         android:label="Partido"
         tools:layout="@layout/activity_carga_partido" />
+    <activity
+        android:id="@+id/mainPartidoActivity"
+        android:name="com.franciscolinares.ubb.partido.MainPartidoActivity"
+        android:label="activity_main_partido"
+        tools:layout="@layout/activity_main_partido" />
 </navigation>

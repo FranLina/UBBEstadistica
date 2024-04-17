@@ -1,5 +1,6 @@
 package com.franciscolinares.ubb.partido
 
+import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.navigation.Navigation
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentCargarPlantillasBinding
 import com.franciscolinares.ubb.databinding.FragmentGestionarPartidosBinding
+import com.franciscolinares.ubb.user.MainActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -71,15 +73,16 @@ class CargarPlantillasFragment : Fragment() {
                     editor.putString("idPartido", idpartido.toString())
                     editor.apply()
 
-                    if (it.get("PlantillaL") == true && it.get("PlantillaV") == true)
+                    if (it.get("PlantillaL") == true && it.get("PlantillaV") == true) {
                         Navigation.findNavController(binding.root)
-                            .navigate(R.id.action_cargarPlantillasFragment_to_partidoFragment)
-                    else
+                            .navigate(R.id.action_cargarPlantillasFragment_to_mainPartidoActivity)
+                    } else {
                         Toast.makeText(
                             binding.root.context,
                             "Carga las plantillas para poder seguir",
                             Toast.LENGTH_SHORT
                         ).show()
+                    }
                 }
 
         }

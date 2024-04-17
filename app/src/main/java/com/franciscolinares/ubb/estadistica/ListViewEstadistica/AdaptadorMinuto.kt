@@ -201,14 +201,14 @@ class AdaptadorMinuto (private val mcontext: Context, private var listaMinuto: L
             }
             "12"->{
                 Picasso.get()
-                    .load(R.drawable.tapon_cometido)
+                    .load(R.drawable.tapon_recibido)
                     .placeholder(R.drawable.equipacion)
                     .error(R.drawable.equipacion)
                     .into(imagenAccion)
             }
             "13"->{
                 Picasso.get()
-                    .load(R.drawable.tapon_recibido)
+                    .load(R.drawable.tapon_cometido)
                     .placeholder(R.drawable.equipacion)
                     .error(R.drawable.equipacion)
                     .into(imagenAccion)
