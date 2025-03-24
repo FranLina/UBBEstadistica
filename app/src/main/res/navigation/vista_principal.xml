@@ -76,7 +76,11 @@
         android:id="@+id/consultarJugadorFragment"
         android:name="com.franciscolinares.ubb.jugador.ConsultarJugadorFragment"
         android:label="Consultar Jugador"
-        tools:layout="@layout/fragment_consultar_jugador" />
+        tools:layout="@layout/fragment_consultar_jugador" >
+        <action
+            android:id="@+id/action_consultarJugadorFragment_to_crearJugadorFragment"
+            app:destination="@id/crearJugadorFragment" />
+    </fragment>
     <fragment
         android:id="@+id/equipoFragment"
         android:name="com.franciscolinares.ubb.user.EquipoFragment"

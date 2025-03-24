@@ -24,6 +24,8 @@ import com.franciscolinares.ubb.equipo.ListViewEquipo.Equipo
 import com.franciscolinares.ubb.equipo.ListViewEquipo.JugadorPlantilla
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class ConsultarEquipoFragment : Fragment() {
 
@@ -157,6 +159,15 @@ class ConsultarEquipoFragment : Fragment() {
                 dialog.show()
 
                 view.findViewById<Button>(R.id.btnSi).setOnClickListener {
+
+                    val storage = FirebaseStorage.getInstance()
+
+                    // Referencia a la imagen que deseas borrar
+                    val storageRef: StorageReference = storage.reference.child("Equipos/" + listaEquipos[pos].id)
+
+                    // Borra la imagen
+                    storageRef.delete()
+
                     db.collection("Equipos")
                         .document(listaEquipos[pos].id).delete()
                         .addOnSuccessListener {

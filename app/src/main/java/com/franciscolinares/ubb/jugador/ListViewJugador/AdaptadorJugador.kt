@@ -9,9 +9,10 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.franciscolinares.ubb.R
+import com.franciscolinares.ubb.estadistica.ListViewEstadistica.MinutoAMinuto
 import com.squareup.picasso.Picasso
 
-class AdaptadorJugador(private val mcontext: Context, private val listaJugadores: List<Jugador>) :
+class AdaptadorJugador(private val mcontext: Context, private var listaJugadores: List<Jugador>) :
     ArrayAdapter<Jugador>(mcontext, 0, listaJugadores) {
 
     @SuppressLint("ViewHolder", "SetTextI18n")
@@ -20,14 +21,10 @@ class AdaptadorJugador(private val mcontext: Context, private val listaJugadores
 
         val jugador = listaJugadores[position]
 
-        layout.findViewById<TextView>(R.id.txtLVJNombre)
-            .setText("Nombre:  " + jugador.nombre + " " + jugador.apellido1 + " " + jugador.apellido2)
-        layout.findViewById<TextView>(R.id.txtLVJCategoria)
-            .setText("Categoria:  " + jugador.categoria)
-        layout.findViewById<TextView>(R.id.txtLVJSexo)
-            .setText("Sexo:  " + jugador.sexo)
-        layout.findViewById<TextView>(R.id.txtLVJEquipo)
-            .setText("Equipo:  " + jugador.equipo)
+        layout.findViewById<TextView>(R.id.txtLVJNombre).text = "Nombre:  " + jugador.nombre + " " + jugador.apellido1 + " " + jugador.apellido2
+        layout.findViewById<TextView>(R.id.txtLVJCategoria).text = "Categoria:  " + jugador.categoria
+        layout.findViewById<TextView>(R.id.txtLVJSexo).text = "Sexo:  " + jugador.sexo
+        layout.findViewById<TextView>(R.id.txtLVJEquipo).text = "Equipo:  " + jugador.equipo
 
         if (jugador.foto != "") {
             Picasso.get()
@@ -38,5 +35,10 @@ class AdaptadorJugador(private val mcontext: Context, private val listaJugadores
         }
 
         return layout
+    }
+
+    fun updateData(newData: List<Jugador>) {
+        listaJugadores = newData
+        notifyDataSetChanged() // Esto refresca la vista, pero no recrea todos los elementos
     }
 }

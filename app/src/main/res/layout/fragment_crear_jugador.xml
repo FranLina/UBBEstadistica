@@ -65,7 +65,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10sp"
                             android:background="#3A3A3A"
-                            android:text="Datos"
+                            android:text="Datos Jugador"
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textSize="20sp"
@@ -81,32 +81,56 @@
                             android:inputType="textPersonName"
                             android:visibility="gone" />
 
-                        <EditText
-                            android:id="@+id/txtCJNombre"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:backgroundTint="@color/yellow_logo"
-                            android:ems="10"
-                            android:hint="Nombre"
-                            android:inputType="textPersonName" />
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal">
 
-                        <EditText
-                            android:id="@+id/txtCJApellido1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/yellow_logo"
-                            android:ems="10"
-                            android:hint="Primer Apellido"
-                            android:inputType="textPersonName" />
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/imgCJFoto"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1.7"
+                                android:scaleType="centerCrop"
+                                app:shapeAppearanceOverlay="@style/circular"
+                                app:srcCompat="@drawable/jugador_de_baloncesto" />
 
-                        <EditText
-                            android:id="@+id/txtCJApellido2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:backgroundTint="@color/yellow_logo"
-                            android:ems="10"
-                            android:hint="Segundo Apellido"
-                            android:inputType="textPersonName" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <EditText
+                                    android:id="@+id/txtCJNombre"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@color/yellow_logo"
+                                    android:ems="10"
+                                    android:hint="Nombre"
+                                    android:inputType="textPersonName" />
+
+                                <EditText
+                                    android:id="@+id/txtCJApellido1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@color/yellow_logo"
+                                    android:ems="10"
+                                    android:hint="Primer Apellido"
+                                    android:inputType="textPersonName" />
+
+                                <EditText
+                                    android:id="@+id/txtCJApellido2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:backgroundTint="@color/yellow_logo"
+                                    android:ems="10"
+                                    android:hint="Segundo Apellido"
+                                    android:inputType="textPersonName" />
+                            </LinearLayout>
+                        </LinearLayout>
 
                         <EditText
                             android:id="@+id/txtCJFechaNacimiento"
@@ -138,24 +162,24 @@
                             android:layout_marginBottom="10sp"
                             android:orientation="horizontal">
 
-                            <Space
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1" />
-
                             <Button
                                 android:id="@+id/btnCJCrear"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
                                 android:layout_weight="1"
                                 android:backgroundTint="@color/yellow_logo"
-                                android:text="Crear"
+                                android:text="Guardar Jugador"
                                 app:cornerRadius="30dp" />
 
-                            <Space
-                                android:layout_width="wrap_content"
+                            <Button
+                                android:id="@+id/btnCJCargarFoto"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1" />
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:text="Cargar Foto" />
+
                         </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>

@@ -25,6 +25,9 @@ class LoginActivity : AppCompatActivity() {
         val idUser = prefs.getString("idUser", "")
         val password = prefs.getString("password", "")
 
+        binding.textUsuario.setText(idUser.toString())
+        binding.textContraseA.setText(password.toString())
+
         if (!idUser.toString().isEmpty() && !password.toString().isEmpty()) {
             comprobarUsuario(idUser.toString(), password.toString())
         }

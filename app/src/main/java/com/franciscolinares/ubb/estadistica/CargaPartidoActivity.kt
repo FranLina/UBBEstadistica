@@ -9,7 +9,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class CargaPartidoActivity : AppCompatActivity() {
-    var tabTitle = arrayOf("En Vivo", "Estadísticas", "Mejores Jugadores")
+    var tabTitle = arrayOf("En Vivo", "Estadísticas", "Mejores Jugadores","Tiros de campo")
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {

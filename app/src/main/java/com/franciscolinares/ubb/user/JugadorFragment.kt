@@ -1,6 +1,7 @@
 package com.franciscolinares.ubb.user
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,10 @@ class JugadorFragment : Fragment() {
         val root: View = binding.root
 
         binding.btnJCrearJugador.setOnClickListener {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+            val editor = prefs.edit()
+            editor.putString("jugadorId", "")
+            editor.apply()
             Navigation.findNavController(binding.root)
                 .navigate(R.id.action_jugadorFragment_to_crearJugadorFragment)
         }

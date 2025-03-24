@@ -67,4 +67,5 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation ("org.apache.poi:poi-ooxml:5.2.3")
 }

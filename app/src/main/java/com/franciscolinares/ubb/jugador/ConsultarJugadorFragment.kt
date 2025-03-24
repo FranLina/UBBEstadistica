@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ContentValues
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -13,35 +14,41 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.Navigation
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentConsultarJugadorBinding
 import com.franciscolinares.ubb.databinding.FragmentCrearJugadorBinding
+import com.franciscolinares.ubb.equipo.ListViewEquipo.Equipo
+import com.franciscolinares.ubb.estadistica.ListViewEstadistica.AdaptadorMinuto
 import com.franciscolinares.ubb.jugador.ListViewJugador.AdaptadorJugador
 import com.franciscolinares.ubb.jugador.ListViewJugador.Jugador
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class ConsultarJugadorFragment : Fragment() {
 
     private var _binding: FragmentConsultarJugadorBinding? = null
     private val binding get() = _binding!!
     private val db = Firebase.firestore
-    private val listaJugadores = mutableListOf<Jugador>()
+    private var listaJugadores = mutableListOf<Jugador>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var myAdapter: AdaptadorJugador
+    private lateinit var listView: ListView
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentConsultarJugadorBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        listView = binding.ListViewJugador
 
         llenarListView()
 
@@ -73,57 +80,79 @@ class ConsultarJugadorFragment : Fragment() {
             }
         })
 
-        binding.ListViewJugador.onItemLongClickListener =
-            AdapterView.OnItemLongClickListener { arg0, arg1, pos, id ->
+        listView.onItemLongClickListener = AdapterView.OnItemLongClickListener { arg0, arg1, pos, id ->
 
-                val builder = AlertDialog.Builder(binding.root.context)
-                val view = layoutInflater.inflate(R.layout.borrardialog, null)
-                builder.setView(view)
-                view.findViewById<TextView>(R.id.txtIdBorrar).text =
-                    listaJugadores[pos].nombre + " " + listaJugadores[pos].apellido1 + " " + listaJugadores[pos].apellido2
-                val dialog = builder.create()
-                dialog.show()
+            val builder = AlertDialog.Builder(binding.root.context)
+            val view = layoutInflater.inflate(R.layout.borrardialog, null)
+            builder.setView(view)
+            view.findViewById<TextView>(R.id.txtIdBorrar).text =
+                listaJugadores[pos].nombre + " " + listaJugadores[pos].apellido1 + " " + listaJugadores[pos].apellido2
+            val dialog = builder.create()
+            dialog.show()
 
-                view.findViewById<Button>(R.id.btnSi).setOnClickListener {
-                    db.collection("Jugadores")
-                        .document(listaJugadores[pos].id_jugador).delete()
-                        .addOnSuccessListener {
-                            Toast.makeText(
-                                binding.root.context,
-                                "Borrado con exito",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }.addOnFailureListener { exception ->
-                            Log.w(
-                                ContentValues.TAG,
-                                "Error deletting documents.",
-                                exception
-                            )
-                        }
+            view.findViewById<Button>(R.id.btnSi).setOnClickListener {
+
+                if (listaJugadores[pos].equipo != "") {
                     db.collection("Equipos").document(listaJugadores[pos].equipo).get()
                         .addOnSuccessListener {
-                            val listJugador = it.get("Jugadores") as HashMap<String, String>;
+                            val listJugador = it.get("Jugadores") as HashMap<String, String>
                             listJugador.remove(listaJugadores[pos].id_jugador)
                             db.collection("Equipos").document(listaJugadores[pos].equipo).update(
                                 hashMapOf(
                                     "Jugadores" to listJugador
                                 ) as HashMap<String?, Any>
-                            ).addOnSuccessListener {
-                                llenarListView()
-                                dialog.hide()
-                            }
+                            )
                         }
                 }
 
-                view.findViewById<Button>(R.id.btnNo).setOnClickListener {
-                    dialog.hide()
-                }
+                val storage = FirebaseStorage.getInstance()
 
-                true
+                // Referencia a la imagen que deseas borrar
+                val storageRef: StorageReference = storage.reference.child("Jugadores/" + listaJugadores[pos].id_jugador)
+
+                // Borra la imagen
+                storageRef.delete()
+
+                db.collection("Jugadores")
+                    .document(listaJugadores[pos].id_jugador).delete()
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            binding.root.context,
+                            "Borrado con exito",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        llenarListView()
+                        dialog.hide()
+                    }.addOnFailureListener { exception ->
+                        Log.w(
+                            ContentValues.TAG,
+                            "Error deletting documents.",
+                            exception
+                        )
+                    }
             }
 
+            view.findViewById<Button>(R.id.btnNo).setOnClickListener {
+                dialog.hide()
+            }
+
+            true
+        }
+
+        listView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, pos, id ->
+            val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+            val editor = prefs.edit()
+            editor.putString("jugadorId", listaJugadores[pos].id_jugador)
+            editor.apply()
+            Navigation.findNavController(binding.root).navigate(R.id.action_consultarJugadorFragment_to_crearJugadorFragment)
+        }
 
         return root
+    }
+
+    //Función para comprobar que no se repita un jugador en la lista
+    fun comprobarListaSinRepetidos(lista: MutableList<Jugador>): List<Jugador> {
+        return lista.distinctBy { it.id_jugador }
     }
 
     fun llenarListView() {
@@ -142,10 +171,8 @@ class ConsultarJugadorFragment : Fragment() {
                 )
                 listaJugadores.add(jugador)
             }
-
-            val adapter = AdaptadorJugador(binding.root.context, listaJugadores)
-
-            binding.ListViewJugador.adapter = adapter
+            myAdapter = AdaptadorJugador(binding.root.context, comprobarListaSinRepetidos(listaJugadores))
+            listView.adapter = myAdapter
         }
     }
 
@@ -153,14 +180,8 @@ class ConsultarJugadorFragment : Fragment() {
         if (nombre.isNotEmpty()) {
             listaJugadores.clear()
             db.collection("Jugadores")
-                .whereGreaterThanOrEqualTo(
-                    "Nombre",
-                    nombre.substring(0, 1).toUpperCase() + nombre.substring(1)
-                )
-                .whereLessThan(
-                    "Nombre",
-                    nombre.substring(0, 1).toUpperCase() + nombre.substring(1) + "\uf8ff"
-                )
+                .whereGreaterThanOrEqualTo("Nombre", nombre.substring(0, 1).toUpperCase() + nombre.substring(1))
+                .whereLessThan("Nombre", nombre.substring(0, 1).toUpperCase() + nombre.substring(1) + "\uf8ff")
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -182,9 +203,8 @@ class ConsultarJugadorFragment : Fragment() {
                                 listaJugadores.add(jugador)
                             }
                         }
-                        val adapter = AdaptadorJugador(binding.root.context, listaJugadores)
-
-                        binding.ListViewJugador.adapter = adapter
+                        myAdapter = AdaptadorJugador(binding.root.context, comprobarListaSinRepetidos(listaJugadores))
+                        listView.adapter = myAdapter
                     } else {
                         // Manejar errores aquí
                         Toast.makeText(

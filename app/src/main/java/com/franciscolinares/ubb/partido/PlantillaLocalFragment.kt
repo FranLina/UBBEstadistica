@@ -162,7 +162,8 @@ class PlantillaLocalFragment : Fragment() {
                                 "tc3pF" to 0,
                                 "tlA" to 0,
                                 "tlF" to 0,
-                                "val" to 0
+                                "val" to 0,
+                                "tiros" to ArrayList<Map<String,Any>>()
                             ) as Map<String, Any>
                             listJugadores.add(j.id_jugador)
 

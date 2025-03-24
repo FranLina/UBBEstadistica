@@ -45,15 +45,15 @@ class DatosPersonalesFragment : Fragment() {
 
         // Obtener el documento con el ID del usuario
         usuarioRef.get()
-            .addOnSuccessListener { documentSnapshot ->
-                binding.etDPNombre.setText(documentSnapshot.get("nombre").toString())
-                binding.etDPApellido1.setText(documentSnapshot.get("apellido1").toString())
-                binding.etDPApellido2.setText(documentSnapshot.get("apellido2").toString())
-                binding.etDPUbicacion.setText(documentSnapshot.get("direccion").toString())
-                binding.etDPPoblacion.setText(documentSnapshot.get("poblacion").toString())
-                binding.etDPProvincia.setText(documentSnapshot.get("provincia").toString())
-                binding.etDPCorreo.setText(documentSnapshot.get("correo").toString())
-                binding.etDPTelefono.setText(documentSnapshot.get("telefono").toString())
+            .addOnSuccessListener { user ->
+                binding.etDPNombre.setText(user.get("nombre").toString())
+                binding.etDPApellido1.setText(user.get("apellido1").toString())
+                binding.etDPApellido2.setText(user.get("apellido2").toString())
+                binding.etDPUbicacion.setText(user.get("direccion").toString())
+                binding.etDPPoblacion.setText(user.get("poblacion").toString())
+                binding.etDPProvincia.setText(user.get("provincia").toString())
+                binding.etDPCorreo.setText(user.get("correo").toString())
+                binding.etDPTelefono.setText(user.get("telefono").toString())
             }
             .addOnFailureListener { exception ->
                 // Manejar errores
