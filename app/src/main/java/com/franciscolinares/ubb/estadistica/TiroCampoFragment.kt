@@ -2,27 +2,29 @@ package com.franciscolinares.ubb.estadistica
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.graphics.RectF
 import android.os.Bundle
 import android.os.Handler
 import android.preference.PreferenceManager
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.CheckBox
+import android.widget.CompoundButton
+import android.widget.ListView
+import android.widget.TextView
 import com.franciscolinares.ubb.R
-import com.franciscolinares.ubb.databinding.FragmentMVPBinding
 import com.franciscolinares.ubb.databinding.FragmentTiroCampoBinding
+import com.franciscolinares.ubb.estadistica.ListViewEstadistica.AdaptadorTiroJugador
+import com.franciscolinares.ubb.estadistica.ListViewEstadistica.TiroJugador
+import com.franciscolinares.ubb.partido.ListViewPartido.AdaptadorJugadorConvocado
+import com.franciscolinares.ubb.partido.ListViewPartido.JugadorConvocado
 import com.franciscolinares.ubb.partido.TiroView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import java.util.Locale
-import kotlin.math.max
 
 class TiroCampoFragment : Fragment() {
 
@@ -31,6 +33,17 @@ class TiroCampoFragment : Fragment() {
     private val db = Firebase.firestore
     private var i = 0
     private val handler = Handler()
+    private lateinit var myAdapterLocal: AdaptadorTiroJugador
+    private lateinit var myAdapterVistante: AdaptadorTiroJugador
+    private lateinit var listViewLocal: ListView
+    private lateinit var listViewVisitante: ListView
+    private val listaPlantillaLocal = mutableListOf<TiroJugador>()
+    private val listaPlantillaVisitante = mutableListOf<TiroJugador>()
+    private var jugadores: ArrayList<Map<String?, Any?>> = arrayListOf()
+
+    private val checkBoxListener = CompoundButton.OnCheckedChangeListener { _, _ ->
+        recuperarTiros()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +61,22 @@ class TiroCampoFragment : Fragment() {
 
         i = binding.progressBar.progress
 
+
+        // Asignar el listener a todos los CheckBox
+        binding.cbCuarto1.setOnCheckedChangeListener(checkBoxListener)
+        binding.cbCuarto2.setOnCheckedChangeListener(checkBoxListener)
+        binding.cbCuarto3.setOnCheckedChangeListener(checkBoxListener)
+        binding.cbCuarto4.setOnCheckedChangeListener(checkBoxListener)
+
         recuperaInfo()
-        recuperarAllTiros()
+        binding.campoTiro.viewTreeObserver.addOnGlobalLayoutListener {
+            recuperarTiros()
+        }
+
+        listViewLocal = binding.LVJugadorTiroLocal
+        listViewVisitante = binding.LVJugadorTiroVisitante
+
+        recuperarJugadores(root)
 
         Thread {
             while (i < 100) {
@@ -64,10 +91,10 @@ class TiroCampoFragment : Fragment() {
                 }
                 if (i == 100) {
                     i = 0
-                    recuperarAllTiros()
                     db.collection("Partidos").document(idPartido).get()
                         .addOnSuccessListener { partido ->
                             if (partido.get("Estado") != "Finalizado") {
+                                recuperarTiros()
                                 db.collection("Partidos").document(idPartido).get()
                                     .addOnSuccessListener { documentSnapshot ->
                                         binding.txtPuntosLocalPartido.text =
@@ -86,30 +113,129 @@ class TiroCampoFragment : Fragment() {
         return root
     }
 
-    private fun recuperarAllTiros() {
+    private fun recuperarJugadores(viewDialog: View) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
         val idPartido = prefs.getString("idPartido", "").toString()
 
-        binding.campoTiro.viewTreeObserver.addOnGlobalLayoutListener {
+        listaPlantillaLocal.add(TiroJugador("TODOS", "", "", true, true))
+        listaPlantillaVisitante.add(TiroJugador("TODOS", "", "", true, true))
+
+        db.collection("Estadisticas").document(idPartido).get()
+            .addOnSuccessListener {
+                val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                for (j in 0..<listJugador.count()) {
+                    jugadores.add((it.get(listJugador[j]) as Map<String?, Any?>))
+                }
+                val jugadoresOrdenados = jugadores.sortedWith(compareBy<Map<String?, Any?>> { it["equipo"] as? String }.thenBy {
+                    (it["dorsal"] as? String)?.toIntOrNull() ?: Int.MAX_VALUE
+                })
+                for (j in 0..<jugadoresOrdenados.count()) {
+                    val jugador = jugadoresOrdenados[j]
+                    val ju = TiroJugador(
+                        jugador["nombre"].toString(),
+                        jugador["dorsal"].toString(),
+                        jugador["equipo"].toString(),
+                        true,
+                        false
+                    )
+                    if (jugador["equipo"] == "Local") {
+                        listaPlantillaLocal.add(ju)
+                    } else {
+                        listaPlantillaVisitante.add(ju)
+                    }
+                }
+                myAdapterLocal = AdaptadorTiroJugador(viewDialog.context, listaPlantillaLocal) { recuperarTiros() }
+                listViewLocal.adapter = myAdapterLocal
+
+                myAdapterVistante = AdaptadorTiroJugador(viewDialog.context, listaPlantillaVisitante) { recuperarTiros() }
+                listViewVisitante.adapter = myAdapterVistante
+
+            }
+    }
+
+    private fun recuperarTiros() {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+
+        val cuartos = comprobarCheckBoxCuartos()
+        val jugadoresL = comprobarCheckBoxJugador(listViewLocal)
+        val jugadoresV = comprobarCheckBoxJugador(listViewVisitante)
+
+        if (cuartos.isNotEmpty()) {
             if (binding.campoTiro.width > 0 && binding.campoTiro.height > 0) {
                 db.collection("Estadisticas").document(idPartido).get()
                     .addOnSuccessListener {
                         val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                        val tiros: ArrayList<TiroView.Tiro> = arrayListOf()
                         for (j in 0..<listJugador.count()) {
                             val jugador = it.get(listJugador[j]) as Map<String?, Any?>
-                            val tiros = jugador["tiros"] as ArrayList<Map<String, Any>>
-                            for (tiro in tiros) {
-                                binding.tiroView2.agregarTiro(
-                                    tiro["x"].toString().toFloat(),
-                                    tiro["y"].toString().toFloat(),
-                                    tiro["encestado"] as Boolean,
-                                    jugador["equipo"] as String
-                                )
+                            val tirosJ = jugador["tiros"] as ArrayList<Map<String, Any>>
+
+                            if (jugador["equipo"] == "Local" && jugadoresL.contains(jugador["dorsal"])) {
+                                for (tiro in tirosJ) {
+                                    if (cuartos.contains(tiro["cuarto"].toString().toInt())) {
+                                        tiros.add(
+                                            TiroView.Tiro(
+                                                tiro["x"].toString().toFloat(),
+                                                tiro["y"].toString().toFloat(),
+                                                tiro["encestado"] as Boolean,
+                                                jugador["equipo"] as String
+                                            )
+                                        )
+                                    }
+                                }
+                            } else if (jugador["equipo"] == "Visitante" && jugadoresV.contains(jugador["dorsal"])) {
+                                for (tiro in tirosJ) {
+                                    if (cuartos.contains(tiro["cuarto"].toString().toInt())) {
+                                        tiros.add(
+                                            TiroView.Tiro(
+                                                tiro["x"].toString().toFloat(),
+                                                tiro["y"].toString().toFloat(),
+                                                tiro["encestado"] as Boolean,
+                                                jugador["equipo"] as String
+                                            )
+                                        )
+                                    }
+                                }
                             }
                         }
+                        binding.tiroView2.mostrarTiros(tiros)
                     }
             }
+        } else {
+            val tiros: ArrayList<TiroView.Tiro> = arrayListOf()
+            binding.tiroView2.mostrarTiros(tiros)
         }
+    }
+
+    private fun comprobarCheckBoxCuartos(): ArrayList<Int> {
+        val cuartos = ArrayList<Int>()
+        if (binding.cbCuarto1.isChecked)
+            cuartos.add(1)
+        if (binding.cbCuarto2.isChecked)
+            cuartos.add(2)
+        if (binding.cbCuarto3.isChecked)
+            cuartos.add(3)
+        if (binding.cbCuarto4.isChecked)
+            cuartos.add(4)
+        return cuartos
+    }
+
+    private fun comprobarCheckBoxJugador(listView: ListView): ArrayList<String> {
+        val seleccionados = ArrayList<String>()
+        for (i in 0 until listView.childCount) {
+            val itemView = listView.getChildAt(i) // Obtiene la vista del elemento
+            val checkBox = itemView?.findViewById<CheckBox>(R.id.cbTiroJugador)
+            val dorsal = itemView?.findViewById<TextView>(R.id.txtDorsalJugadorTiro)
+
+            if (checkBox != null && checkBox.isChecked) {
+                if (dorsal != null) {
+                    seleccionados.add(dorsal.text.toString())
+                }
+            }
+        }
+
+        return seleccionados
     }
 
     @SuppressLint("SetTextI18n")

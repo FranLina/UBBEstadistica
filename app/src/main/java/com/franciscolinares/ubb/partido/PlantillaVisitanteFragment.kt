@@ -87,7 +87,12 @@ class PlantillaVisitanteFragment : Fragment() {
                         false
                     )
                     listaPlantilla.add(j)
-                    myAdapter.updateData(listaPlantilla)
+                    if (::myAdapter.isInitialized) {  // Verifica si está inicializado antes de usarlo
+                        myAdapter.updateData(listaPlantilla)
+                    } else {
+                        myAdapter = AdaptadorJugadorConvocado(root.context, listaPlantilla)
+                        listView.adapter = myAdapter
+                    }
                     dialog.hide()
                 } else {
                     // Manejar errores aquí

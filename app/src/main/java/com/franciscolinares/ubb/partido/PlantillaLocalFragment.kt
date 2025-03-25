@@ -87,7 +87,13 @@ class PlantillaLocalFragment : Fragment() {
                         false
                     )
                     listaPlantilla.add(j)
-                    myAdapter.updateData(listaPlantilla)
+                    if (::myAdapter.isInitialized) {  // Verifica si está inicializado antes de usarlo
+                        myAdapter.updateData(listaPlantilla)
+                    } else {
+                        myAdapter = AdaptadorJugadorConvocado(root.context, listaPlantilla)
+                        listView.adapter = myAdapter
+                    }
+
                     dialog.hide()
                 } else {
                     // Manejar errores aquí
@@ -163,7 +169,7 @@ class PlantillaLocalFragment : Fragment() {
                                 "tlA" to 0,
                                 "tlF" to 0,
                                 "val" to 0,
-                                "tiros" to ArrayList<Map<String,Any>>()
+                                "tiros" to ArrayList<Map<String, Any>>()
                             ) as Map<String, Any>
                             listJugadores.add(j.id_jugador)
 
