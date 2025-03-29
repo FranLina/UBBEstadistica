@@ -4142,7 +4142,7 @@ class PartidoFragment : Fragment() {
                         }
 
                         filaFalta.findViewById<TextView>(R.id.txtFaltaDorsal).text = jugador["dorsal"].toString()
-                        filaFalta.findViewById<TextView>(R.id.txtFaltaNombre).text = jugador["nombre"].toString().toUpperCase(Locale.ROOT)
+                        filaFalta.findViewById<TextView>(R.id.txtFaltaNombre).text = jugador["nombre"].toString().uppercase(Locale.ROOT)
                         filaFalta.findViewById<TextView>(R.id.txtFaltaFalta).text = jugador["falC"].toString()
                         if (jugador["falC"].toString().toInt() == 5)
                             filaFalta.findViewById<TextView>(R.id.txtFaltaFalta).setTextColor(Color.RED)

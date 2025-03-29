@@ -197,14 +197,14 @@ class EnVivoFragment : Fragment() {
 
         db.collection("Partidos").document(idPartido).get()
             .addOnSuccessListener {
-                binding.txtNombreELocal.text = "  " + it.get("EquipoLocal").toString().toUpperCase(
+                binding.txtNombreELocal.text = "  " + it.get("EquipoLocal").toString().uppercase(
                     Locale.ROOT
                 )
-                binding.txtNombreEVisitante.text = "  " + it.get("EquipoVisitante").toString().toUpperCase(
+                binding.txtNombreEVisitante.text = "  " + it.get("EquipoVisitante").toString().uppercase(
                     Locale.ROOT
                 )
-                binding.txtEquipoLJC.text = it.get("EquipoLocal").toString().toUpperCase(Locale.ROOT)
-                binding.txtEquipoVJC.text = it.get("EquipoVisitante").toString().toUpperCase(Locale.ROOT)
+                binding.txtEquipoLJC.text = it.get("EquipoLocal").toString().uppercase(Locale.ROOT)
+                binding.txtEquipoVJC.text = it.get("EquipoVisitante").toString().uppercase(Locale.ROOT)
                 binding.txtPuntosLocalPartido.text =
                     (it.get("Resultado").toString().split(" - "))[0]
                 binding.txtPuntosVisitantePartido.text =
@@ -274,9 +274,9 @@ class EnVivoFragment : Fragment() {
 
             registro.findViewById<TextView>(R.id.txtJCNombre).text =
                 if (jugador["nombre"].toString().length > 23) {
-                    "${jugador["nombre"].toString().toUpperCase(Locale.ROOT).substring(0, 20)}..."
+                    "${jugador["nombre"].toString().uppercase(Locale.ROOT).substring(0, 20)}..."
                 } else {
-                    jugador["nombre"].toString().toUpperCase(Locale.ROOT)
+                    jugador["nombre"].toString().uppercase(Locale.ROOT)
                 }
             registro.findViewById<TextView>(R.id.txtJCPuntos).text = jugador["puntos"].toString()
             registro.findViewById<TextView>(R.id.txtJCRebotes).text =

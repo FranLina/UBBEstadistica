@@ -37,7 +37,7 @@ class AdaptadorJugadorConvocado(private val mcontext: Context, private var lista
         val cb = listItemView.findViewById<CheckBox>(R.id.cbConvocado)
 
         listItemView.findViewById<TextView>(R.id.txtConvocadoNombre).text =
-            (jugador.apellido1 + " " + jugador.apellido2 + ", " + jugador.nombre).toUpperCase(
+            (jugador.apellido1 + " " + jugador.apellido2 + ", " + jugador.nombre).uppercase(
                 Locale.ROOT
             )
         listItemView.findViewById<EditText>(R.id.ettConvocadoDorsal).setText(jugador.dorsal)

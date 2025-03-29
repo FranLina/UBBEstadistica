@@ -67,7 +67,7 @@ class AdaptadorMinuto (private val mcontext: Context, private var listaMinuto: L
             "1" -> {
                 layout.findViewById<TextView>(R.id.txtLVMFrase).text = minuto.frase
                 layout.findViewById<TextView>(R.id.txtLVM).text = "#" + minuto.dorsal + ", p " + minuto.cuarto + ", " + minuto.tiempo
-                layout.findViewById<TextView>(R.id.txtLVMNombre).text = minuto.nombre.toUpperCase(Locale.ROOT)
+                layout.findViewById<TextView>(R.id.txtLVMNombre).text = minuto.nombre.uppercase(Locale.ROOT)
                 layout.findViewById<TextView>(R.id.txtLVMResultado).visibility = View.VISIBLE
                 layout.findViewById<TextView>(R.id.txtLVMResultado).text = minuto.resultado
             }
@@ -93,7 +93,7 @@ class AdaptadorMinuto (private val mcontext: Context, private var listaMinuto: L
                     layout.findViewById<TextView>(R.id.txtLVMFrase).text = minuto.frase
                     layout.findViewById<TextView>(R.id.txtLVM).text = "#" + minuto.dorsal + ", p " + minuto.cuarto + ", " + minuto.tiempo
                 }
-                layout.findViewById<TextView>(R.id.txtLVMNombre).text = minuto.nombre.toUpperCase(Locale.ROOT)
+                layout.findViewById<TextView>(R.id.txtLVMNombre).text = minuto.nombre.uppercase(Locale.ROOT)
             }
             "4" -> {
                 layout.findViewById<ImageView>(R.id.imgAccionMAM).visibility = View.GONE

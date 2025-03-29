@@ -51,7 +51,7 @@ class AdaptadorMvp(private val mcontext: Context, private var listaJugadores: Li
                 }
             }
         layout.findViewById<TextView>(R.id.txtMVPMinutos).text = convertirAMinutosYSegundos(jugadorE.minutos)
-        layout.findViewById<TextView>(R.id.txtMVPNombre).text = jugadorE.nombre.toUpperCase(Locale.ROOT)
+        layout.findViewById<TextView>(R.id.txtMVPNombre).text = jugadorE.nombre.uppercase(Locale.ROOT)
         layout.findViewById<TextView>(R.id.txtMVPDorsal).text = jugadorE.dorsal
         layout.findViewById<TextView>(R.id.txtMVPPuntos).text = jugadorE.puntos.toString()
         layout.findViewById<TextView>(R.id.txtMVPRebotes).text = jugadorE.rebotes.toString()

@@ -245,10 +245,10 @@ class TiroCampoFragment : Fragment() {
 
         db.collection("Partidos").document(idPartido).get()
             .addOnSuccessListener {
-                binding.txtNombreELocal.text = "  " + it.get("EquipoLocal").toString().toUpperCase(
+                binding.txtNombreELocal.text = "  " + it.get("EquipoLocal").toString().uppercase(
                     Locale.ROOT
                 )
-                binding.txtNombreEVisitante.text = "  " + it.get("EquipoVisitante").toString().toUpperCase(Locale.ROOT)
+                binding.txtNombreEVisitante.text = "  " + it.get("EquipoVisitante").toString().uppercase(Locale.ROOT)
                 binding.txtPuntosLocalPartido.text =
                     (it.get("Resultado").toString().split(" - "))[0]
                 binding.txtPuntosVisitantePartido.text =

@@ -51,7 +51,7 @@ class PlantillaLocalFragment : Fragment() {
         listView = binding.LVPlantillaLocal
 
         db.collection("Equipos").document(equipoLocal.toString()).get().addOnSuccessListener {
-            binding.txtPlantillaEquipoL.text = it.get("Nombre").toString().toUpperCase(Locale.ROOT)
+            binding.txtPlantillaEquipoL.text = it.get("Nombre").toString().uppercase(Locale.ROOT)
 
             if (it.get("UrlFoto") != "") {
                 Picasso.get()

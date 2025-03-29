@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.TextView
 import com.franciscolinares.ubb.R
+import java.util.Locale
 
 class AdaptadorTiroJugador(
     private val mcontext: Context,
@@ -34,9 +35,9 @@ class AdaptadorTiroJugador(
         val cb = listItemView.findViewById<CheckBox>(R.id.cbTiroJugador)
 
         if ((jugador.nombre).length > 13) {
-            listItemView.findViewById<TextView>(R.id.txtNombreJugadorTiro).text = "${(jugador.nombre.toUpperCase()).substring(0, 10)}..."
+            listItemView.findViewById<TextView>(R.id.txtNombreJugadorTiro).text = "${(jugador.nombre.uppercase(Locale.getDefault())).substring(0, 10)}..."
         } else {
-            listItemView.findViewById<TextView>(R.id.txtNombreJugadorTiro).text = jugador.nombre.toUpperCase()
+            listItemView.findViewById<TextView>(R.id.txtNombreJugadorTiro).text = jugador.nombre.uppercase(Locale.getDefault())
         }
         listItemView.findViewById<TextView>(R.id.txtDorsalJugadorTiro).text = jugador.dorsal
 

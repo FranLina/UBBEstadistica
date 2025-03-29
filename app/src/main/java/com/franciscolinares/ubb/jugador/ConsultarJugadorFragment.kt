@@ -29,6 +29,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import java.util.Locale
 
 class ConsultarJugadorFragment : Fragment() {
 
@@ -180,8 +181,8 @@ class ConsultarJugadorFragment : Fragment() {
         if (nombre.isNotEmpty()) {
             listaJugadores.clear()
             db.collection("Jugadores")
-                .whereGreaterThanOrEqualTo("Nombre", nombre.substring(0, 1).toUpperCase() + nombre.substring(1))
-                .whereLessThan("Nombre", nombre.substring(0, 1).toUpperCase() + nombre.substring(1) + "\uf8ff")
+                .whereGreaterThanOrEqualTo("Nombre", nombre.substring(0, 1).uppercase(Locale.getDefault()) + nombre.substring(1))
+                .whereLessThan("Nombre", nombre.substring(0, 1).uppercase(Locale.getDefault()) + nombre.substring(1) + "\uf8ff")
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {

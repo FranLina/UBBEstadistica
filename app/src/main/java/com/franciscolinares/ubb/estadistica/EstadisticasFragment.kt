@@ -471,12 +471,12 @@ class EstadisticasFragment : Fragment() {
         val idPartido = prefs.getString("idPartido", "").toString()
 
         db.collection("Partidos").document(idPartido).get().addOnSuccessListener {
-            binding.txtNombreELocal.text = "  " + it.get("EquipoLocal").toString().toUpperCase(
+            binding.txtNombreELocal.text = "  " + it.get("EquipoLocal").toString().uppercase(
                 Locale.ROOT
             )
-            binding.txtNombreEVisitante.text = "  " + it.get("EquipoVisitante").toString().toUpperCase(Locale.ROOT)
-            binding.txtNombreELocalEsta.text = it.get("EquipoLocal").toString().toUpperCase(Locale.ROOT)
-            binding.txtNombreEVisitanteEsta.text = it.get("EquipoVisitante").toString().toUpperCase(Locale.ROOT)
+            binding.txtNombreEVisitante.text = "  " + it.get("EquipoVisitante").toString().uppercase(Locale.ROOT)
+            binding.txtNombreELocalEsta.text = it.get("EquipoLocal").toString().uppercase(Locale.ROOT)
+            binding.txtNombreEVisitanteEsta.text = it.get("EquipoVisitante").toString().uppercase(Locale.ROOT)
             binding.txtPuntosLocalPartido.text = (it.get("Resultado").toString().split(" - "))[0]
             binding.txtPuntosVisitantePartido.text = (it.get("Resultado").toString().split(" - "))[1]
             cargaEscudos(it.get("EquipoLocal").toString(), it.get("EquipoVisitante").toString())
@@ -582,12 +582,12 @@ class EstadisticasFragment : Fragment() {
             registroN.findViewById<TextView>(R.id.txtENombre).text =
                 if ((jugador["dorsal"].toString() + " " + jugador["nombre"].toString()).length > 19) {
                     "${
-                        " " + (jugador["dorsal"].toString() + " " + jugador["nombre"].toString().toUpperCase()).substring(
+                        " " + (jugador["dorsal"].toString() + " " + jugador["nombre"].toString().uppercase(Locale.getDefault())).substring(
                             0, 16
                         )
                     }..."
                 } else {
-                    " " + jugador["dorsal"].toString() + " " + jugador["nombre"].toString().toUpperCase()
+                    " " + jugador["dorsal"].toString() + " " + jugador["nombre"].toString().uppercase(Locale.getDefault())
                 }
             registroN.tag = jugador["dorsal"].toString()
             registro.tag = jugador["dorsal"].toString()
@@ -761,7 +761,7 @@ class EstadisticasFragment : Fragment() {
                                     }
                                 }
 
-                                view.findViewById<TextView>(R.id.txtMVPNombre2).text = jugador["nombre"].toString().toUpperCase(Locale.ROOT)
+                                view.findViewById<TextView>(R.id.txtMVPNombre2).text = jugador["nombre"].toString().uppercase(Locale.ROOT)
                                 view.findViewById<TextView>(R.id.txtMVPMinutos).text =
                                     convertirAMinutosYSegundos(jugador["minutos"].toString().toFloat())
                                 view.findViewById<TextView>(R.id.txtMVPDorsal).text = jugador["dorsal"].toString()
