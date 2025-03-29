@@ -275,6 +275,10 @@ class PartidoFragment : Fragment() {
                 val lista = it.get("registro") as ArrayList<Map<String?, Any?>>
                 for (i in (lista.count() - 1) downTo 0) {
                     val minutoMap = lista[i]
+
+                    val coordenadaX = (minutoMap["coordenada_x"] as? Double)
+                    val coordenadaY = (minutoMap["coordenada_y"] as? Double)
+
                     val minuto = MinutoAMinuto(
                         minutoMap["cuarto"].toString(),
                         minutoMap["dorsal"].toString(),
@@ -284,7 +288,9 @@ class PartidoFragment : Fragment() {
                         minutoMap["resultado"].toString(),
                         minutoMap["tiempo"].toString(),
                         minutoMap["tipoFrase"].toString(),
-                        minutoMap["tipoImg"].toString()
+                        minutoMap["tipoImg"].toString(),
+                        coordenadaX,
+                        coordenadaY
                     )
                     listaminuto.add(minuto)
                 }
@@ -1279,19 +1285,29 @@ class PartidoFragment : Fragment() {
                                                 dialog.hide()
 
                                                 view2.findViewById<ImageView>(R.id.pistaBaloncesto).viewTreeObserver.addOnGlobalLayoutListener {
-                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(R.id.pistaBaloncesto).height > 0) {
+                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(
+                                                            R.id.pistaBaloncesto
+                                                        ).height > 0
+                                                    ) {
                                                         view2.findViewById<ImageView>(R.id.pistaBaloncesto).setOnTouchListener { v, event ->
                                                             if (event.action == MotionEvent.ACTION_DOWN) {
-                                                                convertirCoordenadas(event.x, event.y, view2.findViewById(R.id.pistaBaloncesto))?.let { (x, y) ->
-                                                                    view2.findViewById<TiroView>(R.id.tiroView).agregarTiro(x, y, true, jugador["equipo"].toString())
+                                                                convertirCoordenadas(
+                                                                    event.x,
+                                                                    event.y,
+                                                                    view2.findViewById(R.id.pistaBaloncesto)
+                                                                )?.let { (x, y) ->
+                                                                    view2.findViewById<TiroView>(R.id.tiroView)
+                                                                        .agregarTiro(x, y, true, jugador["equipo"].toString())
 
-                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String,Any>>
-                                                                    listTiros.add(hashMapOf(
-                                                                        "x" to x,
-                                                                        "y" to y,
-                                                                        "cuarto" to cuarto,
-                                                                        "encestado" to true
-                                                                    ))
+                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String, Any>>
+                                                                    listTiros.add(
+                                                                        hashMapOf(
+                                                                            "x" to x,
+                                                                            "y" to y,
+                                                                            "cuarto" to cuarto,
+                                                                            "encestado" to true
+                                                                        )
+                                                                    )
                                                                     jugador["tiros"] = listTiros
                                                                     jugador["tc2pA"] =
                                                                         jugador["tc2pA"].toString().toInt() + 1
@@ -1330,7 +1346,9 @@ class PartidoFragment : Fragment() {
                                                                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                                         "equipo" to "Local",
                                                                                         "tipoFrase" to "1",
-                                                                                        "tipoImg" to "7"
+                                                                                        "tipoImg" to "7",
+                                                                                        "coordenada_x" to x,
+                                                                                        "coordenada_y" to y
                                                                                     ) as Map<String?, Any?>
                                                                                     listRegistros.add(registro)
                                                                                     db.collection("MinutoaMinuto")
@@ -1377,19 +1395,29 @@ class PartidoFragment : Fragment() {
                                                 dialog.hide()
 
                                                 view2.findViewById<ImageView>(R.id.pistaBaloncesto).viewTreeObserver.addOnGlobalLayoutListener {
-                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(R.id.pistaBaloncesto).height > 0) {
+                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(
+                                                            R.id.pistaBaloncesto
+                                                        ).height > 0
+                                                    ) {
                                                         view2.findViewById<ImageView>(R.id.pistaBaloncesto).setOnTouchListener { v, event ->
                                                             if (event.action == MotionEvent.ACTION_DOWN) {
-                                                                convertirCoordenadas(event.x, event.y, view2.findViewById(R.id.pistaBaloncesto))?.let { (x, y) ->
-                                                                    view2.findViewById<TiroView>(R.id.tiroView).agregarTiro(x, y, true, jugador["equipo"].toString())
+                                                                convertirCoordenadas(
+                                                                    event.x,
+                                                                    event.y,
+                                                                    view2.findViewById(R.id.pistaBaloncesto)
+                                                                )?.let { (x, y) ->
+                                                                    view2.findViewById<TiroView>(R.id.tiroView)
+                                                                        .agregarTiro(x, y, true, jugador["equipo"].toString())
 
-                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String,Any>>
-                                                                    listTiros.add(hashMapOf(
-                                                                        "x" to x,
-                                                                        "y" to y,
-                                                                        "cuarto" to cuarto,
-                                                                        "encestado" to true
-                                                                    ))
+                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String, Any>>
+                                                                    listTiros.add(
+                                                                        hashMapOf(
+                                                                            "x" to x,
+                                                                            "y" to y,
+                                                                            "cuarto" to cuarto,
+                                                                            "encestado" to true
+                                                                        )
+                                                                    )
                                                                     jugador["tiros"] = listTiros
                                                                     jugador["tc2pA"] =
                                                                         jugador["tc2pA"].toString().toInt() + 1
@@ -1428,7 +1456,9 @@ class PartidoFragment : Fragment() {
                                                                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                                         "equipo" to "Visitante",
                                                                                         "tipoFrase" to "1",
-                                                                                        "tipoImg" to "7"
+                                                                                        "tipoImg" to "7",
+                                                                                        "coordenada_x" to x,
+                                                                                        "coordenada_y" to y
                                                                                     ) as Map<String?, Any?>
                                                                                     listRegistros.add(registro)
                                                                                     db.collection("MinutoaMinuto")
@@ -1482,19 +1512,29 @@ class PartidoFragment : Fragment() {
                                                 dialog.hide()
 
                                                 view2.findViewById<ImageView>(R.id.pistaBaloncesto).viewTreeObserver.addOnGlobalLayoutListener {
-                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(R.id.pistaBaloncesto).height > 0) {
+                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(
+                                                            R.id.pistaBaloncesto
+                                                        ).height > 0
+                                                    ) {
                                                         view2.findViewById<ImageView>(R.id.pistaBaloncesto).setOnTouchListener { v, event ->
                                                             if (event.action == MotionEvent.ACTION_DOWN) {
-                                                                convertirCoordenadas(event.x, event.y, view2.findViewById(R.id.pistaBaloncesto))?.let { (x, y) ->
-                                                                    view2.findViewById<TiroView>(R.id.tiroView).agregarTiro(x, y, false, jugador["equipo"].toString())
+                                                                convertirCoordenadas(
+                                                                    event.x,
+                                                                    event.y,
+                                                                    view2.findViewById(R.id.pistaBaloncesto)
+                                                                )?.let { (x, y) ->
+                                                                    view2.findViewById<TiroView>(R.id.tiroView)
+                                                                        .agregarTiro(x, y, false, jugador["equipo"].toString())
 
-                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String,Any>>
-                                                                    listTiros.add(hashMapOf(
-                                                                        "x" to x,
-                                                                        "y" to y,
-                                                                        "cuarto" to cuarto,
-                                                                        "encestado" to false
-                                                                    ))
+                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String, Any>>
+                                                                    listTiros.add(
+                                                                        hashMapOf(
+                                                                            "x" to x,
+                                                                            "y" to y,
+                                                                            "cuarto" to cuarto,
+                                                                            "encestado" to false
+                                                                        )
+                                                                    )
                                                                     jugador["tiros"] = listTiros
                                                                     jugador["tc2pF"] =
                                                                         jugador["tc2pF"].toString().toInt() + 1
@@ -1525,7 +1565,9 @@ class PartidoFragment : Fragment() {
                                                                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                                         "equipo" to "Local",
                                                                                         "tipoFrase" to "3",
-                                                                                        "tipoImg" to "6"
+                                                                                        "tipoImg" to "6",
+                                                                                        "coordenada_x" to x,
+                                                                                        "coordenada_y" to y
                                                                                     ) as Map<String?, Any?>
                                                                                     listRegistros.add(registro)
                                                                                     db.collection("MinutoaMinuto")
@@ -1570,19 +1612,29 @@ class PartidoFragment : Fragment() {
                                                 dialog.hide()
 
                                                 view2.findViewById<ImageView>(R.id.pistaBaloncesto).viewTreeObserver.addOnGlobalLayoutListener {
-                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(R.id.pistaBaloncesto).height > 0) {
+                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(
+                                                            R.id.pistaBaloncesto
+                                                        ).height > 0
+                                                    ) {
                                                         view2.findViewById<ImageView>(R.id.pistaBaloncesto).setOnTouchListener { v, event ->
                                                             if (event.action == MotionEvent.ACTION_DOWN) {
-                                                                convertirCoordenadas(event.x, event.y, view2.findViewById(R.id.pistaBaloncesto))?.let { (x, y) ->
-                                                                    view2.findViewById<TiroView>(R.id.tiroView).agregarTiro(x, y, false, jugador["equipo"].toString())
+                                                                convertirCoordenadas(
+                                                                    event.x,
+                                                                    event.y,
+                                                                    view2.findViewById(R.id.pistaBaloncesto)
+                                                                )?.let { (x, y) ->
+                                                                    view2.findViewById<TiroView>(R.id.tiroView)
+                                                                        .agregarTiro(x, y, false, jugador["equipo"].toString())
 
-                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String,Any>>
-                                                                    listTiros.add(hashMapOf(
-                                                                        "x" to x,
-                                                                        "y" to y,
-                                                                        "cuarto" to cuarto,
-                                                                        "encestado" to false
-                                                                    ))
+                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String, Any>>
+                                                                    listTiros.add(
+                                                                        hashMapOf(
+                                                                            "x" to x,
+                                                                            "y" to y,
+                                                                            "cuarto" to cuarto,
+                                                                            "encestado" to false
+                                                                        )
+                                                                    )
                                                                     jugador["tiros"] = listTiros
                                                                     jugador["tc2pF"] =
                                                                         jugador["tc2pF"].toString().toInt() + 1
@@ -1613,7 +1665,9 @@ class PartidoFragment : Fragment() {
                                                                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                                         "equipo" to "Visitante",
                                                                                         "tipoFrase" to "3",
-                                                                                        "tipoImg" to "6"
+                                                                                        "tipoImg" to "6",
+                                                                                        "coordenada_x" to x,
+                                                                                        "coordenada_y" to y
                                                                                     ) as Map<String?, Any?>
                                                                                     listRegistros.add(registro)
                                                                                     db.collection("MinutoaMinuto")
@@ -1681,19 +1735,29 @@ class PartidoFragment : Fragment() {
                                                 dialog.hide()
 
                                                 view2.findViewById<ImageView>(R.id.pistaBaloncesto).viewTreeObserver.addOnGlobalLayoutListener {
-                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(R.id.pistaBaloncesto).height > 0) {
+                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(
+                                                            R.id.pistaBaloncesto
+                                                        ).height > 0
+                                                    ) {
                                                         view2.findViewById<ImageView>(R.id.pistaBaloncesto).setOnTouchListener { v, event ->
                                                             if (event.action == MotionEvent.ACTION_DOWN) {
-                                                                convertirCoordenadas(event.x, event.y, view2.findViewById(R.id.pistaBaloncesto))?.let { (x, y) ->
-                                                                    view2.findViewById<TiroView>(R.id.tiroView).agregarTiro(x, y, true, jugador["equipo"].toString())
+                                                                convertirCoordenadas(
+                                                                    event.x,
+                                                                    event.y,
+                                                                    view2.findViewById(R.id.pistaBaloncesto)
+                                                                )?.let { (x, y) ->
+                                                                    view2.findViewById<TiroView>(R.id.tiroView)
+                                                                        .agregarTiro(x, y, true, jugador["equipo"].toString())
 
-                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String,Any>>
-                                                                    listTiros.add(hashMapOf(
-                                                                        "x" to x,
-                                                                        "y" to y,
-                                                                        "cuarto" to cuarto,
-                                                                        "encestado" to true
-                                                                    ))
+                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String, Any>>
+                                                                    listTiros.add(
+                                                                        hashMapOf(
+                                                                            "x" to x,
+                                                                            "y" to y,
+                                                                            "cuarto" to cuarto,
+                                                                            "encestado" to true
+                                                                        )
+                                                                    )
                                                                     jugador["tiros"] = listTiros
                                                                     jugador["tc3pA"] =
                                                                         jugador["tc3pA"].toString().toInt() + 1
@@ -1732,7 +1796,9 @@ class PartidoFragment : Fragment() {
                                                                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                                         "equipo" to "Local",
                                                                                         "tipoFrase" to "1",
-                                                                                        "tipoImg" to "8"
+                                                                                        "tipoImg" to "8",
+                                                                                        "coordenada_x" to x,
+                                                                                        "coordenada_y" to y
                                                                                     ) as Map<String?, Any?>
                                                                                     listRegistros.add(registro)
                                                                                     db.collection("MinutoaMinuto")
@@ -1777,19 +1843,29 @@ class PartidoFragment : Fragment() {
                                                 dialog.hide()
 
                                                 view2.findViewById<ImageView>(R.id.pistaBaloncesto).viewTreeObserver.addOnGlobalLayoutListener {
-                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(R.id.pistaBaloncesto).height > 0) {
+                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(
+                                                            R.id.pistaBaloncesto
+                                                        ).height > 0
+                                                    ) {
                                                         view2.findViewById<ImageView>(R.id.pistaBaloncesto).setOnTouchListener { v, event ->
                                                             if (event.action == MotionEvent.ACTION_DOWN) {
-                                                                convertirCoordenadas(event.x, event.y, view2.findViewById(R.id.pistaBaloncesto))?.let { (x, y) ->
-                                                                    view2.findViewById<TiroView>(R.id.tiroView).agregarTiro(x, y, true, jugador["equipo"].toString())
+                                                                convertirCoordenadas(
+                                                                    event.x,
+                                                                    event.y,
+                                                                    view2.findViewById(R.id.pistaBaloncesto)
+                                                                )?.let { (x, y) ->
+                                                                    view2.findViewById<TiroView>(R.id.tiroView)
+                                                                        .agregarTiro(x, y, true, jugador["equipo"].toString())
 
-                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String,Any>>
-                                                                    listTiros.add(hashMapOf(
-                                                                        "x" to x,
-                                                                        "y" to y,
-                                                                        "cuarto" to cuarto,
-                                                                        "encestado" to true
-                                                                    ))
+                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String, Any>>
+                                                                    listTiros.add(
+                                                                        hashMapOf(
+                                                                            "x" to x,
+                                                                            "y" to y,
+                                                                            "cuarto" to cuarto,
+                                                                            "encestado" to true
+                                                                        )
+                                                                    )
                                                                     jugador["tiros"] = listTiros
                                                                     jugador["tc3pA"] =
                                                                         jugador["tc3pA"].toString().toInt() + 1
@@ -1828,7 +1904,9 @@ class PartidoFragment : Fragment() {
                                                                                         "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                                         "equipo" to "Visitante",
                                                                                         "tipoFrase" to "1",
-                                                                                        "tipoImg" to "8"
+                                                                                        "tipoImg" to "8",
+                                                                                        "coordenada_x" to x,
+                                                                                        "coordenada_y" to y
                                                                                     ) as Map<String?, Any?>
                                                                                     listRegistros.add(registro)
                                                                                     db.collection("MinutoaMinuto")
@@ -1884,19 +1962,29 @@ class PartidoFragment : Fragment() {
                                                 dialog.hide()
 
                                                 view2.findViewById<ImageView>(R.id.pistaBaloncesto).viewTreeObserver.addOnGlobalLayoutListener {
-                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(R.id.pistaBaloncesto).height > 0) {
+                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(
+                                                            R.id.pistaBaloncesto
+                                                        ).height > 0
+                                                    ) {
                                                         view2.findViewById<ImageView>(R.id.pistaBaloncesto).setOnTouchListener { v, event ->
                                                             if (event.action == MotionEvent.ACTION_DOWN) {
-                                                                convertirCoordenadas(event.x, event.y, view2.findViewById(R.id.pistaBaloncesto))?.let { (x, y) ->
-                                                                    view2.findViewById<TiroView>(R.id.tiroView).agregarTiro(x, y, false, jugador["equipo"].toString())
+                                                                convertirCoordenadas(
+                                                                    event.x,
+                                                                    event.y,
+                                                                    view2.findViewById(R.id.pistaBaloncesto)
+                                                                )?.let { (x, y) ->
+                                                                    view2.findViewById<TiroView>(R.id.tiroView)
+                                                                        .agregarTiro(x, y, false, jugador["equipo"].toString())
 
-                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String,Any>>
-                                                                    listTiros.add(hashMapOf(
-                                                                        "x" to x,
-                                                                        "y" to y,
-                                                                        "cuarto" to cuarto,
-                                                                        "encestado" to false
-                                                                    ))
+                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String, Any>>
+                                                                    listTiros.add(
+                                                                        hashMapOf(
+                                                                            "x" to x,
+                                                                            "y" to y,
+                                                                            "cuarto" to cuarto,
+                                                                            "encestado" to false
+                                                                        )
+                                                                    )
                                                                     jugador["tiros"] = listTiros
                                                                     jugador["tc3pF"] =
                                                                         jugador["tc3pF"].toString().toInt() + 1
@@ -1928,7 +2016,9 @@ class PartidoFragment : Fragment() {
                                                                                 "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                                 "equipo" to "Local",
                                                                                 "tipoFrase" to "3",
-                                                                                "tipoImg" to "6"
+                                                                                "tipoImg" to "6",
+                                                                                "coordenada_x" to x,
+                                                                                "coordenada_y" to y
                                                                             ) as Map<String?, Any?>
                                                                             listRegistros.add(registro)
                                                                             db.collection("MinutoaMinuto")
@@ -1971,19 +2061,29 @@ class PartidoFragment : Fragment() {
                                                 dialog.hide()
 
                                                 view2.findViewById<ImageView>(R.id.pistaBaloncesto).viewTreeObserver.addOnGlobalLayoutListener {
-                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(R.id.pistaBaloncesto).height > 0) {
+                                                    if (view2.findViewById<ImageView>(R.id.pistaBaloncesto).width > 0 && view2.findViewById<ImageView>(
+                                                            R.id.pistaBaloncesto
+                                                        ).height > 0
+                                                    ) {
                                                         view2.findViewById<ImageView>(R.id.pistaBaloncesto).setOnTouchListener { v, event ->
                                                             if (event.action == MotionEvent.ACTION_DOWN) {
-                                                                convertirCoordenadas(event.x, event.y, view2.findViewById(R.id.pistaBaloncesto))?.let { (x, y) ->
-                                                                    view2.findViewById<TiroView>(R.id.tiroView).agregarTiro(x, y, false, jugador["equipo"].toString())
+                                                                convertirCoordenadas(
+                                                                    event.x,
+                                                                    event.y,
+                                                                    view2.findViewById(R.id.pistaBaloncesto)
+                                                                )?.let { (x, y) ->
+                                                                    view2.findViewById<TiroView>(R.id.tiroView)
+                                                                        .agregarTiro(x, y, false, jugador["equipo"].toString())
 
-                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String,Any>>
-                                                                    listTiros.add(hashMapOf(
-                                                                        "x" to x,
-                                                                        "y" to y,
-                                                                        "cuarto" to cuarto,
-                                                                        "encestado" to false
-                                                                    ))
+                                                                    val listTiros = jugador["tiros"] as ArrayList<Map<String, Any>>
+                                                                    listTiros.add(
+                                                                        hashMapOf(
+                                                                            "x" to x,
+                                                                            "y" to y,
+                                                                            "cuarto" to cuarto,
+                                                                            "encestado" to false
+                                                                        )
+                                                                    )
                                                                     jugador["tiros"] = listTiros
                                                                     jugador["tc3pF"] =
                                                                         jugador["tc3pF"].toString().toInt() + 1
@@ -2015,7 +2115,9 @@ class PartidoFragment : Fragment() {
                                                                                 "tiempo" to binding.TiempoCuarto.text.toString(),
                                                                                 "equipo" to "Visitante",
                                                                                 "tipoFrase" to "3",
-                                                                                "tipoImg" to "6"
+                                                                                "tipoImg" to "6",
+                                                                                "coordenada_x" to x,
+                                                                                "coordenada_y" to y
                                                                             ) as Map<String?, Any?>
                                                                             listRegistros.add(registro)
                                                                             db.collection("MinutoaMinuto")
@@ -2863,6 +2965,7 @@ class PartidoFragment : Fragment() {
 
         return RectF(offsetX, offsetY, offsetX + scaledWidth, offsetY + scaledHeight)
     }
+
     private fun convertirCoordenadas(x: Float, y: Float, imageView: ImageView): Pair<Float, Float>? {
         val rect = calcularDimensionesImagen(imageView)
         if (rect.width() == 0f || rect.height() == 0f) {
@@ -2874,8 +2977,9 @@ class PartidoFragment : Fragment() {
         val escalaX = (x - rect.left) / rect.width()
         val escalaY = (y - rect.top) / rect.height()
 
-       return Pair(escalaX, escalaY)
+        return Pair(escalaX, escalaY)
     }
+
     @SuppressLint("SetTextI18n")
     private fun recuperaInfo() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
@@ -2922,6 +3026,113 @@ class PartidoFragment : Fragment() {
                     "Tiempo" to tiempo
                 ) as Map<String, Any>
             )
+    }
+
+    private fun convertirMMSSAMinutos(minutoSegundo: String): Float {
+        val partes = minutoSegundo.split(":")
+        val minutos = partes[0].toInt()
+        val segundos = partes[1].toInt()
+
+        // Convertir los minutos y segundos a minutos
+        return minutos.toFloat() + segundos / 60f  // Los segundos se convierten a minutos
+    }
+
+    private fun actualizarMinutosJugadores() {
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+        val minutoActual = convertirMMSSAMinutos(tiempo)
+
+        // Obtener los datos de Firestore
+        db.collection("Estadisticas").document(idPartido).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val listJugador = documentSnapshot.get("ListadoJugadores") as ArrayList<String>
+                for (j in listJugador) {
+                    val jugador = (documentSnapshot.get(j) as Map<String?, Any?>).toMutableMap()
+
+                    if (jugador["equipo"].toString() == "Local") {
+                        for (campo in quintetoL) {
+                            if (jugador["dorsal"].toString() == campo && jugador["equipo"].toString() == "Local") {
+                                val minutoEntrada = jugador["minutoEntrada"].toString().toFloat()
+                                val totalMinutos = jugador["minutos"].toString().toFloat()
+                                val cuartoEntrada = jugador["cuartoEntrada"].toString().toInt()
+
+                                // Calcular tiempo jugado
+                                val tiempoJugado = if (cuarto == cuartoEntrada) {
+                                    // Si el cuarto es el mismo, simplemente restamos el minuto actual al de entrada
+                                    minutoEntrada - minutoActual
+                                } else {
+                                    // Si el cuarto ha cambiado, contamos desde su entrada hasta el final del cuarto (00:00)
+                                    minutoEntrada
+                                }.coerceAtLeast(0f)
+
+                                // Actualizamos el total de minutos jugados
+                                jugador["minutos"] = totalMinutos + tiempoJugado
+
+                                // Actualizamos el minuto de entrada y el cuarto de entrada
+                                db.collection("Estadisticas").document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            j to jugador
+                                        ) as Map<String, Any>
+                                    )
+                                    .addOnSuccessListener {
+                                        // Actualizamos el minuto de entrada y el cuarto de entrada para el siguiente cuarto
+                                        jugador["minutoEntrada"] = convertirMMSSAMinutos(tiempo)
+                                        jugador["cuartoEntrada"] = cuarto
+                                        db.collection("Estadisticas").document(idPartido)
+                                            .update(
+                                                hashMapOf(
+                                                    j to jugador
+                                                ) as Map<String, Any>
+                                            )
+                                    }
+                                break
+                            }
+                        }
+                    } else {
+                        for (campo in quintetoV) {
+                            if (jugador["dorsal"].toString() == campo && jugador["equipo"].toString() == "Visitante") {
+                                val minutoEntrada = jugador["minutoEntrada"].toString().toFloat()
+                                val totalMinutos = jugador["minutos"].toString().toFloat()
+                                val cuartoEntrada = jugador["cuartoEntrada"].toString().toInt()
+
+                                // Calcular tiempo jugado
+                                val tiempoJugado = if (cuarto == cuartoEntrada) {
+                                    // Si el cuarto es el mismo, simplemente restamos el minuto actual al de entrada
+                                    minutoEntrada - minutoActual
+                                } else {
+                                    // Si el cuarto ha cambiado, contamos desde su entrada hasta el final del cuarto (00:00)
+                                    minutoEntrada
+                                }.coerceAtLeast(0f)
+
+                                // Actualizamos el total de minutos jugados
+                                jugador["minutos"] = totalMinutos + tiempoJugado
+
+                                // Actualizamos el minuto de entrada y el cuarto de entrada
+                                db.collection("Estadisticas").document(idPartido)
+                                    .update(
+                                        hashMapOf(
+                                            j to jugador
+                                        ) as Map<String, Any>
+                                    )
+                                    .addOnSuccessListener {
+                                        // Actualizamos el minuto de entrada y el cuarto de entrada para el siguiente cuarto
+                                        jugador["minutoEntrada"] = convertirMMSSAMinutos(tiempo)
+                                        jugador["cuartoEntrada"] = cuarto
+                                        db.collection("Estadisticas").document(idPartido)
+                                            .update(
+                                                hashMapOf(
+                                                    j to jugador
+                                                ) as Map<String, Any>
+                                            )
+                                    }
+                                break
+                            }
+                        }
+                    }
+                }
+            }
     }
 
     private fun actualizaTiempoMuertos() {
@@ -3017,6 +3228,7 @@ class PartidoFragment : Fragment() {
                     "Tiempo" to tiempo
                 ) as Map<String?, Any?>
             )
+            actualizarMinutosJugadores()
         }
     }
 
@@ -3074,10 +3286,12 @@ class PartidoFragment : Fragment() {
                                 binding.txtFaltasLocal.text = falL.toString()
                                 binding.txtFaltasVisitante.text = falV.toString()
                                 binding.txtCuartoPartido.text = "Cuarto $cuarto"
+                                binding.TiempoCuarto.setTextColor(Color.RED)
                                 tiempo = "10:00"
                                 binding.TiempoCuarto.text = tiempo
                                 isPlay = false
                                 pauseOffSet = 10 * 60 * 1000
+                                actualizarMinutosJugadores()
                                 db.collection("Partidos").document(idPartido).update(
                                     hashMapOf(
                                         "TiempoML" to tmL,
@@ -3127,6 +3341,12 @@ class PartidoFragment : Fragment() {
                                     "registro" to listRegistros,
                                 ) as Map<String?, Any?>
                             )
+                        binding.TiempoCuarto.setTextColor(Color.RED)
+                        tiempo = "00:00"
+                        binding.TiempoCuarto.text = tiempo
+                        isPlay = false
+                        pauseOffSet = 0
+                        actualizarMinutosJugadores()
                     }
                 db.collection("Partidos").document(idPartido).update(
                     hashMapOf(
@@ -3174,10 +3394,12 @@ class PartidoFragment : Fragment() {
                                 binding.txtTiemposMLocal.text = tmL.toString()
                                 binding.txtTiemposMVisitante.text = tmV.toString()
                                 binding.txtCuartoPartido.text = "Cuarto $cuarto"
+                                binding.TiempoCuarto.setTextColor(Color.RED)
                                 tiempo = "05:00"
                                 binding.TiempoCuarto.text = tiempo
                                 isPlay = false
                                 pauseOffSet = pauseOffSetProrroga
+                                actualizarMinutosJugadores()
                                 db.collection("Partidos").document(idPartido).update(
                                     hashMapOf(
                                         "TiempoML" to tmL,
@@ -3233,6 +3455,12 @@ class PartidoFragment : Fragment() {
                         "Estado" to "Finalizado",
                     ) as Map<String?, Any?>
                 )
+                tiempo = "00:00"
+                binding.TiempoCuarto.text = tiempo
+                binding.TiempoCuarto.setTextColor(Color.RED)
+                isPlay = false
+                pauseOffSet = 0
+                actualizarMinutosJugadores()
             }
         }
     }
@@ -3244,6 +3472,7 @@ class PartidoFragment : Fragment() {
             pauseOffSet = -1 * (SystemClock.elapsedRealtime() - binding.TiempoCuarto.base)
             isPlay = false
             actualizaTiempo()
+            actualizarMinutosJugadores()
         }
     }
 
@@ -3502,6 +3731,7 @@ class PartidoFragment : Fragment() {
                                     )
                             }
                         dialog.hide()
+                        actualizarMinutosJugadores()
                     } else {
                         Toast.makeText(
                             binding.root.context,
@@ -3523,6 +3753,8 @@ class PartidoFragment : Fragment() {
             val idPartido = prefs.getString("idPartido", "").toString()
             var contLoca: Int = 0
             var quinteto: Int = 0
+
+            paraCronometro()
 
             db.collection("Estadisticas").document(idPartido).get()
                 .addOnSuccessListener { esta ->
@@ -3600,7 +3832,7 @@ class PartidoFragment : Fragment() {
                                     val listRegistros =
                                         it2.get("registro") as ArrayList<Map<String?, Any?>>
                                     for (j in listJugador) {
-                                        val jugador = esta.get(j) as Map<String?, Any?>
+                                        val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
                                         if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Local") {
                                             val registro = hashMapOf(
                                                 "cuarto" to cuarto,
@@ -3614,6 +3846,16 @@ class PartidoFragment : Fragment() {
                                                 "tipoImg" to "1"
                                             ) as Map<String?, Any?>
                                             listRegistros.add(registro)
+
+                                            jugador["minutoEntrada"] = 0.0f
+                                            jugador["cuartoEntrada"] = 0
+                                            db.collection("Estadisticas").document(idPartido)
+                                                .update(
+                                                    hashMapOf(
+                                                        j to jugador
+                                                    ) as Map<String, Any>
+                                                )
+
                                             quintetoL.remove(toggleButtonSale.text.toString())
                                         }
                                     }
@@ -3627,7 +3869,7 @@ class PartidoFragment : Fragment() {
                                                 toggleButtonSale.textOn = toggleButton.textOn
                                             }
                                             for (j in listJugador) {
-                                                val jugador = esta.get(j) as Map<String?, Any?>
+                                                val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
                                                 if (jugador["dorsal"].toString() == toggleButton.text && jugador["equipo"].toString() == "Local") {
                                                     val registro = hashMapOf(
                                                         "cuarto" to cuarto,
@@ -3644,6 +3886,15 @@ class PartidoFragment : Fragment() {
                                                     cont++
                                                     quintetoL.add(toggleButton.text.toString())
                                                     actualizaQuinteto("QuintetoL")
+
+                                                    jugador["minutoEntrada"] = convertirMMSSAMinutos(tiempo)
+                                                    jugador["cuartoEntrada"] = cuarto
+                                                    db.collection("Estadisticas").document(idPartido)
+                                                        .update(
+                                                            hashMapOf(
+                                                                j to jugador
+                                                            ) as Map<String, Any>
+                                                        )
                                                 }
                                             }
                                         }
@@ -3670,7 +3921,7 @@ class PartidoFragment : Fragment() {
                     }
                 }
             vaciarToggle(llenarListToggle())
-            paraCronometro()
+
         }
     }
 
@@ -3684,6 +3935,8 @@ class PartidoFragment : Fragment() {
             val idPartido = prefs.getString("idPartido", "").toString()
             var contLoca: Int = 0
             var quinteto: Int = 0
+
+            paraCronometro()
 
             db.collection("Estadisticas").document(idPartido).get()
                 .addOnSuccessListener { esta ->
@@ -3762,7 +4015,7 @@ class PartidoFragment : Fragment() {
                                         it2.get("registro") as ArrayList<Map<String?, Any?>>
 
                                     for (j in listJugador) {
-                                        val jugador = esta.get(j) as Map<String?, Any?>
+                                        val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
                                         if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Visitante") {
                                             val registro = hashMapOf(
                                                 "cuarto" to cuarto,
@@ -3776,6 +4029,16 @@ class PartidoFragment : Fragment() {
                                                 "tipoImg" to "1"
                                             ) as Map<String?, Any?>
                                             listRegistros.add(registro)
+
+                                            jugador["minutoEntrada"] = 0.0f
+                                            jugador["cuartoEntrada"] = 0
+                                            db.collection("Estadisticas").document(idPartido)
+                                                .update(
+                                                    hashMapOf(
+                                                        j to jugador
+                                                    ) as Map<String, Any>
+                                                )
+
                                             quintetoV.remove(toggleButtonSale.text.toString())
                                         }
                                     }
@@ -3791,7 +4054,7 @@ class PartidoFragment : Fragment() {
                                             }
 
                                             for (j in listJugador) {
-                                                val jugador = esta.get(j) as Map<String?, Any?>
+                                                val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
                                                 if (jugador["dorsal"] == toggleButton.text && jugador["equipo"] == "Visitante") {
                                                     val registro = hashMapOf(
                                                         "cuarto" to cuarto,
@@ -3808,6 +4071,15 @@ class PartidoFragment : Fragment() {
                                                     cont++
                                                     quintetoV.add(toggleButton.text.toString())
                                                     actualizaQuinteto("QuintetoV")
+
+                                                    jugador["minutoEntrada"] = convertirMMSSAMinutos(tiempo)
+                                                    jugador["cuartoEntrada"] = cuarto
+                                                    db.collection("Estadisticas").document(idPartido)
+                                                        .update(
+                                                            hashMapOf(
+                                                                j to jugador
+                                                            ) as Map<String, Any>
+                                                        )
                                                 }
                                             }
                                         }
@@ -3834,7 +4106,7 @@ class PartidoFragment : Fragment() {
                     }
                 }
             vaciarToggle(llenarListToggle())
-            paraCronometro()
+
         }
     }
 
@@ -4558,10 +4830,16 @@ class PartidoFragment : Fragment() {
 
                                     "TIRO DE 2 FALLADO" -> {
                                         jugador["tc2pF"] = jugador["tc2pF"].toString().toInt() - 1
+                                        val tiros = jugador["tiros"] as ArrayList<Map<String, Any>>
+                                        tiros.removeIf { it["x"] == jugada.coordenada_x && it["y"] == jugada.coordenada_y }
+                                        jugador["tiros"] = tiros
                                     }
 
                                     "TIRO DE 3 FALLADO" -> {
                                         jugador["tc3pF"] = jugador["tc3pF"].toString().toInt() - 1
+                                        val tiros = jugador["tiros"] as ArrayList<Map<String, Any>>
+                                        tiros.removeIf { it["x"] == jugada.coordenada_x && it["y"] == jugada.coordenada_y }
+                                        jugador["tiros"] = tiros
                                     }
                                 }
 
@@ -4589,6 +4867,9 @@ class PartidoFragment : Fragment() {
                             if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
                                 jugador["tc2pA"] = jugador["tc2pA"].toString().toInt() - 1
                                 jugador["puntos"] = jugador["puntos"].toString().toInt() - 2
+                                val tiros = jugador["tiros"] as ArrayList<Map<String, Any>>
+                                tiros.removeIf { it["x"] == jugada.coordenada_x && it["y"] == jugada.coordenada_y }
+                                jugador["tiros"] = tiros
                                 if (jugada.equipo == "Local") {
                                     binding.txtPuntosLocal.text = "" + (binding.txtPuntosLocal.text.toString().toInt() - 2)
                                 } else {
@@ -4619,6 +4900,9 @@ class PartidoFragment : Fragment() {
                             if (jugador["dorsal"] == jugada.dorsal && jugador["equipo"] == jugada.equipo) {
                                 jugador["tc3pA"] = jugador["tc3pA"].toString().toInt() - 1
                                 jugador["puntos"] = jugador["puntos"].toString().toInt() - 3
+                                val tiros = jugador["tiros"] as ArrayList<Map<String, Any>>
+                                tiros.removeIf { it["x"] == jugada.coordenada_x && it["y"] == jugada.coordenada_y }
+                                jugador["tiros"] = tiros
                                 if (jugada.equipo == "Local") {
                                     binding.txtPuntosLocal.text = "" + (binding.txtPuntosLocal.text.toString().toInt() - 3)
                                 } else {

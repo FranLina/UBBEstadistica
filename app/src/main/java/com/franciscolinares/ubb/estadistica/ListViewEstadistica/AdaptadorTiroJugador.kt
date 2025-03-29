@@ -33,8 +33,8 @@ class AdaptadorTiroJugador(
 
         val cb = listItemView.findViewById<CheckBox>(R.id.cbTiroJugador)
 
-        if ((jugador.nombre).length > 16) {
-            listItemView.findViewById<TextView>(R.id.txtNombreJugadorTiro).text = "${(jugador.nombre.toUpperCase()).substring(0, 13)}..."
+        if ((jugador.nombre).length > 13) {
+            listItemView.findViewById<TextView>(R.id.txtNombreJugadorTiro).text = "${(jugador.nombre.toUpperCase()).substring(0, 10)}..."
         } else {
             listItemView.findViewById<TextView>(R.id.txtNombreJugadorTiro).text = jugador.nombre.toUpperCase()
         }

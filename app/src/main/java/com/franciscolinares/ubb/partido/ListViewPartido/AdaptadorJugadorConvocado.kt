@@ -13,9 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import com.franciscolinares.ubb.R
-import com.franciscolinares.ubb.estadistica.ListViewEstadistica.MinutoAMinuto
 import com.squareup.picasso.Picasso
-import java.util.Collections
 import java.util.Locale
 
 class AdaptadorJugadorConvocado(private val mcontext: Context, private var listaPlantilla: MutableList<JugadorConvocado>) :
@@ -24,6 +22,7 @@ class AdaptadorJugadorConvocado(private val mcontext: Context, private var lista
     private val checkboxState = mutableMapOf<Int, Boolean>()
 
     init {
+        listaPlantilla = listaPlantilla.sortedWith(compareBy { (it.dorsal as? String)?.toIntOrNull() ?: Int.MAX_VALUE }).toMutableList()
         for(i in listaPlantilla.indices){
             checkboxState[i] = false
         }
@@ -79,7 +78,7 @@ class AdaptadorJugadorConvocado(private val mcontext: Context, private var lista
     }
 
     fun updateData(newData: List<JugadorConvocado>) {
-        listaPlantilla = newData.toMutableList()
+        listaPlantilla = newData.sortedWith(compareBy { (it.dorsal as? String)?.toIntOrNull() ?: Int.MAX_VALUE }).toMutableList()
         notifyDataSetChanged() // Esto refresca la vista, pero no recrea todos los elementos
     }
 }

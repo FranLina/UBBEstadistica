@@ -1,6 +1,6 @@
 package com.franciscolinares.ubb.estadistica.ListViewEstadistica
 
-class MinutoAMinuto (
+class MinutoAMinuto(
     val cuarto: String,
     val dorsal: String,
     val nombre: String,
@@ -9,5 +9,7 @@ class MinutoAMinuto (
     val resultado: String,
     val tiempo: String,
     val tipoFrase: String,
-    val imgAccion: String
+    val imgAccion: String,
+    val coordenada_x: Double? = 0.0,
+    val coordenada_y: Double? = 0.0
 )

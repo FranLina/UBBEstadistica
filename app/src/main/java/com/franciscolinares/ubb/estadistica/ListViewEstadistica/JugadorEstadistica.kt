@@ -1,6 +1,7 @@
 package com.franciscolinares.ubb.estadistica.ListViewEstadistica
 
 class JugadorEstadistica (
+    val minutos: Float,
     val dorsal: String,
     val nombre: String,
     val equipo:String,

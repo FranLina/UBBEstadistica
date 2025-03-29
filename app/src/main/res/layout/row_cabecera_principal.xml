@@ -6,6 +6,14 @@
     android:background="@color/yellow_logo">
 
     <TextView
+        android:id="@+id/textView69"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/textView10"
         android:layout_width="40dp"
         android:layout_height="50dp"

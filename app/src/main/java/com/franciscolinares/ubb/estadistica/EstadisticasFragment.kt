@@ -133,6 +133,7 @@ class EstadisticasFragment : Fragment() {
 
         val tamanoCelda = 400
 
+        var min = 0.0f
         var pts = 0
         var tc2A = 0
         var tc2F = 0
@@ -155,7 +156,7 @@ class EstadisticasFragment : Fragment() {
         // Crear encabezados
         val filaEncabezado = sheet.createRow(0)
         val titulos = listOf(
-            "", "", "TC 2P", "", "TC 3P", "", "TL", "", "", "REB", "", "", "", "", "TAP", "", "FAL", "", ""
+            "", "", "", "TC 2P", "", "TC 3P", "", "TL", "", "", "REB", "", "", "", "", "TAP", "", "FAL", "", ""
         )
         for ((cel, titulo) in titulos.withIndex()) {
             val celda = filaEncabezado.createCell(cel)
@@ -163,22 +164,42 @@ class EstadisticasFragment : Fragment() {
             celda.setCellValue(titulo)
             celda.cellStyle = estilos["encabezadoPrincipal"] as XSSFCellStyle?
         }
-        sheet.addMergedRegion(CellRangeAddress(0, 0, 2, 3))
-        sheet.addMergedRegion(CellRangeAddress(0, 0, 4, 5))
-        sheet.addMergedRegion(CellRangeAddress(0, 0, 6, 7))
-        sheet.addMergedRegion(CellRangeAddress(0, 0, 14, 15))
-        sheet.addMergedRegion(CellRangeAddress(0, 0, 16, 17))
+        sheet.addMergedRegion(CellRangeAddress(0, 0, 3, 4))
+        sheet.addMergedRegion(CellRangeAddress(0, 0, 5, 6))
+        sheet.addMergedRegion(CellRangeAddress(0, 0, 7, 8))
+        sheet.addMergedRegion(CellRangeAddress(0, 0, 15, 16))
+        sheet.addMergedRegion(CellRangeAddress(0, 0, 17, 18))
 
         // Crear encabezados
         val filaEncabezado2 = sheet.createRow(1)
         val titulos2 = listOf(
-            "Nombre", "PTS", "A/I", "%", "A/I", "%", "A/I", "%", "Def.", "Ofe.", "Tot.", "AS", "REC", "PÉR", "Com.", "Rec.", "Com.", "Rec.", "VAL"
+            "Nombre",
+            "MIN",
+            "PTS",
+            "A/I",
+            "%",
+            "A/I",
+            "%",
+            "A/I",
+            "%",
+            "Def.",
+            "Ofe.",
+            "Tot.",
+            "AS",
+            "REC",
+            "PÉR",
+            "Com.",
+            "Rec.",
+            "Com.",
+            "Rec.",
+            "VAL"
         )
         for ((cel, titulo2) in titulos2.withIndex()) {
             val celda = filaEncabezado2.createCell(cel)
             filaEncabezado2.height = 500
             celda.setCellValue(titulo2)
-            if (cel == 0 || cel == 1 || cel == 11 || cel == 12 || cel == 13 || cel == 18) celda.cellStyle = estilos["encabezadoA"] as XSSFCellStyle?
+            if (cel == 0 || cel == 1 || cel == 2 || cel == 12 || cel == 13 || cel == 14 || cel == 19) celda.cellStyle =
+                estilos["encabezadoA"] as XSSFCellStyle?
             else celda.cellStyle = estilos["encabezado"] as XSSFCellStyle?
         }
 
@@ -196,6 +217,7 @@ class EstadisticasFragment : Fragment() {
             // Recorrer jugadores y obtener estadísticas
             for (jugador in jugadoresOrdenados) {
                 if (jugador["equipo"].toString() == equipo) {
+                    min += jugador["minutos"].toString().toFloat()
                     pts += jugador["puntos"].toString().toInt()
                     tc2A += jugador["tc2pA"].toString().toInt()
                     tc2F += jugador["tc2pF"].toString().toInt()
@@ -218,7 +240,7 @@ class EstadisticasFragment : Fragment() {
                     val row = sheet.createRow(rowIndex++)
                     row.height = tamanoCelda.toShort()
                     val celdas = ArrayList<Cell>()
-                    for (cel in 0..18) {
+                    for (cel in titulos2.indices) {
                         val celda = row.createCell(cel)
                         if (rowIndex % 2 == 0) celda.cellStyle = estilos["celda"] as XSSFCellStyle?
                         else celda.cellStyle = estilos["celdaImpar"] as XSSFCellStyle?
@@ -229,39 +251,40 @@ class EstadisticasFragment : Fragment() {
                     else celdas[0].cellStyle = estilos["primeraImpar"] as XSSFCellStyle?
 
                     celdas[0].setCellValue(jugador["dorsal"].toString() + " " + jugador["nombre"].toString())
-                    celdas[1].setCellValue(jugador["puntos"].toString())
-                    celdas[2].setCellValue(
+                    celdas[1].setCellValue(convertirAMinutosYSegundos(jugador["minutos"].toString().toFloat()))
+                    celdas[2].setCellValue(jugador["puntos"].toString())
+                    celdas[3].setCellValue(
                         jugador["tc2pA"].toString() + "/" + (jugador["tc2pA"].toString().toInt() + jugador["tc2pF"].toString().toInt())
                     )
-                    celdas[3].setCellValue(
+                    celdas[4].setCellValue(
                         ((jugador["tc2pA"].toString().toDouble() / (jugador["tc2pA"].toString().toDouble() + jugador["tc2pF"].toString()
                             .toDouble())) * 100).toInt().toString()
                     )
-                    celdas[4].setCellValue(
+                    celdas[5].setCellValue(
                         jugador["tc3pA"].toString() + "/" + (jugador["tc3pA"].toString().toInt() + jugador["tc3pF"].toString().toInt())
                     )
-                    celdas[5].setCellValue(
+                    celdas[6].setCellValue(
                         ((jugador["tc3pA"].toString().toDouble() / (jugador["tc3pA"].toString().toDouble() + jugador["tc3pF"].toString()
                             .toDouble())) * 100).toInt().toString()
                     )
-                    celdas[6].setCellValue(
+                    celdas[7].setCellValue(
                         jugador["tlA"].toString() + "/" + (jugador["tlA"].toString().toInt() + jugador["tlF"].toString().toInt())
                     )
-                    celdas[7].setCellValue(
+                    celdas[8].setCellValue(
                         ((jugador["tlA"].toString().toDouble() / (jugador["tlA"].toString().toDouble() + jugador["tlF"].toString()
                             .toDouble())) * 100).toInt().toString()
                     )
-                    celdas[8].setCellValue(jugador["rebD"].toString())
-                    celdas[9].setCellValue(jugador["rebO"].toString())
-                    celdas[10].setCellValue((jugador["rebD"].toString().toInt() + jugador["rebO"].toString().toInt()).toString())
-                    celdas[11].setCellValue(jugador["asi"].toString())
-                    celdas[12].setCellValue(jugador["recu"].toString())
-                    celdas[13].setCellValue(jugador["per"].toString())
-                    celdas[14].setCellValue(jugador["taCom"].toString())
-                    celdas[15].setCellValue(jugador["taRec"].toString())
-                    celdas[16].setCellValue(jugador["falC"].toString())
-                    celdas[17].setCellValue(jugador["falR"].toString())
-                    celdas[18].setCellValue(jugador["val"].toString())
+                    celdas[9].setCellValue(jugador["rebD"].toString())
+                    celdas[10].setCellValue(jugador["rebO"].toString())
+                    celdas[11].setCellValue((jugador["rebD"].toString().toInt() + jugador["rebO"].toString().toInt()).toString())
+                    celdas[12].setCellValue(jugador["asi"].toString())
+                    celdas[13].setCellValue(jugador["recu"].toString())
+                    celdas[14].setCellValue(jugador["per"].toString())
+                    celdas[15].setCellValue(jugador["taCom"].toString())
+                    celdas[16].setCellValue(jugador["taRec"].toString())
+                    celdas[17].setCellValue(jugador["falC"].toString())
+                    celdas[18].setCellValue(jugador["falR"].toString())
+                    celdas[19].setCellValue(jugador["val"].toString())
                     celdas.clear()
                 }
             }
@@ -270,33 +293,34 @@ class EstadisticasFragment : Fragment() {
             val row = sheet.createRow(rowIndex++)
             row.height = 500
             val celdas = ArrayList<Cell>()
-            for (cel in 0..18) {
+            for (cel in titulos2.indices) {
                 val celda = row.createCell(cel)
-                if (cel == 0 || cel == 1 || cel == 11 || cel == 12 || cel == 13 || cel == 18) celda.cellStyle =
+                if (cel == 0 || cel == 1 || cel == 2 || cel == 12 || cel == 13 || cel == 14 || cel == 19) celda.cellStyle =
                     estilos["encabezadoA"] as XSSFCellStyle?
                 else celda.cellStyle = estilos["encabezado"] as XSSFCellStyle?
                 celdas.add(celda)
             }
 
             celdas[0].setCellValue("Totales")
-            celdas[1].setCellValue(pts.toString())
-            celdas[2].setCellValue(tc2A.toString() + "/" + (tc2A + tc2F))
-            celdas[3].setCellValue(((tc2A.toDouble() / (tc2A.toDouble() + tc2F.toDouble())) * 100).toInt().toString())
-            celdas[4].setCellValue(tc3A.toString() + "/" + (tc3A + tc3F))
-            celdas[5].setCellValue(((tc3A.toDouble() / (tc3A.toDouble() + tc3F.toDouble())) * 100).toInt().toString())
-            celdas[6].setCellValue(tlA.toString() + "/" + (tlA + tlF))
-            celdas[7].setCellValue(((tlA.toDouble() / (tlA.toDouble() + tlF.toDouble())) * 100).toInt().toString())
-            celdas[8].setCellValue(rebD.toString())
-            celdas[9].setCellValue(rebO.toString())
-            celdas[10].setCellValue((rebD + rebO).toString())
-            celdas[11].setCellValue(asi.toString())
-            celdas[12].setCellValue(rec.toString())
-            celdas[13].setCellValue(per.toString())
-            celdas[14].setCellValue(tapC.toString())
-            celdas[15].setCellValue(tapR.toString())
-            celdas[16].setCellValue(falC.toString())
-            celdas[17].setCellValue(falR.toString())
-            celdas[18].setCellValue(valoracion.toString())
+            celdas[1].setCellValue(convertirAMinutosYSegundos(min))
+            celdas[2].setCellValue(pts.toString())
+            celdas[3].setCellValue(tc2A.toString() + "/" + (tc2A + tc2F))
+            celdas[4].setCellValue(((tc2A.toDouble() / (tc2A.toDouble() + tc2F.toDouble())) * 100).toInt().toString())
+            celdas[5].setCellValue(tc3A.toString() + "/" + (tc3A + tc3F))
+            celdas[6].setCellValue(((tc3A.toDouble() / (tc3A.toDouble() + tc3F.toDouble())) * 100).toInt().toString())
+            celdas[7].setCellValue(tlA.toString() + "/" + (tlA + tlF))
+            celdas[8].setCellValue(((tlA.toDouble() / (tlA.toDouble() + tlF.toDouble())) * 100).toInt().toString())
+            celdas[9].setCellValue(rebD.toString())
+            celdas[10].setCellValue(rebO.toString())
+            celdas[11].setCellValue((rebD + rebO).toString())
+            celdas[12].setCellValue(asi.toString())
+            celdas[13].setCellValue(rec.toString())
+            celdas[14].setCellValue(per.toString())
+            celdas[15].setCellValue(tapC.toString())
+            celdas[16].setCellValue(tapR.toString())
+            celdas[17].setCellValue(falC.toString())
+            celdas[18].setCellValue(falR.toString())
+            celdas[19].setCellValue(valoracion.toString())
             celdas.clear()
 
             // Guardar archivo Excel
@@ -399,7 +423,8 @@ class EstadisticasFragment : Fragment() {
 
             db.collection("Partidos").document(idPartido).get().addOnSuccessListener {
                 val nombreArchivo =
-                    "estadisticas_" + it.get("EquipoLocal") + "_" + it.get("EquipoVisitante") + "_" + it.get("Fecha").toString().replace("/", "-") + "_" + equipo + ".xlsx"
+                    "estadisticas_" + it.get("EquipoLocal") + "_" + it.get("EquipoVisitante") + "_" + it.get("Fecha").toString()
+                        .replace("/", "-") + "_" + equipo + ".xlsx"
 
                 // Obtener la carpeta de Descargas
                 val directorioDescargas = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -458,10 +483,19 @@ class EstadisticasFragment : Fragment() {
         }
     }
 
+    private fun convertirAMinutosYSegundos(formato: Float): String {
+        val minutos = formato.toInt()  // Los minutos completos
+        val segundos = ((formato - minutos) * 60).toInt()  // Los segundos restantes
+
+        // Formateamos los minutos y segundos en un formato de dos dígitos
+        return String.format("%02d:%02d", minutos, segundos)
+    }
+
     @SuppressLint("SetTextI18n", "InflateParams", "ResourceAsColor", "MissingInflatedId")
     private fun recuperaDatosEstadistica(
         jugadores: ArrayList<Map<String?, Any?>>
     ) {
+        var minL = 0.0f
         var ptsL = 0
         var tc2AL = 0
         var tc2FL = 0
@@ -480,6 +514,7 @@ class EstadisticasFragment : Fragment() {
         var falRL = 0
         var valL = 0
 
+        var minV = 0.0f
         var ptsV = 0
         var tc2AV = 0
         var tc2FV = 0
@@ -557,6 +592,7 @@ class EstadisticasFragment : Fragment() {
             registroN.tag = jugador["dorsal"].toString()
             registro.tag = jugador["dorsal"].toString()
 
+            registro.findViewById<TextView>(R.id.txtEMin).text = convertirAMinutosYSegundos(jugador["minutos"].toString().toFloat())
             registro.findViewById<TextView>(R.id.txtEPuntos).text = jugador["puntos"].toString()
             registro.findViewById<TextView>(R.id.txtETC2P1).text =
                 jugador["tc2pA"].toString() + "/" + (jugador["tc2pA"].toString().toInt() + jugador["tc2pF"].toString().toInt())
@@ -588,7 +624,7 @@ class EstadisticasFragment : Fragment() {
             if (jugador["equipo"] == "Local") {
                 binding.TLLocal.addView(registro)
                 binding.TLLocalNombre.addView(registroN)
-
+                minL += jugador["minutos"].toString().toFloat()
                 ptsL += jugador["puntos"].toString().toInt()
                 tc2AL += jugador["tc2pA"].toString().toInt()
                 tc2FL += jugador["tc2pF"].toString().toInt()
@@ -610,6 +646,7 @@ class EstadisticasFragment : Fragment() {
                 binding.TLVisitante.addView(registro)
                 binding.TLVisitanteNombre.addView(registroN)
 
+                minV += jugador["minutos"].toString().toFloat()
                 ptsV += jugador["puntos"].toString().toInt()
                 tc2AV += jugador["tc2pA"].toString().toInt()
                 tc2FV += jugador["tc2pF"].toString().toInt()
@@ -634,6 +671,7 @@ class EstadisticasFragment : Fragment() {
         binding.TLLocalNombre.addView(registroNTotalL)
 
         val registroL = LayoutInflater.from(binding.root.context).inflate(R.layout.row_estadistica_total_datos, null, false)
+        registroL.findViewById<TextView>(R.id.txtEMin).text = convertirAMinutosYSegundos(minL)
         registroL.findViewById<TextView>(R.id.txtEPuntos).text = ptsL.toString()
         registroL.findViewById<TextView>(R.id.txtETC2P1).text = tc2AL.toString() + "/" + (tc2AL + tc2FL).toString()
         registroL.findViewById<TextView>(R.id.txtETC2P2).text = ((tc2AL.toDouble() / (tc2AL.toDouble() + tc2FL.toDouble())) * 100).toInt().toString()
@@ -659,6 +697,7 @@ class EstadisticasFragment : Fragment() {
         binding.TLVisitanteNombre.addView(registroNTotalV)
 
         val registroV = LayoutInflater.from(binding.root.context).inflate(R.layout.row_estadistica_total_datos, null, false)
+        registroV.findViewById<TextView>(R.id.txtEMin).text = convertirAMinutosYSegundos(minV)
         registroV.findViewById<TextView>(R.id.txtEPuntos).text = ptsV.toString()
         registroV.findViewById<TextView>(R.id.txtETC2P1).text = tc2AV.toString() + "/" + (tc2AV + tc2FV).toString()
         registroV.findViewById<TextView>(R.id.txtETC2P2).text = ((tc2AV.toDouble() / (tc2AV.toDouble() + tc2FV.toDouble())) * 100).toInt().toString()
@@ -686,7 +725,7 @@ class EstadisticasFragment : Fragment() {
 
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "MissingInflatedId")
     private fun mostrarEstadisticaJugador(tableLayout: TableLayout, equipo: String) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
         val idPartido = prefs.getString("idPartido", "").toString()
@@ -723,6 +762,8 @@ class EstadisticasFragment : Fragment() {
                                 }
 
                                 view.findViewById<TextView>(R.id.txtMVPNombre2).text = jugador["nombre"].toString().toUpperCase(Locale.ROOT)
+                                view.findViewById<TextView>(R.id.txtMVPMinutos).text =
+                                    convertirAMinutosYSegundos(jugador["minutos"].toString().toFloat())
                                 view.findViewById<TextView>(R.id.txtMVPDorsal).text = jugador["dorsal"].toString()
                                 view.findViewById<TextView>(R.id.txtMVPPuntos).text = jugador["puntos"].toString()
                                 view.findViewById<TextView>(R.id.txtMVPRebotes).text =

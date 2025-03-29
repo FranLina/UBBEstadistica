@@ -74,15 +74,16 @@ class PlantillaLocalFragment : Fragment() {
                 val nombreJ = view.findViewById<EditText>(R.id.txtIJPNombre).text.toString()
                 val apellido1J = view.findViewById<EditText>(R.id.txtIJPApellido1).text.toString()
                 val apellido2J = view.findViewById<EditText>(R.id.txtIJPApellido2).text.toString()
+                val dorsal = view.findViewById<EditText>(R.id.txtIJPDorsal).text.toString()
 
-                if (nombreJ != "") {
+                if (nombreJ != "" && dorsal != "") {
                     val j = JugadorConvocado(
                         UUID.randomUUID().toString(),
                         "",
                         nombreJ,
                         apellido1J,
                         apellido2J,
-                        "",
+                        dorsal,
                         "",
                         false
                     )
@@ -99,7 +100,7 @@ class PlantillaLocalFragment : Fragment() {
                     // Manejar errores aquí
                     Toast.makeText(
                         binding.root.context,
-                        "No hay un nombre asignado al Jugador",
+                        "No hay un nombre asignado al Jugador o Dorsal",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -151,8 +152,11 @@ class PlantillaLocalFragment : Fragment() {
                                 "dorsal" to j.dorsal,
                                 "nombre" to j.apellido1 + " " + j.apellido2 + ", " + j.nombre,
                                 "minutos" to 0,
+                                "minutoEntrada" to 0,
+                                "cuartoEntrada" to 0,
                                 "equipo" to "Local",
                                 "asi" to 0,
+                                "fal_esp" to 0,
                                 "falR" to 0,
                                 "falC" to 0,
                                 "per" to 0,
@@ -263,6 +267,12 @@ class PlantillaLocalFragment : Fragment() {
                         myAdapter = AdaptadorJugadorConvocado(viewDialog.context, listaPlantilla)
                         listView.adapter = myAdapter
 
+                    } else {
+                        Toast.makeText(
+                            binding.root.context,
+                            "No hay jugadores disponibles para este equipo",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
                     // Manejar errores aquí

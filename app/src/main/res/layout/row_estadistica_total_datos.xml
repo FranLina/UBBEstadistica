@@ -7,6 +7,14 @@
 
 
     <TextView
+        android:id="@+id/txtEMin"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="MIN"
+        android:textColor="@color/yellow_logo" />
+
+    <TextView
         android:id="@+id/txtEPuntos"
         android:layout_width="40dp"
         android:layout_height="40dp"

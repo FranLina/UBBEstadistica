@@ -17,8 +17,8 @@ import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import java.util.Locale
 
-class AdaptadorMvp (private val mcontext: Context, private var listaJugadores: List<JugadorEstadistica>) :
-ArrayAdapter<JugadorEstadistica>(mcontext, 0, listaJugadores) {
+class AdaptadorMvp(private val mcontext: Context, private var listaJugadores: List<JugadorEstadistica>) :
+    ArrayAdapter<JugadorEstadistica>(mcontext, 0, listaJugadores) {
 
     private val db = Firebase.firestore
 
@@ -38,7 +38,7 @@ ArrayAdapter<JugadorEstadistica>(mcontext, 0, listaJugadores) {
                     val jugador = esta.get(j) as Map<String?, Any?>
                     if (jugador["equipo"].toString() == jugadorE.equipo && jugador["dorsal"].toString() == jugadorE.dorsal) {
                         db.collection("Jugadores").document(j).get()
-                            .addOnSuccessListener { p->
+                            .addOnSuccessListener { p ->
                                 if (p.get("UrlFoto") != "") {
                                     Picasso.get()
                                         .load(p.get("UrlFoto").toString())
@@ -50,6 +50,7 @@ ArrayAdapter<JugadorEstadistica>(mcontext, 0, listaJugadores) {
                     }
                 }
             }
+        layout.findViewById<TextView>(R.id.txtMVPMinutos).text = convertirAMinutosYSegundos(jugadorE.minutos)
         layout.findViewById<TextView>(R.id.txtMVPNombre).text = jugadorE.nombre.toUpperCase(Locale.ROOT)
         layout.findViewById<TextView>(R.id.txtMVPDorsal).text = jugadorE.dorsal
         layout.findViewById<TextView>(R.id.txtMVPPuntos).text = jugadorE.puntos.toString()
@@ -62,6 +63,14 @@ ArrayAdapter<JugadorEstadistica>(mcontext, 0, listaJugadores) {
         layout.findViewById<TextView>(R.id.txtMVPValoracion).text = jugadorE.valoracion.toString()
 
         return layout
+    }
+
+    private fun convertirAMinutosYSegundos(formato: Float): String {
+        val minutos = formato.toInt()  // Los minutos completos
+        val segundos = ((formato - minutos) * 60).toInt()  // Los segundos restantes
+
+        // Formateamos los minutos y segundos en un formato de dos dígitos
+        return String.format("%02d:%02d", minutos, segundos)
     }
 
     fun updateData(newData: List<JugadorEstadistica>) {
