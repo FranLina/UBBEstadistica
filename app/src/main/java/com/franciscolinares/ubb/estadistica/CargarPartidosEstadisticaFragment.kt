@@ -16,6 +16,9 @@ import com.franciscolinares.ubb.partido.ListViewPartido.Partido
 import com.franciscolinares.ubb.user.MainActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class CargarPartidosEstadisticaFragment : Fragment() {
 
@@ -39,6 +42,9 @@ class CargarPartidosEstadisticaFragment : Fragment() {
         db.collection("Partidos").orderBy("Fecha").get().addOnSuccessListener {
             val listaPartido = mutableListOf<Partido>()
             for (partido in it) {
+                val fechaString = partido.getString("Fecha").toString()
+                val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val fechaDate = formato.parse(fechaString) ?: Date()
                     val p = Partido(
                         partido.id,
                         partido.get("EquipoLocal").toString(),
@@ -47,12 +53,15 @@ class CargarPartidosEstadisticaFragment : Fragment() {
                         partido.get("Resultado").toString(),
                         partido.get("Hora").toString(),
                         partido.get("Fecha").toString(),
+                        fechaDate,
                         partido.get("Estado").toString()
                     )
                 listaPartido.add(p)
             }
 
-            val adapter = AdaptadorPartidoEstadistica(binding.root.context, listaPartido)
+            val listaOrdenada = listaPartido.sortedBy { it.fechaDate }
+
+            val adapter = AdaptadorPartidoEstadistica(binding.root.context, listaOrdenada)
 
             binding.ListViewPartidoEstadistica.adapter = adapter
 

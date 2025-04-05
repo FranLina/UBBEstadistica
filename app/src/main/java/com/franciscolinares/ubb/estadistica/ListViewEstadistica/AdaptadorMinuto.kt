@@ -72,12 +72,15 @@ class AdaptadorMinuto (private val mcontext: Context, private var listaMinuto: L
                 layout.findViewById<TextView>(R.id.txtLVMResultado).text = minuto.resultado
             }
             "2" -> {
+                layout.setPaddingRelative(120,0,120,0)
                 layout.findViewById<ImageView>(R.id.imgAccionMAM).visibility = View.GONE
+                layout.findViewById<TextView>(R.id.txtLVMFrase).setPadding(0, 30, 0, 10)
                 layout.findViewById<TextView>(R.id.txtLVMFrase).text = minuto.frase + " " + minuto.cuarto
                 layout.findViewById<TextView>(R.id.txtLVMFrase).setBackgroundColor(Color.parseColor("#FF4CAF50"))
                 layout.findViewById<TextView>(R.id.txtLVMFrase).setTextColor(Color.WHITE)
                 layout.findViewById<TextView>(R.id.txtLVMFrase).gravity = Gravity.CENTER
-                layout.findViewById<TextView>(R.id.txtLVM).text = ""
+                layout.findViewById<TextView>(R.id.txtLVM).setPadding(0, 0, 0, 20)
+                layout.findViewById<TextView>(R.id.txtLVM).text = minuto.tiempo + " h."
                 layout.findViewById<TextView>(R.id.txtLVM).gravity = Gravity.CENTER
                 layout.findViewById<TextView>(R.id.txtLVM).setBackgroundColor(Color.parseColor("#FF4CAF50"))
                 layout.findViewById<TextView>(R.id.txtLVM).setTextColor(Color.WHITE)
@@ -96,12 +99,15 @@ class AdaptadorMinuto (private val mcontext: Context, private var listaMinuto: L
                 layout.findViewById<TextView>(R.id.txtLVMNombre).text = minuto.nombre.uppercase(Locale.ROOT)
             }
             "4" -> {
+                layout.setPaddingRelative(120,0,120,0)
                 layout.findViewById<ImageView>(R.id.imgAccionMAM).visibility = View.GONE
+                layout.findViewById<TextView>(R.id.txtLVMFrase).setPadding(0, 30, 0, 0)
                 layout.findViewById<TextView>(R.id.txtLVMFrase).text = minuto.frase + " " + minuto.cuarto
                 layout.findViewById<TextView>(R.id.txtLVMFrase).setBackgroundColor(Color.parseColor("#3A3A3A"))
                 layout.findViewById<TextView>(R.id.txtLVMFrase).setTextColor(Color.WHITE)
                 layout.findViewById<TextView>(R.id.txtLVMFrase).gravity = Gravity.CENTER
-                layout.findViewById<TextView>(R.id.txtLVM).text = ""
+                layout.findViewById<TextView>(R.id.txtLVM).setPadding(0, 0, 0, 20)
+                layout.findViewById<TextView>(R.id.txtLVM).text = minuto.tiempo  + " h."
                 layout.findViewById<TextView>(R.id.txtLVM).gravity = Gravity.CENTER
                 layout.findViewById<TextView>(R.id.txtLVM).setBackgroundColor(Color.parseColor("#3A3A3A"))
                 layout.findViewById<TextView>(R.id.txtLVM).setTextColor(Color.WHITE)

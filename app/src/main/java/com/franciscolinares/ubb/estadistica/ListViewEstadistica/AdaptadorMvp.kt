@@ -50,7 +50,7 @@ class AdaptadorMvp(private val mcontext: Context, private var listaJugadores: Li
                     }
                 }
             }
-        layout.findViewById<TextView>(R.id.txtMVPMinutos).text = convertirAMinutosYSegundos(jugadorE.minutos)
+        layout.findViewById<TextView>(R.id.txtMVPMinutos).text = jugadorE.minutos
         layout.findViewById<TextView>(R.id.txtMVPNombre).text = jugadorE.nombre.uppercase(Locale.ROOT)
         layout.findViewById<TextView>(R.id.txtMVPDorsal).text = jugadorE.dorsal
         layout.findViewById<TextView>(R.id.txtMVPPuntos).text = jugadorE.puntos.toString()
@@ -65,13 +65,13 @@ class AdaptadorMvp(private val mcontext: Context, private var listaJugadores: Li
         return layout
     }
 
-    private fun convertirAMinutosYSegundos(formato: Float): String {
+    /*private fun convertirAMinutosYSegundos(formato: Float): String {
         val minutos = formato.toInt()  // Los minutos completos
         val segundos = ((formato - minutos) * 60).toInt()  // Los segundos restantes
 
         // Formateamos los minutos y segundos en un formato de dos dígitos
         return String.format("%02d:%02d", minutos, segundos)
-    }
+    }*/
 
     fun updateData(newData: List<JugadorEstadistica>) {
         listaJugadores = newData

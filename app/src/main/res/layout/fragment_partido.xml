@@ -351,119 +351,149 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp"
                     android:gravity="bottom"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/btnFalta"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:text="FAL"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:cornerRadius="20sp" />
+                        android:layout_marginBottom="10dp"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/btnAsistencia"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:text="ASI"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:cornerRadius="20sp" />
+                        <Button
+                            android:id="@+id/btnFalta"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/black"
+                            android:text="FALTA"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:cornerRadius="20sp" />
 
-                    <Button
-                        android:id="@+id/btnTL"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:text="TL"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:cornerRadius="20sp" />
+                        <Button
+                            android:id="@+id/btnFalEspecial"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/black"
+                            android:text="FALTA ESPECIAL"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:cornerRadius="20sp" />
 
-                    <Button
-                        android:id="@+id/btnT2p"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:text="T2p"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:cornerRadius="20sp" />
+                        <Button
+                            android:id="@+id/btnTL"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/black"
+                            android:text="TIRO LIBRE"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:cornerRadius="20sp" />
 
-                    <Button
-                        android:id="@+id/btnT3p"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:text="T3p"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:cornerRadius="20sp" />
+                        <Button
+                            android:id="@+id/btnT2p"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/black"
+                            android:text="TIRO 2PTS"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:cornerRadius="20sp" />
 
-                    <Button
-                        android:id="@+id/btnPerdida"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:text="PÉR"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:cornerRadius="20sp" />
+                        <Button
+                            android:id="@+id/btnT3p"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/black"
+                            android:text="TIRO 3PTS"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:cornerRadius="20sp" />
 
-                    <Button
-                        android:id="@+id/btnRecuperacion"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:text="REC"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:cornerRadius="20sp" />
+                    </LinearLayout>
 
-                    <Button
-                        android:id="@+id/btnTapon"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:text="TAP"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:cornerRadius="20sp" />
+                        android:layout_marginBottom="10dp"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/btnRebote"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="@color/black"
-                        android:text="REB"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"
-                        app:cornerRadius="20sp" />
+                        <Button
+                            android:id="@+id/btnTapon"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/black"
+                            android:text="TAPÓN"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:cornerRadius="20sp" />
+
+                        <Button
+                            android:id="@+id/btnRecuperacion"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/black"
+                            android:text="RECUPERACIÓN"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:cornerRadius="20sp" />
+
+                        <Button
+                            android:id="@+id/btnPerdida"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/black"
+                            android:text="PÉRDIDA"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:cornerRadius="20sp" />
+
+                        <Button
+                            android:id="@+id/btnAsistencia"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/black"
+                            android:text="ASISTENCIA"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:cornerRadius="20sp" />
+
+                        <Button
+                            android:id="@+id/btnRebote"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="5dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/black"
+                            android:text="REBOTE"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:cornerRadius="20sp" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout

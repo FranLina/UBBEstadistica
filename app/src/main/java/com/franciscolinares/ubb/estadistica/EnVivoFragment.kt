@@ -241,9 +241,13 @@ class EnVivoFragment : Fragment() {
             .inflate(R.layout.row_cabecera_jugadores_campo, null, false)
         binding.TLEquipoVJC.addView(cabeceraVJC)
 
-        for (j in 0..<jugadores.count()) {
+        val jugadoresOrdenados = jugadores.sortedWith(compareBy<Map<String?, Any?>> { it["equipo"] as? String }.thenBy {
+            (it["dorsal"] as? String)?.toIntOrNull() ?: Int.MAX_VALUE
+        })
 
-            val jugador = jugadores[j]
+        for (j in 0..<jugadoresOrdenados.count()) {
+
+            val jugador = jugadoresOrdenados[j]
 
             val registro = LayoutInflater.from(binding.root.context)
                 .inflate(R.layout.row_jugadores_campo, null, false)

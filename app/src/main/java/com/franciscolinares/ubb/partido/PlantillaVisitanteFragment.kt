@@ -152,8 +152,8 @@ class PlantillaVisitanteFragment : Fragment() {
                                 val jugador = hashMapOf(
                                     "dorsal" to j.dorsal,
                                     "nombre" to j.apellido1 + " " + j.apellido2 + ", " + j.nombre,
-                                    "minutos" to 0,
-                                    "minutoEntrada" to 0,
+                                    "minutos" to "00:00",
+                                    "minutoEntrada" to "00:00",
                                     "cuartoEntrada" to 0,
                                     "equipo" to "Visitante",
                                     "asi" to 0,

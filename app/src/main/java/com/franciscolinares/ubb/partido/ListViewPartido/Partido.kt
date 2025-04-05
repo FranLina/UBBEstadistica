@@ -1,5 +1,7 @@
 package com.franciscolinares.ubb.partido.ListViewPartido
 
+import java.util.Date
+
 class Partido(
     val id: String,
     val local: String,
@@ -8,6 +10,7 @@ class Partido(
     val resultado: String,
     val hora: String,
     val fecha: String,
+    val fechaDate: Date,
     val estado: String
 ) {
     override fun equals(other: Any?): Boolean {

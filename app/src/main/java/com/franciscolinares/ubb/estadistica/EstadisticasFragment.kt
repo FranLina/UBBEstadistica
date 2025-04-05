@@ -133,7 +133,7 @@ class EstadisticasFragment : Fragment() {
 
         val tamanoCelda = 400
 
-        var min = 0.0f
+        var min = "00:00"
         var pts = 0
         var tc2A = 0
         var tc2F = 0
@@ -217,7 +217,7 @@ class EstadisticasFragment : Fragment() {
             // Recorrer jugadores y obtener estadísticas
             for (jugador in jugadoresOrdenados) {
                 if (jugador["equipo"].toString() == equipo) {
-                    min += jugador["minutos"].toString().toFloat()
+                    min = sumarTiempos(jugador["minutos"].toString(), min)
                     pts += jugador["puntos"].toString().toInt()
                     tc2A += jugador["tc2pA"].toString().toInt()
                     tc2F += jugador["tc2pF"].toString().toInt()
@@ -251,7 +251,7 @@ class EstadisticasFragment : Fragment() {
                     else celdas[0].cellStyle = estilos["primeraImpar"] as XSSFCellStyle?
 
                     celdas[0].setCellValue(jugador["dorsal"].toString() + " " + jugador["nombre"].toString())
-                    celdas[1].setCellValue(convertirAMinutosYSegundos(jugador["minutos"].toString().toFloat()))
+                    celdas[1].setCellValue(jugador["minutos"].toString())
                     celdas[2].setCellValue(jugador["puntos"].toString())
                     celdas[3].setCellValue(
                         jugador["tc2pA"].toString() + "/" + (jugador["tc2pA"].toString().toInt() + jugador["tc2pF"].toString().toInt())
@@ -302,7 +302,7 @@ class EstadisticasFragment : Fragment() {
             }
 
             celdas[0].setCellValue("Totales")
-            celdas[1].setCellValue(convertirAMinutosYSegundos(min))
+            celdas[1].setCellValue(min)
             celdas[2].setCellValue(pts.toString())
             celdas[3].setCellValue(tc2A.toString() + "/" + (tc2A + tc2F))
             celdas[4].setCellValue(((tc2A.toDouble() / (tc2A.toDouble() + tc2F.toDouble())) * 100).toInt().toString())
@@ -483,19 +483,11 @@ class EstadisticasFragment : Fragment() {
         }
     }
 
-    private fun convertirAMinutosYSegundos(formato: Float): String {
-        val minutos = formato.toInt()  // Los minutos completos
-        val segundos = ((formato - minutos) * 60).toInt()  // Los segundos restantes
-
-        // Formateamos los minutos y segundos en un formato de dos dígitos
-        return String.format("%02d:%02d", minutos, segundos)
-    }
-
     @SuppressLint("SetTextI18n", "InflateParams", "ResourceAsColor", "MissingInflatedId")
     private fun recuperaDatosEstadistica(
         jugadores: ArrayList<Map<String?, Any?>>
     ) {
-        var minL = 0.0f
+        var minL = "00:00"
         var ptsL = 0
         var tc2AL = 0
         var tc2FL = 0
@@ -514,7 +506,7 @@ class EstadisticasFragment : Fragment() {
         var falRL = 0
         var valL = 0
 
-        var minV = 0.0f
+        var minV = "00:00"
         var ptsV = 0
         var tc2AV = 0
         var tc2FV = 0
@@ -592,7 +584,7 @@ class EstadisticasFragment : Fragment() {
             registroN.tag = jugador["dorsal"].toString()
             registro.tag = jugador["dorsal"].toString()
 
-            registro.findViewById<TextView>(R.id.txtEMin).text = convertirAMinutosYSegundos(jugador["minutos"].toString().toFloat())
+            registro.findViewById<TextView>(R.id.txtEMin).text = jugador["minutos"].toString()
             registro.findViewById<TextView>(R.id.txtEPuntos).text = jugador["puntos"].toString()
             registro.findViewById<TextView>(R.id.txtETC2P1).text =
                 jugador["tc2pA"].toString() + "/" + (jugador["tc2pA"].toString().toInt() + jugador["tc2pF"].toString().toInt())
@@ -624,7 +616,7 @@ class EstadisticasFragment : Fragment() {
             if (jugador["equipo"] == "Local") {
                 binding.TLLocal.addView(registro)
                 binding.TLLocalNombre.addView(registroN)
-                minL += jugador["minutos"].toString().toFloat()
+                minL = sumarTiempos(jugador["minutos"].toString(), minL)
                 ptsL += jugador["puntos"].toString().toInt()
                 tc2AL += jugador["tc2pA"].toString().toInt()
                 tc2FL += jugador["tc2pF"].toString().toInt()
@@ -646,7 +638,7 @@ class EstadisticasFragment : Fragment() {
                 binding.TLVisitante.addView(registro)
                 binding.TLVisitanteNombre.addView(registroN)
 
-                minV += jugador["minutos"].toString().toFloat()
+                minV = sumarTiempos(jugador["minutos"].toString(), minV)
                 ptsV += jugador["puntos"].toString().toInt()
                 tc2AV += jugador["tc2pA"].toString().toInt()
                 tc2FV += jugador["tc2pF"].toString().toInt()
@@ -671,7 +663,7 @@ class EstadisticasFragment : Fragment() {
         binding.TLLocalNombre.addView(registroNTotalL)
 
         val registroL = LayoutInflater.from(binding.root.context).inflate(R.layout.row_estadistica_total_datos, null, false)
-        registroL.findViewById<TextView>(R.id.txtEMin).text = convertirAMinutosYSegundos(minL)
+        registroL.findViewById<TextView>(R.id.txtEMin).text = minL
         registroL.findViewById<TextView>(R.id.txtEPuntos).text = ptsL.toString()
         registroL.findViewById<TextView>(R.id.txtETC2P1).text = tc2AL.toString() + "/" + (tc2AL + tc2FL).toString()
         registroL.findViewById<TextView>(R.id.txtETC2P2).text = ((tc2AL.toDouble() / (tc2AL.toDouble() + tc2FL.toDouble())) * 100).toInt().toString()
@@ -697,7 +689,7 @@ class EstadisticasFragment : Fragment() {
         binding.TLVisitanteNombre.addView(registroNTotalV)
 
         val registroV = LayoutInflater.from(binding.root.context).inflate(R.layout.row_estadistica_total_datos, null, false)
-        registroV.findViewById<TextView>(R.id.txtEMin).text = convertirAMinutosYSegundos(minV)
+        registroV.findViewById<TextView>(R.id.txtEMin).text = minV
         registroV.findViewById<TextView>(R.id.txtEPuntos).text = ptsV.toString()
         registroV.findViewById<TextView>(R.id.txtETC2P1).text = tc2AV.toString() + "/" + (tc2AV + tc2FV).toString()
         registroV.findViewById<TextView>(R.id.txtETC2P2).text = ((tc2AV.toDouble() / (tc2AV.toDouble() + tc2FV.toDouble())) * 100).toInt().toString()
@@ -723,6 +715,18 @@ class EstadisticasFragment : Fragment() {
         mostrarEstadisticaJugador(binding.TLVisitante, "Visitante")
         mostrarEstadisticaJugador(binding.TLVisitanteNombre, "Visitante")
 
+    }
+
+    // Función para sumar tiempos en formato MM:SS
+    private fun sumarTiempos(tiempo1: String, tiempo2: String): String {
+        val (min1, seg1) = tiempo1.split(":").map { it.toInt() }
+        val (min2, seg2) = tiempo2.split(":").map { it.toInt() }
+
+        val totalSegundos = (min1 * 60 + seg1) + (min2 * 60 + seg2)
+        val minutos = totalSegundos / 60
+        val segundos = totalSegundos % 60
+
+        return String.format("%02d:%02d", minutos, segundos)
     }
 
     @SuppressLint("SetTextI18n", "MissingInflatedId")
@@ -762,8 +766,7 @@ class EstadisticasFragment : Fragment() {
                                 }
 
                                 view.findViewById<TextView>(R.id.txtMVPNombre2).text = jugador["nombre"].toString().uppercase(Locale.ROOT)
-                                view.findViewById<TextView>(R.id.txtMVPMinutos).text =
-                                    convertirAMinutosYSegundos(jugador["minutos"].toString().toFloat())
+                                view.findViewById<TextView>(R.id.txtMVPMinutos).text = jugador["minutos"].toString()
                                 view.findViewById<TextView>(R.id.txtMVPDorsal).text = jugador["dorsal"].toString()
                                 view.findViewById<TextView>(R.id.txtMVPPuntos).text = jugador["puntos"].toString()
                                 view.findViewById<TextView>(R.id.txtMVPRebotes).text =

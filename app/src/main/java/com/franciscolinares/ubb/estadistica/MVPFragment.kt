@@ -132,7 +132,7 @@ class MVPFragment : Fragment() {
         val mejoresJugadores = ArrayList(jugadoresOrdenados.take(cantidad))
         for (j in mejoresJugadores) {
             val dato = JugadorEstadistica(
-                j["minutos"].toString().toFloat(),
+                j["minutos"].toString(),
                 j["dorsal"].toString(),
                 j["nombre"].toString(),
                 j["equipo"].toString(),

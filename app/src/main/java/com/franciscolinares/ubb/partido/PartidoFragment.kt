@@ -33,6 +33,8 @@ import com.franciscolinares.ubb.estadistica.ListViewEstadistica.MinutoAMinuto
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.max
 
@@ -367,8 +369,8 @@ class PartidoFragment : Fragment() {
                 val builder = AlertDialog.Builder(binding.root.context)
                 val view = layoutInflater.inflate(R.layout.accion_partido, null)
                 builder.setView(view)
-                view.findViewById<Button>(R.id.btnAnotar).text = "Recibida"
-                view.findViewById<Button>(R.id.btnFallar).text = "Cometida"
+                view.findViewById<Button>(R.id.btnAnotar).text = "RECIBIDA"
+                view.findViewById<Button>(R.id.btnFallar).text = "COMETIDA"
                 val dialog = builder.create()
                 dialog.show()
                 paraCronometro()
@@ -378,268 +380,47 @@ class PartidoFragment : Fragment() {
 
                 view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
                     val lista = llenarListToggle()
-                    for (i in 0..<lista.count()) {
-                        if (lista[i].isChecked) {
-                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                                db.collection("Estadisticas").document(idPartido).get()
-                                    .addOnSuccessListener {
-                                        val listJugador =
-                                            it.get("ListadoJugadores") as ArrayList<String>
-                                        for (j in 0..<listJugador.count()) {
-                                            val jugador =
-                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
-
-                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                                jugador["falR"] = jugador["falR"].toString().toInt() + 1
-                                                db.collection("Estadisticas")
-                                                    .document(idPartido)
-                                                    .update(
-                                                        hashMapOf(
-                                                            listJugador[j] to jugador
-                                                        ) as Map<String, Any>
-                                                    ).addOnSuccessListener {
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Falta reciba por el jugador " + lista[i].textOn + ", lleva " + jugador["falR"] + " faltas recibidas.",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        calcularVal(listJugador[j], jugador)
-
-                                                        db.collection("MinutoaMinuto")
-                                                            .document(idPartido).get()
-                                                            .addOnSuccessListener {
-                                                                val listRegistros =
-                                                                    it.get("registro") as ArrayList<Map<String?, Any?>>
-                                                                val registro = hashMapOf(
-                                                                    "cuarto" to cuarto,
-                                                                    "dorsal" to lista[i].text,
-                                                                    "nombre" to jugador["nombre"],
-                                                                    "frase" to "FALTA RECIBIDA",
-                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                    "equipo" to "Local",
-                                                                    "tipoFrase" to "3",
-                                                                    "tipoImg" to "3"
-                                                                ) as Map<String?, Any?>
-                                                                listRegistros.add(registro)
-                                                                db.collection("MinutoaMinuto")
-                                                                    .document(idPartido)
-                                                                    .update(
-                                                                        hashMapOf(
-                                                                            "registro" to listRegistros,
-                                                                        ) as Map<String?, Any?>
-                                                                    ).addOnSuccessListener {
-                                                                        actualizaJugadaReciente()
-                                                                    }
-                                                            }
-                                                    }
-                                            }
-                                        }
-
-                                    }
-                            } else {
-                                db.collection("Estadisticas").document(idPartido).get()
-                                    .addOnSuccessListener {
-                                        val listJugador =
-                                            it.get("ListadoJugadores") as ArrayList<String>
-                                        for (j in 0..<listJugador.count()) {
-                                            val jugador =
-                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
-
-                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                                jugador["falR"] = jugador["falR"].toString().toInt() + 1
-                                                db.collection("Estadisticas")
-                                                    .document(idPartido)
-                                                    .update(
-                                                        hashMapOf(
-                                                            listJugador[j] to jugador
-                                                        ) as Map<String, Any>
-                                                    ).addOnSuccessListener {
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Falta recibida por el jugador " + lista[i].textOn + ", lleva " + jugador["falR"] + " faltas recibidas.",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        calcularVal(listJugador[j], jugador)
-
-                                                        db.collection("MinutoaMinuto")
-                                                            .document(idPartido).get()
-                                                            .addOnSuccessListener {
-                                                                val listRegistros =
-                                                                    it.get("registro") as ArrayList<Map<String?, Any?>>
-                                                                val registro = hashMapOf(
-                                                                    "cuarto" to cuarto,
-                                                                    "dorsal" to lista[i].text,
-                                                                    "nombre" to jugador["nombre"],
-                                                                    "frase" to "FALTA RECIBIDA",
-                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                    "equipo" to "Visitante",
-                                                                    "tipoFrase" to "3",
-                                                                    "tipoImg" to "3"
-                                                                ) as Map<String?, Any?>
-                                                                listRegistros.add(registro)
-                                                                db.collection("MinutoaMinuto")
-                                                                    .document(idPartido)
-                                                                    .update(
-                                                                        hashMapOf(
-                                                                            "registro" to listRegistros,
-                                                                        ) as Map<String?, Any?>
-                                                                    ).addOnSuccessListener {
-                                                                        actualizaJugadaReciente()
-                                                                    }
-                                                            }
-                                                    }
-                                            }
-                                        }
-
-                                    }
-                            }
-                        }
-                    }
+                    manejarFalta("FALTA RECIBIDA", comprobarEquipoJugador(llenarListToggle()), lista, idPartido)
                     vaciarToggle(lista)
                     dialog.hide()
                 }
 
                 view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
                     val lista = llenarListToggle()
-                    for (i in 0..<lista.count()) {
-                        if (lista[i].isChecked) {
-                            if (lista[i].id == R.id.TBLocal1 || lista[i].id == R.id.TBLocal2 || lista[i].id == R.id.TBLocal3 || lista[i].id == R.id.TBLocal4 || lista[i].id == R.id.TBLocal5) {
-                                db.collection("Estadisticas").document(idPartido).get()
-                                    .addOnSuccessListener {
-                                        val listJugador =
-                                            it.get("ListadoJugadores") as ArrayList<String>
-                                        for (j in 0..<listJugador.count()) {
-                                            val jugador =
-                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
-
-                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Local") {
-                                                jugador["falC"] = jugador["falC"].toString().toInt() + 1
-                                                binding.txtFaltasLocal.text = (falL + 1).toString()
-                                                falL += 1
-                                                db.collection("Estadisticas")
-                                                    .document(idPartido)
-                                                    .update(
-                                                        hashMapOf(
-                                                            listJugador[j] to jugador
-                                                        ) as Map<String, Any>
-                                                    ).addOnSuccessListener {
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Falta del jugador " + lista[i].textOn + ", lleva " + jugador["falC"] + " faltas.",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        calcularVal(listJugador[j], jugador)
-                                                        actualizaFaltaEquipo("FaltaL")
-
-                                                        db.collection("MinutoaMinuto")
-                                                            .document(idPartido).get()
-                                                            .addOnSuccessListener {
-                                                                val listRegistros =
-                                                                    it.get("registro") as ArrayList<Map<String?, Any?>>
-                                                                val registro = hashMapOf(
-                                                                    "cuarto" to cuarto,
-                                                                    "dorsal" to lista[i].text,
-                                                                    "nombre" to jugador["nombre"],
-                                                                    "frase" to "FALTA COMETIDA",
-                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                    "equipo" to "Local",
-                                                                    "tipoFrase" to "3",
-                                                                    "tipoImg" to "3"
-                                                                ) as Map<String?, Any?>
-                                                                listRegistros.add(registro)
-                                                                db.collection("MinutoaMinuto")
-                                                                    .document(idPartido)
-                                                                    .update(
-                                                                        hashMapOf(
-                                                                            "registro" to listRegistros,
-                                                                        ) as Map<String?, Any?>
-                                                                    ).addOnSuccessListener {
-                                                                        actualizaJugadaReciente()
-                                                                        if (jugador["falC"].toString() == "5")
-                                                                            faltas5Local(
-                                                                                llenarListToggleLocal(),
-                                                                                lista[i]
-                                                                            )
-                                                                    }
-                                                            }
-                                                    }
-                                            }
-                                        }
-
-                                    }
-                            } else {
-                                db.collection("Estadisticas").document(idPartido).get()
-                                    .addOnSuccessListener {
-                                        val listJugador =
-                                            it.get("ListadoJugadores") as ArrayList<String>
-                                        for (j in 0..<listJugador.count()) {
-                                            val jugador =
-                                                (it.get(listJugador[j]) as Map<String?, Any?>).toMutableMap()
-
-                                            if (jugador["dorsal"] == lista[i].text && jugador["equipo"] == "Visitante") {
-                                                jugador["falC"] = jugador["falC"].toString().toInt() + 1
-                                                binding.txtFaltasVisitante.text = (falV + 1).toString()
-                                                falV += 1
-                                                db.collection("Estadisticas")
-                                                    .document(idPartido)
-                                                    .update(
-                                                        hashMapOf(
-                                                            listJugador[j] to jugador
-                                                        ) as Map<String, Any>
-                                                    ).addOnSuccessListener {
-                                                        Toast.makeText(
-                                                            binding.root.context,
-                                                            "Falta del jugador " + lista[i].textOn + ", lleva " + jugador["falC"] + " faltas.",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                        calcularVal(listJugador[j], jugador)
-                                                        actualizaFaltaEquipo("FaltaV")
-
-                                                        db.collection("MinutoaMinuto")
-                                                            .document(idPartido).get()
-                                                            .addOnSuccessListener {
-                                                                val listRegistros =
-                                                                    it.get("registro") as ArrayList<Map<String?, Any?>>
-                                                                val registro = hashMapOf(
-                                                                    "cuarto" to cuarto,
-                                                                    "dorsal" to lista[i].text,
-                                                                    "nombre" to jugador["nombre"],
-                                                                    "frase" to "FALTA COMETIDA",
-                                                                    "resultado" to binding.txtPuntosLocal.text.toString() + "-" + binding.txtPuntosVisitante.text.toString(),
-                                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                                    "equipo" to "Visitante",
-                                                                    "tipoFrase" to "3",
-                                                                    "tipoImg" to "3"
-                                                                ) as Map<String?, Any?>
-                                                                listRegistros.add(registro)
-                                                                db.collection("MinutoaMinuto")
-                                                                    .document(idPartido)
-                                                                    .update(
-                                                                        hashMapOf(
-                                                                            "registro" to listRegistros,
-                                                                        ) as Map<String?, Any?>
-                                                                    ).addOnSuccessListener {
-                                                                        actualizaJugadaReciente()
-                                                                        if (jugador["falC"].toString() == "5")
-                                                                            faltas5Visitante(
-                                                                                llenarListToggleVisitante(),
-                                                                                lista[i]
-                                                                            )
-                                                                    }
-                                                            }
-                                                    }
-                                            }
-                                        }
-
-                                    }
-                            }
-                        }
-                    }
+                    manejarFalta("FALTA COMETIDA",comprobarEquipoJugador(llenarListToggle()), lista, idPartido)
                     vaciarToggle(lista)
                     dialog.hide()
+                }
+
+                actualizaTiempo()
+            }
+        }
+        binding.btnFalEspecial.setOnClickListener {
+            if (estado != "Finalizado") {
+                val builder = AlertDialog.Builder(binding.root.context)
+                val view = layoutInflater.inflate(R.layout.accion_partido, null)
+                builder.setView(view)
+                view.findViewById<Button>(R.id.btnAnotar).text = "TÉCNICA"
+                view.findViewById<Button>(R.id.btnFallar).text = "ANTIDEPORTIVA"
+                val dialog = builder.create()
+                dialog.show()
+                paraCronometro()
+
+                falL = binding.txtFaltasLocal.text.toString().toInt()
+                falV = binding.txtFaltasVisitante.text.toString().toInt()
+
+                view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
+                    val lista = llenarListToggle()
+                    manejarFalta("FALTA TÉCNICA",comprobarEquipoJugador(llenarListToggle()), lista, idPartido)
+                    vaciarToggle(lista)
+                    dialog.dismiss()
+                }
+
+                view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
+                    val lista = llenarListToggle()
+                    manejarFalta("FALTA ANTIDEPORTIVA",comprobarEquipoJugador(llenarListToggle()), lista, idPartido)
+                    vaciarToggle(lista)
+                    dialog.dismiss()
                 }
 
                 actualizaTiempo()
@@ -3028,111 +2809,75 @@ class PartidoFragment : Fragment() {
             )
     }
 
-    private fun convertirMMSSAMinutos(minutoSegundo: String): Float {
-        val partes = minutoSegundo.split(":")
-        val minutos = partes[0].toInt()
-        val segundos = partes[1].toInt()
-
-        // Convertir los minutos y segundos a minutos
-        return minutos.toFloat() + segundos / 60f  // Los segundos se convierten a minutos
-    }
-
     private fun actualizarMinutosJugadores() {
-
         val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
         val idPartido = prefs.getString("idPartido", "").toString()
-        val minutoActual = convertirMMSSAMinutos(tiempo)
+        val minutoActual = tiempo // Ahora es un String en formato MM:SS
 
-        // Obtener los datos de Firestore
         db.collection("Estadisticas").document(idPartido).get()
             .addOnSuccessListener { documentSnapshot ->
                 val listJugador = documentSnapshot.get("ListadoJugadores") as ArrayList<String>
                 for (j in listJugador) {
                     val jugador = (documentSnapshot.get(j) as Map<String?, Any?>).toMutableMap()
 
-                    if (jugador["equipo"].toString() == "Local") {
-                        for (campo in quintetoL) {
-                            if (jugador["dorsal"].toString() == campo && jugador["equipo"].toString() == "Local") {
-                                val minutoEntrada = jugador["minutoEntrada"].toString().toFloat()
-                                val totalMinutos = jugador["minutos"].toString().toFloat()
-                                val cuartoEntrada = jugador["cuartoEntrada"].toString().toInt()
+                    val equipo = jugador["equipo"].toString()
+                    val quinteto = if (equipo == "Local") quintetoL else quintetoV
 
-                                // Calcular tiempo jugado
-                                val tiempoJugado = if (cuarto == cuartoEntrada) {
-                                    // Si el cuarto es el mismo, simplemente restamos el minuto actual al de entrada
-                                    minutoEntrada - minutoActual
-                                } else {
-                                    // Si el cuarto ha cambiado, contamos desde su entrada hasta el final del cuarto (00:00)
-                                    minutoEntrada
-                                }.coerceAtLeast(0f)
+                    if (jugador["dorsal"].toString() in quinteto) {
+                        val minutoEntrada = jugador["minutoEntrada"].toString() // Formato MM:SS
+                        val totalMinutos = jugador["minutos"].toString()
+                        val cuartoEntrada = jugador["cuartoEntrada"].toString().toInt()
 
-                                // Actualizamos el total de minutos jugados
-                                jugador["minutos"] = totalMinutos + tiempoJugado
-
-                                // Actualizamos el minuto de entrada y el cuarto de entrada
-                                db.collection("Estadisticas").document(idPartido)
-                                    .update(
-                                        hashMapOf(
-                                            j to jugador
-                                        ) as Map<String, Any>
-                                    )
-                                    .addOnSuccessListener {
-                                        // Actualizamos el minuto de entrada y el cuarto de entrada para el siguiente cuarto
-                                        jugador["minutoEntrada"] = convertirMMSSAMinutos(tiempo)
-                                        jugador["cuartoEntrada"] = cuarto
-                                        db.collection("Estadisticas").document(idPartido)
-                                            .update(
-                                                hashMapOf(
-                                                    j to jugador
-                                                ) as Map<String, Any>
-                                            )
-                                    }
-                                break
-                            }
+                        // Calcular tiempo jugado
+                        val tiempoJugado = if (cuarto == cuartoEntrada) {
+                            restarTiempo(minutoEntrada, minutoActual) // Nueva función para restar tiempos
+                        } else {
+                            minutoEntrada // Si cambió el cuarto, cuenta to do el tiempo hasta 00:00
                         }
-                    } else {
-                        for (campo in quintetoV) {
-                            if (jugador["dorsal"].toString() == campo && jugador["equipo"].toString() == "Visitante") {
-                                val minutoEntrada = jugador["minutoEntrada"].toString().toFloat()
-                                val totalMinutos = jugador["minutos"].toString().toFloat()
-                                val cuartoEntrada = jugador["cuartoEntrada"].toString().toInt()
 
-                                // Calcular tiempo jugado
-                                val tiempoJugado = if (cuarto == cuartoEntrada) {
-                                    // Si el cuarto es el mismo, simplemente restamos el minuto actual al de entrada
-                                    minutoEntrada - minutoActual
-                                } else {
-                                    // Si el cuarto ha cambiado, contamos desde su entrada hasta el final del cuarto (00:00)
-                                    minutoEntrada
-                                }.coerceAtLeast(0f)
+                        // Sumar tiempo jugado al total
+                        jugador["minutos"] = sumarTiempos(totalMinutos, tiempoJugado)
 
-                                // Actualizamos el total de minutos jugados
-                                jugador["minutos"] = totalMinutos + tiempoJugado
-
-                                // Actualizamos el minuto de entrada y el cuarto de entrada
+                        // Guardar cambios en Firestore
+                        db.collection("Estadisticas").document(idPartido)
+                            .update(j, jugador)
+                            .addOnSuccessListener {
+                                // Actualizar minuto y cuarto de entrada para el siguiente cálculo
+                                jugador["minutoEntrada"] = minutoActual
+                                jugador["cuartoEntrada"] = cuarto
                                 db.collection("Estadisticas").document(idPartido)
-                                    .update(
-                                        hashMapOf(
-                                            j to jugador
-                                        ) as Map<String, Any>
-                                    )
-                                    .addOnSuccessListener {
-                                        // Actualizamos el minuto de entrada y el cuarto de entrada para el siguiente cuarto
-                                        jugador["minutoEntrada"] = convertirMMSSAMinutos(tiempo)
-                                        jugador["cuartoEntrada"] = cuarto
-                                        db.collection("Estadisticas").document(idPartido)
-                                            .update(
-                                                hashMapOf(
-                                                    j to jugador
-                                                ) as Map<String, Any>
-                                            )
-                                    }
-                                break
+                                    .update(j, jugador)
                             }
-                        }
                     }
                 }
             }
+    }
+
+    // Función para restar tiempos en formato MM:SS
+    private fun restarTiempo(inicio: String, fin: String): String {
+        val (minI, segI) = inicio.split(":").map { it.toInt() }
+        val (minF, segF) = fin.split(":").map { it.toInt() }
+
+        val totalSegundosI = minI * 60 + segI
+        val totalSegundosF = minF * 60 + segF
+
+        val diferencia = maxOf(totalSegundosI - totalSegundosF, 0)
+        val minutos = diferencia / 60
+        val segundos = diferencia % 60
+
+        return String.format("%02d:%02d", minutos, segundos)
+    }
+
+    // Función para sumar tiempos en formato MM:SS
+    private fun sumarTiempos(tiempo1: String, tiempo2: String): String {
+        val (min1, seg1) = tiempo1.split(":").map { it.toInt() }
+        val (min2, seg2) = tiempo2.split(":").map { it.toInt() }
+
+        val totalSegundos = (min1 * 60 + seg1) + (min2 * 60 + seg2)
+        val minutos = totalSegundos / 60
+        val segundos = totalSegundos % 60
+
+        return String.format("%02d:%02d", minutos, segundos)
     }
 
     private fun actualizaTiempoMuertos() {
@@ -3186,28 +2931,6 @@ class PartidoFragment : Fragment() {
 
     }
 
-    private fun actualizaQuinteto(equipo: String) {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-        val idPartido = prefs.getString("idPartido", "").toString()
-        if (equipo == "QuintetoL") {
-            db.collection("Partidos")
-                .document(idPartido)
-                .update(
-                    hashMapOf(
-                        equipo to quintetoL,
-                    ) as Map<String, Any>
-                )
-        } else {
-            db.collection("Partidos")
-                .document(idPartido)
-                .update(
-                    hashMapOf(
-                        equipo to quintetoV,
-                    ) as Map<String, Any>
-                )
-        }
-    }
-
     private fun play() {
         if (!isPlay && estado != "Finalizado") {
             binding.TiempoCuarto.base = SystemClock.elapsedRealtime() + pauseOffSet
@@ -3238,6 +2961,8 @@ class PartidoFragment : Fragment() {
             val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
             val idPartido = prefs.getString("idPartido", "").toString()
 
+            val horaActual = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+
             if (cuarto == 1 || cuarto == 2 || cuarto == 3) {
                 falL = 0
                 falV = 0
@@ -3257,7 +2982,7 @@ class PartidoFragment : Fragment() {
                             "dorsal" to "",
                             "frase" to "FIN DEL PERIODO",
                             "resultado" to "",
-                            "tiempo" to "",
+                            "tiempo" to horaActual.toString(),
                             "equipo" to "",
                             "tipoFrase" to "4"
                         ) as Map<String?, Any?>
@@ -3268,7 +2993,7 @@ class PartidoFragment : Fragment() {
                             "dorsal" to "",
                             "frase" to "INICIO DEL PERIODO",
                             "resultado" to "",
-                            "tiempo" to "",
+                            "tiempo" to horaActual.toString(),
                             "equipo" to "",
                             "tipoFrase" to "2"
                         ) as Map<String?, Any?>
@@ -3317,7 +3042,7 @@ class PartidoFragment : Fragment() {
                             "dorsal" to "",
                             "frase" to "FIN DEL PERIODO",
                             "resultado" to "",
-                            "tiempo" to "",
+                            "tiempo" to horaActual.toString(),
                             "equipo" to "",
                             "tipoFrase" to "4"
                         ) as Map<String?, Any?>
@@ -3328,7 +3053,7 @@ class PartidoFragment : Fragment() {
                             "dorsal" to "",
                             "frase" to "FIN DEL PARTIDO",
                             "resultado" to "",
-                            "tiempo" to "",
+                            "tiempo" to horaActual.toString(),
                             "equipo" to "",
                             "tipoFrase" to "4"
                         ) as Map<String?, Any?>
@@ -3363,7 +3088,7 @@ class PartidoFragment : Fragment() {
                             "dorsal" to "",
                             "frase" to "FIN DEL PERIODO",
                             "resultado" to "",
-                            "tiempo" to "",
+                            "tiempo" to horaActual.toString(),
                             "equipo" to "",
                             "tipoFrase" to "4"
                         ) as Map<String?, Any?>
@@ -3374,7 +3099,7 @@ class PartidoFragment : Fragment() {
                             "dorsal" to "",
                             "frase" to "INICIO DEL PERIODO",
                             "resultado" to "",
-                            "tiempo" to "",
+                            "tiempo" to horaActual.toString(),
                             "equipo" to "",
                             "tipoFrase" to "2"
                         ) as Map<String?, Any?>
@@ -3425,7 +3150,7 @@ class PartidoFragment : Fragment() {
                             "dorsal" to "",
                             "frase" to "FIN DEL PERIODO",
                             "resultado" to "",
-                            "tiempo" to "",
+                            "tiempo" to horaActual.toString(),
                             "equipo" to "",
                             "tipoFrase" to "4"
                         ) as Map<String?, Any?>
@@ -3436,7 +3161,7 @@ class PartidoFragment : Fragment() {
                             "dorsal" to "",
                             "frase" to "FIN DEL PARTIDO",
                             "resultado" to "",
-                            "tiempo" to "",
+                            "tiempo" to horaActual.toString(),
                             "equipo" to "",
                             "tipoFrase" to "4"
                         ) as Map<String?, Any?>
@@ -3486,6 +3211,8 @@ class PartidoFragment : Fragment() {
 
         val builder = AlertDialog.Builder(binding.root.context)
         val view = layoutInflater.inflate(R.layout.cambios_equipo, null)
+
+        val horaActual = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
         db.collection("Estadisticas").document(idPartido).get()
             .addOnSuccessListener { esta ->
@@ -3582,7 +3309,7 @@ class PartidoFragment : Fragment() {
                                         "dorsal" to "",
                                         "frase" to "INICIO DEL PERIODO",
                                         "resultado" to "",
-                                        "tiempo" to "",
+                                        "tiempo" to horaActual.toString(),
                                         "equipo" to "",
                                         "tipoFrase" to "2",
                                         "tipoImg" to ""
@@ -3731,6 +3458,10 @@ class PartidoFragment : Fragment() {
                                     )
                             }
                         dialog.hide()
+                        if (equipo == "Local") colocarQuinteto(equipo, llenarListToggleLocal()) else colocarQuinteto(
+                            equipo,
+                            llenarListToggleVisitante()
+                        )
                         actualizarMinutosJugadores()
                     } else {
                         Toast.makeText(
@@ -3745,369 +3476,267 @@ class PartidoFragment : Fragment() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun hacerCambiosLocal(lista: ArrayList<ToggleButton>, toggleButtonSale: ToggleButton) {
-        if (estado != "Finalizado") {
-            val builder = AlertDialog.Builder(binding.root.context)
-            val view = layoutInflater.inflate(R.layout.cambios_equipo, null)
+        if (estado == "Finalizado") return
 
-            val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-            val idPartido = prefs.getString("idPartido", "").toString()
-            var contLoca: Int = 0
-            var quinteto: Int = 0
+        val context = binding.root.context
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+        val builder = AlertDialog.Builder(context)
+        val view = layoutInflater.inflate(R.layout.cambios_equipo, null)
+        val contenedor1 = view.findViewById<LinearLayout>(R.id.ContenedorCambios)
+        val contenedor2 = view.findViewById<LinearLayout>(R.id.ContenedorCambios2)
+        val btnGuardar = view.findViewById<Button>(R.id.btnGuardarPlantillaCambios)
+        val listToggleButton = arrayListOf<ToggleButton>()
+        var quinteto = 0
 
-            paraCronometro()
+        paraCronometro()
 
-            db.collection("Estadisticas").document(idPartido).get()
-                .addOnSuccessListener { esta ->
-                    val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
+        db.collection("Estadisticas").document(idPartido).get().addOnSuccessListener { esta ->
+            val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
+            var contLoca = 0
 
-                    val listToggleButton: ArrayList<ToggleButton> =
-                        java.util.ArrayList<ToggleButton>()
+            listJugador.forEach { j ->
+                val jugador = esta.get(j) as Map<String, Any>
+                val dorsal = jugador["dorsal"].toString()
 
-                    for (i in 0..<listJugador.count()) {
-                        val jugador = esta.get(listJugador[i].toString()) as Map<String?, Any?>
-                        if (jugador["equipo"].toString() == "Local" && jugador["falC"].toString() != "5") {
-                            if (jugador["dorsal"] != lista[0].text && jugador["dorsal"] != lista[1].text && jugador["dorsal"] != lista[2].text && jugador["dorsal"] != lista[3].text && jugador["dorsal"] != lista[4].text) {
-
-                                val toggleButton: ToggleButton = ToggleButton(view.context)
-                                toggleButton.text = jugador["dorsal"].toString()
-                                toggleButton.id = contLoca
-                                toggleButton.textOff = jugador["dorsal"].toString()
-                                toggleButton.textOn = jugador["dorsal"].toString()
-                                toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocaldesactivado))
-                                toggleButton.setTextColor(Color.BLACK)
-
-                                if (contLoca < 5)
-                                    view.findViewById<LinearLayout>(R.id.ContenedorCambios)
-                                        .addView(toggleButton)
-                                else
-                                    view.findViewById<LinearLayout>(R.id.ContenedorCambios2)
-                                        .addView(toggleButton)
-
-                                toggleButton.setOnCheckedChangeListener { _, _ ->
-
-                                    if (toggleButton.isChecked) {
-                                        if (quinteto < 1) {
-                                            toggleButton.setBackgroundDrawable(
-                                                resources.getDrawable(
-                                                    R.drawable.togglebuttonlocalactivado
-                                                )
-                                            )
-                                            quinteto++
-                                        } else {
-                                            toggleButton.isChecked = false
-                                            Toast.makeText(
-                                                binding.root.context,
-                                                "Solo se puede seleccionar 1 jugador",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                    } else {
-                                        if (quinteto > 0) {
-                                            toggleButton.setBackgroundDrawable(
-                                                resources.getDrawable(
-                                                    R.drawable.togglebuttonlocaldesactivado
-                                                )
-                                            )
-                                            quinteto--
-                                        }
-                                    }
+                if (jugador["equipo"] == "Local" && jugador["falC"].toString() != "5" && jugador["fal_esp"].toString() != "2" && dorsal !in lista.map { it.text }) {
+                    val toggleButton = ToggleButton(view.context).apply {
+                        text = dorsal
+                        textOff = dorsal
+                        textOn = dorsal
+                        id = contLoca++
+                        setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocaldesactivado))
+                        setTextColor(Color.BLACK)
+                        setOnCheckedChangeListener { buttonView, isChecked ->
+                            if (isChecked) {
+                                if (quinteto < 1) {
+                                    buttonView.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocalactivado))
+                                    quinteto++
+                                } else {
+                                    buttonView.isChecked = false
+                                    Toast.makeText(context, "Solo se puede seleccionar 1 jugador", Toast.LENGTH_SHORT).show()
                                 }
-                                listToggleButton.add(toggleButton)
-                                contLoca++
+                            } else {
+                                buttonView.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocaldesactivado))
+                                quinteto--
+                            }
+                        }
+                    }
+                    (if (contLoca <= 5) contenedor1 else contenedor2).addView(toggleButton)
+                    listToggleButton.add(toggleButton)
+                }
+            }
+
+            val dialog = builder.setView(view).create()
+            dialog.show()
+
+            btnGuardar.setOnClickListener {
+                if (quinteto == 1) {
+                    db.collection("MinutoaMinuto").document(idPartido).get().addOnSuccessListener { it2 ->
+                        val listRegistros = (it2.get("registro") as? ArrayList<Map<String, Any>>)?.toMutableList() ?: mutableListOf()
+
+                        listJugador.mapNotNull { j ->
+                            val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"] == "Local") {
+                                quintetoL.remove(toggleButtonSale.text.toString())
+                                listRegistros.add(crearRegistro(jugador, "ABANDONA LA PISTA EL ", "", "3", "1"))
                             }
                         }
 
+                        val jugadorIn = listToggleButton.firstOrNull { it.isChecked }?.let { toggleButton ->
+                            toggleButtonSale.text = toggleButton.text
+                            listJugador.mapNotNull { j ->
+                                val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
+                                if (jugador["dorsal"].toString() == toggleButton.text && jugador["equipo"] == "Local") {
+                                    quintetoL.add(toggleButton.text.toString())
+                                    actualizaQuinteto("QuintetoL")
+                                    jugador.apply {
+                                        put("minutoEntrada", tiempo)
+                                        put("cuartoEntrada", cuarto)
+                                    }
+                                    listRegistros.add(crearRegistro(jugador, "ENTRA A LA PISTA EL ", "", "3", "1"))
+                                    j to jugador
+                                } else null
+                            }.toMap()
+                        } ?: emptyMap()
+
+                        db.collection("Estadisticas").document(idPartido).update(jugadorIn)
+                        db.collection("MinutoaMinuto").document(idPartido).update("registro", listRegistros)
+                            .addOnSuccessListener { actualizaJugadaReciente() }
+                        dialog.dismiss()
                     }
+                } else {
+                    Toast.makeText(context, "Seleccione a 1 jugador para continuar", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        vaciarToggle(llenarListToggle())
+    }
 
-                    builder.setView(view)
+    private fun hacerCambiosVisitante(lista: ArrayList<ToggleButton>, toggleButtonSale: ToggleButton) {
+        if (estado == "Finalizado") return
 
-                    val dialog = builder.create()
-                    dialog.show()
+        val context = binding.root.context
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+        val builder = AlertDialog.Builder(context)
+        val view = layoutInflater.inflate(R.layout.cambios_equipo, null)
+        val contenedor1 = view.findViewById<LinearLayout>(R.id.ContenedorCambios)
+        val contenedor2 = view.findViewById<LinearLayout>(R.id.ContenedorCambios2)
+        val btnGuardar = view.findViewById<Button>(R.id.btnGuardarPlantillaCambios)
+        val listToggleButton = arrayListOf<ToggleButton>()
+        var quinteto = 0
 
-                    view.findViewById<Button>(R.id.btnGuardarPlantillaCambios).setOnClickListener {
-                        if (quinteto == 1) {
-                            var cont = 0
-                            db.collection("MinutoaMinuto").document(idPartido).get()
-                                .addOnSuccessListener { it2 ->
-                                    val listRegistros =
-                                        it2.get("registro") as ArrayList<Map<String?, Any?>>
-                                    for (j in listJugador) {
-                                        val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
-                                        if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Local") {
-                                            val registro = hashMapOf(
-                                                "cuarto" to cuarto,
-                                                "dorsal" to toggleButtonSale.text,
-                                                "nombre" to jugador["nombre"],
-                                                "frase" to "ABANDONA LA PISTA EL ",
-                                                "resultado" to "",
-                                                "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                "equipo" to "Local",
-                                                "tipoFrase" to "3",
-                                                "tipoImg" to "1"
-                                            ) as Map<String?, Any?>
-                                            listRegistros.add(registro)
+        paraCronometro()
 
-                                            jugador["minutoEntrada"] = 0.0f
-                                            jugador["cuartoEntrada"] = 0
-                                            db.collection("Estadisticas").document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        j to jugador
-                                                    ) as Map<String, Any>
-                                                )
+        db.collection("Estadisticas").document(idPartido).get().addOnSuccessListener { esta ->
+            val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
+            var contVisitante = 0
 
-                                            quintetoL.remove(toggleButtonSale.text.toString())
-                                        }
-                                    }
+            listJugador.forEach { j ->
+                val jugador = esta.get(j) as Map<String, Any>
+                val dorsal = jugador["dorsal"].toString()
 
-                                    for (i in 0..<listToggleButton.count()) {
-                                        val toggleButton = listToggleButton[i]
-                                        if (toggleButton.isChecked) {
-                                            if (cont == 0) {
-                                                toggleButtonSale.text = toggleButton.text
-                                                toggleButtonSale.textOff = toggleButton.textOff
-                                                toggleButtonSale.textOn = toggleButton.textOn
-                                            }
-                                            for (j in listJugador) {
-                                                val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
-                                                if (jugador["dorsal"].toString() == toggleButton.text && jugador["equipo"].toString() == "Local") {
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to toggleButton.text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "ENTRA A LA PISTA EL ",
-                                                        "resultado" to "",
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Local",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "1"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-                                                    cont++
-                                                    quintetoL.add(toggleButton.text.toString())
-                                                    actualizaQuinteto("QuintetoL")
-
-                                                    jugador["minutoEntrada"] = convertirMMSSAMinutos(tiempo)
-                                                    jugador["cuartoEntrada"] = cuarto
-                                                    db.collection("Estadisticas").document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                j to jugador
-                                                            ) as Map<String, Any>
-                                                        )
-                                                }
-                                            }
-                                        }
-                                    }
-                                    db.collection("MinutoaMinuto")
-                                        .document(idPartido)
-                                        .update(
-                                            hashMapOf(
-                                                "registro" to listRegistros,
-                                            ) as Map<String?, Any?>
-                                        ).addOnSuccessListener {
-                                            actualizaJugadaReciente()
-                                        }
+                if (jugador["equipo"] == "Visitante" && jugador["falC"].toString() != "5" && jugador["fal_esp"].toString() != "2" && dorsal !in lista.map { it.text }) {
+                    val toggleButton = ToggleButton(view.context).apply {
+                        text = dorsal
+                        textOff = dorsal
+                        textOn = dorsal
+                        id = contVisitante++
+                        setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitantedesactivado))
+                        setTextColor(Color.BLACK)
+                        setOnCheckedChangeListener { buttonView, isChecked ->
+                            if (isChecked) {
+                                if (quinteto < 1) {
+                                    buttonView.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitanteactivo))
+                                    quinteto++
+                                } else {
+                                    buttonView.isChecked = false
+                                    Toast.makeText(context, "Solo se puede seleccionar 1 jugador", Toast.LENGTH_SHORT).show()
                                 }
-                            dialog.hide()
-
-                        } else {
-                            Toast.makeText(
-                                binding.root.context,
-                                "Seleccione a 1 jugador para continuar",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            } else {
+                                buttonView.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitantedesactivado))
+                                quinteto--
+                            }
                         }
                     }
+                    (if (contVisitante <= 5) contenedor1 else contenedor2).addView(toggleButton)
+                    listToggleButton.add(toggleButton)
                 }
-            vaciarToggle(llenarListToggle())
+            }
 
+            val dialog = builder.setView(view).create()
+            dialog.show()
+
+            btnGuardar.setOnClickListener {
+                if (quinteto == 1) {
+                    db.collection("MinutoaMinuto").document(idPartido).get().addOnSuccessListener { it2 ->
+                        val listRegistros = (it2.get("registro") as? ArrayList<Map<String, Any>>)?.toMutableList() ?: mutableListOf()
+
+                        listJugador.mapNotNull { j ->
+                            val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
+                            if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"] == "Visitante") {
+                                quintetoV.remove(toggleButtonSale.text.toString())
+                                listRegistros.add(crearRegistro(jugador, "ABANDONA LA PISTA EL ", "", "3", "1"))
+                            }
+                        }
+
+                        val jugadorIn = listToggleButton.firstOrNull { it.isChecked }?.let { toggleButton ->
+                            toggleButtonSale.text = toggleButton.text
+                            listJugador.mapNotNull { j ->
+                                val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
+                                if (jugador["dorsal"].toString() == toggleButton.text && jugador["equipo"] == "Visitante") {
+                                    quintetoV.add(toggleButton.text.toString())
+                                    actualizaQuinteto("QuintetoV")
+                                    jugador.apply {
+                                        put("minutoEntrada", tiempo)
+                                        put("cuartoEntrada", cuarto)
+                                    }
+                                    listRegistros.add(crearRegistro(jugador, "ENTRA A LA PISTA EL ", "", "3", "1"))
+                                    j to jugador
+                                } else null
+                            }.toMap()
+                        } ?: emptyMap()
+
+                        db.collection("Estadisticas").document(idPartido).update(jugadorIn)
+                        db.collection("MinutoaMinuto").document(idPartido).update("registro", listRegistros)
+                            .addOnSuccessListener { actualizaJugadaReciente() }
+                        dialog.dismiss()
+                    }
+                } else {
+                    Toast.makeText(context, "Seleccione a 1 jugador para continuar", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        vaciarToggle(llenarListToggle())
+    }
+
+    private fun crearRegistro(
+        jugador: MutableMap<String?, Any?>,
+        frase: String,
+        resultado: String,
+        tipoFrase: String,
+        tipoImg: String
+    ): Map<String, Any> {
+        return mapOf(
+            "cuarto" to cuarto,
+            "dorsal" to jugador["dorsal"].toString(),
+            "nombre" to jugador["nombre"].toString(),
+            "frase" to frase,
+            "resultado" to resultado,
+            "tiempo" to binding.TiempoCuarto.text.toString(),
+            "equipo" to jugador["equipo"].toString(),
+            "tipoFrase" to tipoFrase,
+            "tipoImg" to tipoImg
+        )
+    }
+
+    private fun colocarQuinteto(equipo: String, listToggleButton: ArrayList<ToggleButton>) {
+        // Ordenamos los dorsales teniendo en cuenta que "00" y "0" son distintos
+        val quintetoOrdenado = if (equipo == "Local") {
+            quintetoL.sortedWith { a, b ->
+                val dorsalA = a.toIntOrNull() ?: Int.MAX_VALUE
+                val dorsalB = b.toIntOrNull() ?: Int.MAX_VALUE
+                when {
+                    a == "00" -> -1 // "00" debe ir primero
+                    b == "00" -> 1 // "00" debe ir primero
+                    a == "0" -> -1 // "0" debe ir después de "00"
+                    b == "0" -> 1 // "0" debe ir después de "00"
+                    else -> dorsalA.compareTo(dorsalB) // Ordenamos como enteros
+                }
+            }
+        } else {
+            quintetoV.sortedWith { a, b ->
+                val dorsalA = a.toIntOrNull() ?: Int.MAX_VALUE
+                val dorsalB = b.toIntOrNull() ?: Int.MAX_VALUE
+                when {
+                    a == "00" -> -1 // "00" debe ir primero
+                    b == "00" -> 1 // "00" debe ir primero
+                    a == "0" -> -1 // "0" debe ir después de "00"
+                    b == "0" -> 1 // "0" debe ir después de "00"
+                    else -> dorsalA.compareTo(dorsalB) // Ordenamos como enteros
+                }
+            }
+        }
+
+        // Asignamos los dorsales ordenados a los ToggleButton
+        for ((cont, quin) in quintetoOrdenado.withIndex()) {
+            listToggleButton[cont].text = quin
+            listToggleButton[cont].textOff = quin
+            listToggleButton[cont].textOn = quin
         }
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private fun hacerCambiosVisitante(lista: ArrayList<ToggleButton>, toggleButtonSale: ToggleButton) {
-        if (estado != "Finalizado") {
-            val builder = AlertDialog.Builder(binding.root.context)
-            val view = layoutInflater.inflate(R.layout.cambios_equipo, null)
+    private fun actualizaQuinteto(equipo: String) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+        val quinteto = if (equipo == "QuintetoL") quintetoL else quintetoV
 
-            val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-            val idPartido = prefs.getString("idPartido", "").toString()
-            var contLoca: Int = 0
-            var quinteto: Int = 0
+        db.collection("Partidos")
+            .document(idPartido)
+            .update(equipo, quinteto)
 
-            paraCronometro()
-
-            db.collection("Estadisticas").document(idPartido).get()
-                .addOnSuccessListener { esta ->
-                    val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
-
-                    val listToggleButton: ArrayList<ToggleButton> =
-                        java.util.ArrayList<ToggleButton>()
-
-                    for (i in 0..<listJugador.count()) {
-                        val jugador = esta.get(listJugador[i].toString()) as Map<String?, Any?>
-                        if (jugador["equipo"].toString() == "Visitante" && jugador["falC"].toString() != "5") {
-                            if (jugador["dorsal"] != lista[0].text && jugador["dorsal"] != lista[1].text && jugador["dorsal"] != lista[2].text && jugador["dorsal"] != lista[3].text && jugador["dorsal"] != lista[4].text) {
-
-                                val toggleButton: ToggleButton = ToggleButton(view.context)
-                                toggleButton.text = jugador["dorsal"].toString()
-                                toggleButton.id = contLoca
-                                toggleButton.textOff = jugador["dorsal"].toString()
-                                toggleButton.textOn = jugador["dorsal"].toString()
-                                toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitantedesactivado))
-                                toggleButton.setTextColor(Color.BLACK)
-
-                                if (contLoca < 5)
-                                    view.findViewById<LinearLayout>(R.id.ContenedorCambios)
-                                        .addView(toggleButton)
-                                else
-                                    view.findViewById<LinearLayout>(R.id.ContenedorCambios2)
-                                        .addView(toggleButton)
-
-                                toggleButton.setOnCheckedChangeListener { _, _ ->
-
-                                    if (toggleButton.isChecked) {
-                                        if (quinteto < 1) {
-                                            toggleButton.setBackgroundDrawable(
-                                                resources.getDrawable(
-                                                    R.drawable.togglebuttonvisitanteactivo
-                                                )
-                                            )
-                                            quinteto++
-                                        } else {
-                                            toggleButton.isChecked = false
-                                            Toast.makeText(
-                                                binding.root.context,
-                                                "Solo se puede seleccionar 1 jugador",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                    } else {
-                                        if (quinteto > 0) {
-                                            toggleButton.setBackgroundDrawable(
-                                                resources.getDrawable(
-                                                    R.drawable.togglebuttonvisitantedesactivado
-                                                )
-                                            )
-                                            quinteto--
-                                        }
-                                    }
-                                }
-                                listToggleButton.add(toggleButton)
-                                contLoca++
-                            }
-                        }
-
-                    }
-
-                    builder.setView(view)
-
-                    val dialog = builder.create()
-                    dialog.show()
-
-                    view.findViewById<Button>(R.id.btnGuardarPlantillaCambios).setOnClickListener {
-                        if (quinteto == 1) {
-                            var cont = 0
-                            db.collection("MinutoaMinuto").document(idPartido).get()
-                                .addOnSuccessListener { it2 ->
-                                    val listRegistros =
-                                        it2.get("registro") as ArrayList<Map<String?, Any?>>
-
-                                    for (j in listJugador) {
-                                        val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
-                                        if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Visitante") {
-                                            val registro = hashMapOf(
-                                                "cuarto" to cuarto,
-                                                "dorsal" to toggleButtonSale.text,
-                                                "nombre" to jugador["nombre"],
-                                                "frase" to "ABANDONA LA PISTA EL ",
-                                                "resultado" to "",
-                                                "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                "equipo" to "Visitante",
-                                                "tipoFrase" to "3",
-                                                "tipoImg" to "1"
-                                            ) as Map<String?, Any?>
-                                            listRegistros.add(registro)
-
-                                            jugador["minutoEntrada"] = 0.0f
-                                            jugador["cuartoEntrada"] = 0
-                                            db.collection("Estadisticas").document(idPartido)
-                                                .update(
-                                                    hashMapOf(
-                                                        j to jugador
-                                                    ) as Map<String, Any>
-                                                )
-
-                                            quintetoV.remove(toggleButtonSale.text.toString())
-                                        }
-                                    }
-
-
-                                    for (i in 0..<listToggleButton.count()) {
-                                        val toggleButton = listToggleButton[i]
-                                        if (toggleButton.isChecked) {
-                                            if (cont == 0) {
-                                                toggleButtonSale.text = toggleButton.text
-                                                toggleButtonSale.textOff = toggleButton.textOff
-                                                toggleButtonSale.textOn = toggleButton.textOn
-                                            }
-
-                                            for (j in listJugador) {
-                                                val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
-                                                if (jugador["dorsal"] == toggleButton.text && jugador["equipo"] == "Visitante") {
-                                                    val registro = hashMapOf(
-                                                        "cuarto" to cuarto,
-                                                        "dorsal" to toggleButton.text,
-                                                        "nombre" to jugador["nombre"],
-                                                        "frase" to "ENTRA A LA PISTA EL ",
-                                                        "resultado" to "",
-                                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                        "equipo" to "Visitante",
-                                                        "tipoFrase" to "3",
-                                                        "tipoImg" to "1"
-                                                    ) as Map<String?, Any?>
-                                                    listRegistros.add(registro)
-                                                    cont++
-                                                    quintetoV.add(toggleButton.text.toString())
-                                                    actualizaQuinteto("QuintetoV")
-
-                                                    jugador["minutoEntrada"] = convertirMMSSAMinutos(tiempo)
-                                                    jugador["cuartoEntrada"] = cuarto
-                                                    db.collection("Estadisticas").document(idPartido)
-                                                        .update(
-                                                            hashMapOf(
-                                                                j to jugador
-                                                            ) as Map<String, Any>
-                                                        )
-                                                }
-                                            }
-                                        }
-                                    }
-                                    db.collection("MinutoaMinuto")
-                                        .document(idPartido)
-                                        .update(
-                                            hashMapOf(
-                                                "registro" to listRegistros,
-                                            ) as Map<String?, Any?>
-                                        ).addOnSuccessListener {
-                                            actualizaJugadaReciente()
-                                        }
-                                }
-                            dialog.hide()
-
-                        } else {
-                            Toast.makeText(
-                                binding.root.context,
-                                "Seleccione a 1 jugador para continuar",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
-            vaciarToggle(llenarListToggle())
-
-        }
+        if (equipo == "QuintetoL") colocarQuinteto("Local", llenarListToggleLocal()) else colocarQuinteto("Visitante", llenarListToggleVisitante())
     }
 
     @SuppressLint("MissingInflatedId", "ResourceAsColor")
@@ -4124,521 +3753,286 @@ class PartidoFragment : Fragment() {
         val tlMuestraFalta = view.findViewById<TableLayout>(R.id.muestraFaltas)
         tlMuestraFalta.removeAllViews()
 
+        // Agregar cabecera de la tabla
         val cabeceraFalta = LayoutInflater.from(binding.root.context).inflate(R.layout.row_cabecera_falta, null, false)
         tlMuestraFalta.addView(cabeceraFalta)
 
+        // Obtener estadísticas
         db.collection("Estadisticas").document(idPartido).get()
-            .addOnSuccessListener {
-                val listJugador = it.get("ListadoJugadores") as ArrayList<String>
-                for (j in 0..<listJugador.count()) {
-                    val jugador = it.get(listJugador[j]) as Map<String?, Any?>
-                    if (jugador["equipo"] == equipo) {
-                        val filaFalta = LayoutInflater.from(binding.root.context).inflate(R.layout.row_falta, null, false)
+            .addOnSuccessListener { result ->
+                val listJugador = result.get("ListadoJugadores") as ArrayList<String>
 
-                        if (j % 2 != 0) {
-                            filaFalta.findViewById<TableRow>(R.id.filaFalta).setBackgroundColor(
-                                Color.parseColor("#FFE4E4E4")
-                            )
-                        }
+                listJugador.filter {
+                    val jugador = result.get(it) as Map<String?, Any?>
+                    jugador["equipo"] == equipo
+                }.forEachIndexed { index, jugadorKey ->
+                    val jugador = result.get(jugadorKey) as Map<String?, Any?>
+                    val filaFalta = LayoutInflater.from(binding.root.context).inflate(R.layout.row_falta, null, false)
 
-                        filaFalta.findViewById<TextView>(R.id.txtFaltaDorsal).text = jugador["dorsal"].toString()
-                        filaFalta.findViewById<TextView>(R.id.txtFaltaNombre).text = jugador["nombre"].toString().uppercase(Locale.ROOT)
-                        filaFalta.findViewById<TextView>(R.id.txtFaltaFalta).text = jugador["falC"].toString()
-                        if (jugador["falC"].toString().toInt() == 5)
-                            filaFalta.findViewById<TextView>(R.id.txtFaltaFalta).setTextColor(Color.RED)
-                        else if (jugador["falC"].toString().toInt() >= 3)
-                            filaFalta.findViewById<TextView>(R.id.txtFaltaFalta).setTextColor(Color.parseColor("#FBC02D"))
-                        tlMuestraFalta.addView(filaFalta)
+                    // Colorear filas alternas
+                    if (index % 2 != 0) {
+                        filaFalta.findViewById<TableRow>(R.id.filaFalta).setBackgroundColor(Color.parseColor("#FFE4E4E4"))
                     }
+
+                    // Rellenar los datos de la fila
+                    filaFalta.findViewById<TextView>(R.id.txtFaltaDorsal).text = jugador["dorsal"].toString()
+                    filaFalta.findViewById<TextView>(R.id.txtFaltaNombre).text = jugador["nombre"].toString().uppercase(Locale.ROOT)
+                    val faltas = jugador["falC"].toString().toInt()
+                    val faltasEspecial = jugador["fal_esp"].toString().toInt()
+                    val txtFalta = filaFalta.findViewById<TextView>(R.id.txtFaltaFalta)
+                    txtFalta.text = faltas.toString()
+
+                    // Cambiar color según el número de faltas
+                    txtFalta.setTextColor(
+                        when {
+                            faltasEspecial == 2 -> Color.RED
+                            faltas == 5 -> Color.RED
+                            faltas >= 3 -> Color.parseColor("#FBC02D")
+                            else -> Color.BLACK
+                        }
+                    )
+
+                    tlMuestraFalta.addView(filaFalta)
                 }
             }
-
         val dialog = builder.create()
         dialog.show()
     }
 
-    @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
-    private fun faltas5Local(lista: ArrayList<ToggleButton>, toggleButtonSale: ToggleButton) {
-        val builder = AlertDialog.Builder(binding.root.context)
-        val view = layoutInflater.inflate(R.layout.cambios_equipo, null)
-        view.findViewById<TextView>(R.id.txtQuinteto).text =
-            "El jugador #" + toggleButtonSale.text + " lleva 5 faltas, por lo que esta expulsado."
+    private fun manejarFalta(
+        tipoFalta: String,
+        equipo: String,
+        listaToggle: List<ToggleButton>,
+        idPartido: String
+    ) {
+        for (i in listaToggle) {
+            if (i.isChecked) {
+                db.collection("Estadisticas").document(idPartido).get().addOnSuccessListener {
+                    val listJugador = it.get("ListadoJugadores") as ArrayList<String>
+                    for (j in listJugador) {
+                        val jugador = (it.get(j) as Map<String?, Any?>).toMutableMap()
+                        val jugadorDorsal = jugador["dorsal"].toString()
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-        val idPartido = prefs.getString("idPartido", "").toString()
-        var contLoca: Int = 0
-        var quinteto: Int = 0
-
-        db.collection("Estadisticas").document(idPartido).get()
-            .addOnSuccessListener { esta ->
-                val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
-
-                val listToggleButton: ArrayList<ToggleButton> =
-                    java.util.ArrayList<ToggleButton>()
-
-                for (i in 0..<listJugador.count()) {
-                    val jugador = esta.get(listJugador[i].toString()) as Map<String?, Any?>
-                    if (jugador["equipo"].toString() == "Local" && jugador["falC"].toString() != "5") {
-                        if (jugador["dorsal"] != lista[0].text && jugador["dorsal"] != lista[1].text && jugador["dorsal"] != lista[2].text && jugador["dorsal"] != lista[3].text && jugador["dorsal"] != lista[4].text) {
-
-                            val toggleButton: ToggleButton = ToggleButton(view.context)
-                            toggleButton.text = jugador["dorsal"].toString()
-                            toggleButton.id = contLoca
-                            toggleButton.textOff = jugador["dorsal"].toString()
-                            toggleButton.textOn = jugador["dorsal"].toString()
-                            toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonlocaldesactivado))
-                            toggleButton.setTextColor(Color.BLACK)
-                            if (contLoca < 5)
-                                view.findViewById<LinearLayout>(R.id.ContenedorCambios)
-                                    .addView(toggleButton)
-                            else
-                                view.findViewById<LinearLayout>(R.id.ContenedorCambios2)
-                                    .addView(toggleButton)
-
-                            toggleButton.setOnCheckedChangeListener { _, _ ->
-
-                                if (toggleButton.isChecked) {
-                                    if (quinteto < 1) {
-                                        toggleButton.setBackgroundDrawable(
-                                            resources.getDrawable(
-                                                R.drawable.togglebuttonlocalactivado
-                                            )
-                                        )
-                                        quinteto++
-                                    } else {
-                                        toggleButton.isChecked = false
-                                        Toast.makeText(
-                                            binding.root.context,
-                                            "Solo se puede seleccionar 1 jugador",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                } else {
-                                    if (quinteto > 0) {
-                                        toggleButton.setBackgroundDrawable(
-                                            resources.getDrawable(
-                                                R.drawable.togglebuttonlocaldesactivado
-                                            )
-                                        )
-                                        quinteto--
-                                    }
+                        // Verificamos si el jugador está seleccionado
+                        if (jugadorDorsal == i.text.toString() && jugador["equipo"] == equipo) {
+                            // Actualizamos la cantidad de faltas dependiendo del equipo
+                            if (jugador["equipo"] == "Local") {
+                                if (tipoFalta == "FALTA COMETIDA") {
+                                    jugador["falC"] = jugador["falC"].toString().toInt() + 1
+                                    falL++
+                                    binding.txtFaltasLocal.text = falL.toString()
+                                } else if (tipoFalta == "FALTA RECIBIDA") {
+                                    jugador["falR"] = jugador["falR"].toString().toInt() + 1
+                                } else if (tipoFalta == "FALTA TÉCNICA" || tipoFalta == "FALTA ANTIDEPORTIVA") {
+                                    jugador["fal_esp"] = jugador["fal_esp"].toString().toInt() + 1
+                                    jugador["falC"] = jugador["falC"].toString().toInt() + 1
+                                    falL++
+                                    binding.txtFaltasLocal.text = falL.toString()
+                                }
+                            } else if (jugador["equipo"] == "Visitante") {
+                                if (tipoFalta == "FALTA COMETIDA") {
+                                    jugador["falC"] = jugador["falC"].toString().toInt() + 1
+                                    falV++
+                                    binding.txtFaltasVisitante.text = falV.toString()
+                                } else if (tipoFalta == "FALTA RECIBIDA") {
+                                    jugador["falR"] = jugador["falR"].toString().toInt() + 1
+                                } else if (tipoFalta == "FALTA TÉCNICA" || tipoFalta == "FALTA ANTIDEPORTIVA") {
+                                    jugador["fal_esp"] = jugador["fal_esp"].toString().toInt() + 1
+                                    jugador["falC"] = jugador["falC"].toString().toInt() + 1
+                                    falV++
+                                    binding.txtFaltasVisitante.text = falV.toString()
                                 }
                             }
-                            listToggleButton.add(toggleButton)
-                            contLoca++
-                        }
-                    }
 
-                }
+                            // Actualiza la estadística en Firebase
+                            db.collection("Estadisticas")
+                                .document(idPartido)
+                                .update(mapOf(j to jugador))
+                                .addOnSuccessListener {
+                                    calcularVal(j, jugador)
 
-                builder.setView(view)
+                                    if (jugador["equipo"] == "Local")
+                                        actualizaFaltaEquipo("FaltaL")
+                                    else
+                                        actualizaFaltaEquipo("FaltaV")
 
-                val dialog = builder.create()
-                dialog.show()
+                                    // Registra la jugada en Firebase
+                                    db.collection("MinutoaMinuto").document(idPartido).get().addOnSuccessListener {
+                                        val listRegistros = it.get("registro") as ArrayList<Map<String, Any>>
+                                        listRegistros.add(
+                                            crearRegistro(
+                                                jugador,
+                                                tipoFalta,
+                                                "${binding.txtPuntosLocal.text}-${binding.txtPuntosVisitante.text}",
+                                                "3",
+                                                "3"
+                                            )
+                                        )
+                                        db.collection("MinutoaMinuto").document(idPartido).update("registro", listRegistros).addOnSuccessListener {
+                                            actualizaJugadaReciente()
 
-                view.findViewById<Button>(R.id.btnGuardarPlantillaCambios).setOnClickListener {
-                    if (quinteto == 1 && contLoca > 0) {
-                        var cont = 0
-                        db.collection("MinutoaMinuto").document(idPartido).get()
-                            .addOnSuccessListener { it2 ->
-                                val listRegistros =
-                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
-
-                                for (j in listJugador) {
-                                    val jugador = esta.get(j) as Map<String?, Any?>
-                                    if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Local") {
-                                        val registro = hashMapOf(
-                                            "cuarto" to cuarto,
-                                            "dorsal" to toggleButtonSale.text,
-                                            "nombre" to jugador["nombre"],
-                                            "frase" to "ABANDONA LA PISTA EL ",
-                                            "resultado" to "",
-                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                            "equipo" to "Local",
-                                            "tipoFrase" to "3",
-                                            "tipoImg" to "1"
-                                        ) as Map<String?, Any?>
-                                        listRegistros.add(registro)
-                                        quintetoL.remove(toggleButtonSale.text.toString())
-                                        actualizaQuinteto("QuintetoL")
-                                    }
-                                }
-
-                                for (i in 0..<listToggleButton.count()) {
-                                    val toggleButton = listToggleButton[i]
-                                    if (toggleButton.isChecked) {
-                                        if (cont == 0) {
-                                            toggleButtonSale.text = toggleButton.text
-                                            toggleButtonSale.textOff = toggleButton.textOff
-                                            toggleButtonSale.textOn = toggleButton.textOn
-                                        }
-
-                                        for (j in listJugador) {
-                                            val jugador = esta.get(j) as Map<String?, Any?>
-                                            if (jugador["dorsal"].toString() == toggleButton.text && jugador["equipo"].toString() == "Local") {
-                                                val registro = hashMapOf(
-                                                    "cuarto" to cuarto,
-                                                    "dorsal" to toggleButton.text,
-                                                    "nombre" to jugador["nombre"],
-                                                    "frase" to "ENTRA A LA PISTA EL ",
-                                                    "resultado" to "",
-                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                    "equipo" to "Local",
-                                                    "tipoFrase" to "3",
-                                                    "tipoImg" to "1"
-                                                ) as Map<String?, Any?>
-                                                listRegistros.add(registro)
-                                                cont++
-                                                quintetoL.add(toggleButton.text.toString())
-                                                actualizaQuinteto("QuintetoL")
+                                            // Maneja la expulsión si el jugador tiene muchas faltas
+                                            if (jugador["falC"].toString().toInt() == 5 || jugador["fal_esp"].toString().toInt() == 2) {
+                                                manejarExpulsion(jugador["equipo"].toString(), llenarListToggleLocal(), i)
                                             }
                                         }
                                     }
                                 }
-                                db.collection("MinutoaMinuto")
-                                    .document(idPartido)
-                                    .update(
-                                        hashMapOf(
-                                            "registro" to listRegistros,
-                                        ) as Map<String?, Any?>
-                                    ).addOnSuccessListener {
-                                        actualizaJugadaReciente()
-                                    }
-                            }
-                        dialog.hide()
-                    } else if (quinteto == 0 && contLoca == 0) {
-                        db.collection("MinutoaMinuto").document(idPartido).get()
-                            .addOnSuccessListener { it2 ->
-                                val listRegistros =
-                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
-
-                                for (j in listJugador) {
-                                    val jugador = esta.get(j) as Map<String?, Any?>
-                                    if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Local") {
-                                        val registro = hashMapOf(
-                                            "cuarto" to cuarto,
-                                            "dorsal" to toggleButtonSale.text,
-                                            "nombre" to jugador["nombre"],
-                                            "frase" to "ABANDONA LA PISTA EL ",
-                                            "resultado" to "",
-                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                            "equipo" to "Local",
-                                            "tipoFrase" to "3",
-                                            "tipoImg" to "1"
-                                        ) as Map<String?, Any?>
-                                        listRegistros.add(registro)
-                                        quintetoL.remove(toggleButtonSale.text.toString())
-                                        actualizaQuinteto("QuintetoL")
-                                        toggleButtonSale.text = " "
-                                        toggleButtonSale.textOff = " "
-                                        toggleButtonSale.textOn = " "
-                                    }
-                                }
-                                db.collection("MinutoaMinuto")
-                                    .document(idPartido)
-                                    .update(
-                                        hashMapOf(
-                                            "registro" to listRegistros,
-                                        ) as Map<String?, Any?>
-                                    ).addOnSuccessListener {
-                                        actualizaJugadaReciente()
-                                    }
-                            }
-                        dialog.hide()
-
-                    } else {
-                        Toast.makeText(
-                            binding.root.context,
-                            "Seleccione a 1 jugador para continuar",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                }
-            }
-        vaciarToggle(llenarListToggle())
-        actualizaTiempo()
-
-    }
-
-    @SuppressLint("UseCompatLoadingForDrawables", "SetTextI18n")
-    private fun faltas5Visitante(lista: ArrayList<ToggleButton>, toggleButtonSale: ToggleButton) {
-        val builder = AlertDialog.Builder(binding.root.context)
-        val view = layoutInflater.inflate(R.layout.cambios_equipo, null)
-
-        view.findViewById<TextView>(R.id.txtQuinteto).text =
-            "El jugador #" + toggleButtonSale.text + " lleva 5 faltas, por lo que esta expulsado."
-
-        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-        val idPartido = prefs.getString("idPartido", "").toString()
-        var contLoca: Int = 0
-        var quinteto: Int = 0
-
-        db.collection("Estadisticas").document(idPartido).get()
-            .addOnSuccessListener { esta ->
-                val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
-
-                val listToggleButton: ArrayList<ToggleButton> =
-                    java.util.ArrayList<ToggleButton>()
-
-                for (i in 0..<listJugador.count()) {
-                    val jugador = esta.get(listJugador[i].toString()) as Map<String?, Any?>
-                    if (jugador["equipo"].toString() == "Visitante" && jugador["falC"].toString() != "5") {
-                        if (jugador["dorsal"] != lista[0].text && jugador["dorsal"] != lista[1].text && jugador["dorsal"] != lista[2].text && jugador["dorsal"] != lista[3].text && jugador["dorsal"] != lista[4].text) {
-                            val toggleButton: ToggleButton = ToggleButton(view.context)
-                            toggleButton.text = jugador["dorsal"].toString()
-                            toggleButton.id = contLoca
-                            toggleButton.textOff = jugador["dorsal"].toString()
-                            toggleButton.textOn = jugador["dorsal"].toString()
-                            toggleButton.setBackgroundDrawable(resources.getDrawable(R.drawable.togglebuttonvisitantedesactivado))
-                            toggleButton.setTextColor(Color.BLACK)
-
-                            if (contLoca < 5)
-                                view.findViewById<LinearLayout>(R.id.ContenedorCambios)
-                                    .addView(toggleButton)
-                            else
-                                view.findViewById<LinearLayout>(R.id.ContenedorCambios2)
-                                    .addView(toggleButton)
-
-                            toggleButton.setOnCheckedChangeListener { _, _ ->
-
-                                if (toggleButton.isChecked) {
-                                    if (quinteto < 1) {
-                                        toggleButton.setBackgroundDrawable(
-                                            resources.getDrawable(
-                                                R.drawable.togglebuttonvisitanteactivo
-                                            )
-                                        )
-                                        quinteto++
-                                    } else {
-                                        toggleButton.isChecked = false
-                                        Toast.makeText(
-                                            binding.root.context,
-                                            "Solo se puede seleccionar 1 jugador",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                } else {
-                                    if (quinteto > 0) {
-                                        toggleButton.setBackgroundDrawable(
-                                            resources.getDrawable(
-                                                R.drawable.togglebuttonvisitantedesactivado
-                                            )
-                                        )
-                                        quinteto--
-                                    }
-                                }
-                            }
-                            listToggleButton.add(toggleButton)
-                            contLoca++
                         }
                     }
-
                 }
-
-                builder.setView(view)
-
-                val dialog = builder.create()
-                dialog.show()
-
-                view.findViewById<Button>(R.id.btnGuardarPlantillaCambios).setOnClickListener {
-                    if (quinteto == 1 && contLoca > 0) {
-                        var cont = 0
-                        db.collection("MinutoaMinuto").document(idPartido).get()
-                            .addOnSuccessListener { it2 ->
-                                val listRegistros =
-                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
-
-                                for (j in listJugador) {
-                                    val jugador = esta.get(j) as Map<String?, Any?>
-                                    if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Visitante") {
-                                        val registro = hashMapOf(
-                                            "cuarto" to cuarto,
-                                            "dorsal" to toggleButtonSale.text,
-                                            "nombre" to jugador["nombre"],
-                                            "frase" to "ABANDONA LA PISTA EL ",
-                                            "resultado" to "",
-                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                            "equipo" to "Visitante",
-                                            "tipoFrase" to "3",
-                                            "tipoImg" to "1"
-                                        ) as Map<String?, Any?>
-                                        listRegistros.add(registro)
-                                        quintetoV.remove(toggleButtonSale.text.toString())
-                                        actualizaQuinteto("QuintetoV")
-                                    }
-                                }
-
-                                for (i in 0..<listToggleButton.count()) {
-                                    val toggleButton = listToggleButton[i]
-                                    if (toggleButton.isChecked) {
-                                        if (cont == 0) {
-                                            toggleButtonSale.text = toggleButton.text
-                                            toggleButtonSale.textOff = toggleButton.textOff
-                                            toggleButtonSale.textOn = toggleButton.textOn
-                                        }
-                                        for (j in listJugador) {
-                                            val jugador = esta.get(j) as Map<String?, Any?>
-                                            if (jugador["dorsal"].toString() == toggleButton.text && jugador["equipo"].toString() == "Visitante") {
-                                                val registro = hashMapOf(
-                                                    "cuarto" to cuarto,
-                                                    "dorsal" to toggleButton.text,
-                                                    "nombre" to jugador["nombre"],
-                                                    "frase" to "ENTRA A LA PISTA EL ",
-                                                    "resultado" to "",
-                                                    "tiempo" to binding.TiempoCuarto.text.toString(),
-                                                    "equipo" to "Visitante",
-                                                    "tipoFrase" to "3",
-                                                    "tipoImg" to "1"
-                                                ) as Map<String?, Any?>
-                                                listRegistros.add(registro)
-                                                cont++
-                                                quintetoV.add(toggleButton.text.toString())
-                                                actualizaQuinteto("QuintetoV")
-                                            }
-                                        }
-                                    }
-                                }
-                                db.collection("MinutoaMinuto")
-                                    .document(idPartido)
-                                    .update(
-                                        hashMapOf(
-                                            "registro" to listRegistros,
-                                        ) as Map<String?, Any?>
-                                    ).addOnSuccessListener {
-                                        actualizaJugadaReciente()
-                                    }
-                            }
-                        dialog.hide()
-                    } else if (quinteto == 0 && contLoca == 0) {
-                        db.collection("MinutoaMinuto").document(idPartido).get()
-                            .addOnSuccessListener { it2 ->
-                                val listRegistros =
-                                    it2.get("registro") as ArrayList<Map<String?, Any?>>
-
-                                for (j in listJugador) {
-                                    val jugador = esta.get(j) as Map<String?, Any?>
-                                    if (jugador["dorsal"].toString() == toggleButtonSale.text && jugador["equipo"].toString() == "Visitante") {
-                                        val registro = hashMapOf(
-                                            "cuarto" to cuarto,
-                                            "dorsal" to toggleButtonSale.text,
-                                            "nombre" to jugador["nombre"],
-                                            "frase" to "ABANDONA LA PISTA EL ",
-                                            "resultado" to "",
-                                            "tiempo" to binding.TiempoCuarto.text.toString(),
-                                            "equipo" to "Visitante",
-                                            "tipoFrase" to "3",
-                                            "tipoImg" to "1"
-                                        ) as Map<String?, Any?>
-                                        listRegistros.add(registro)
-                                        quintetoV.remove(toggleButtonSale.text.toString())
-                                        actualizaQuinteto("QuintetoV")
-                                        toggleButtonSale.text = " "
-                                        toggleButtonSale.textOff = " "
-                                        toggleButtonSale.textOn = " "
-                                    }
-                                }
-                                db.collection("MinutoaMinuto")
-                                    .document(idPartido)
-                                    .update(
-                                        hashMapOf(
-                                            "registro" to listRegistros,
-                                        ) as Map<String?, Any?>
-                                    ).addOnSuccessListener {
-                                        actualizaJugadaReciente()
-                                    }
-                            }
-                        dialog.hide()
-                    } else {
-                        Toast.makeText(
-                            binding.root.context,
-                            "Seleccione a 1 jugador para continuar",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                }
-            }
-        vaciarToggle(llenarListToggle())
-        actualizaTiempo()
-
-    }
-
-    private fun colocarQuinteto(equipo: String, listToggleButton: ArrayList<ToggleButton>) {
-        if (equipo == "Local") {
-            for ((cont, quin) in quintetoL.withIndex()) {
-                listToggleButton[cont].text = quin
-                listToggleButton[cont].textOff = quin
-                listToggleButton[cont].textOn = quin
-            }
-        } else {
-            for ((cont, quin) in quintetoV.withIndex()) {
-                listToggleButton[cont].text = quin
-                listToggleButton[cont].textOff = quin
-                listToggleButton[cont].textOn = quin
+                break
             }
         }
+    }
+
+
+    @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
+    private fun manejarExpulsion(equipo: String, lista: ArrayList<ToggleButton>, toggleButtonSale: ToggleButton) {
+        val context = binding.root.context
+        val builder = AlertDialog.Builder(context)
+        val view = layoutInflater.inflate(R.layout.cambios_equipo, null)
+        val txtQuinteto = view.findViewById<TextView>(R.id.txtQuinteto)
+        txtQuinteto.text = "El jugador #${toggleButtonSale.text}, está expulsado."
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+        val equipoClave = if (equipo == "Local") "QuintetoL" else "QuintetoV"
+
+        db.collection("Estadisticas").document(idPartido).get().addOnSuccessListener { esta ->
+            val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
+            val listToggleButton = ArrayList<ToggleButton>()
+            var quinteto = 0
+
+            listJugador.forEach { jugadorId ->
+                val jugador = esta.get(jugadorId) as Map<String, Any>
+                val dorsal = jugador["dorsal"].toString()
+                if (jugador["equipo"] == equipo && jugador["falC"].toString() != "5" && jugador["fal_esp"].toString() != "2" && lista.none { it.text == dorsal }) {
+                    val toggleButton = ToggleButton(view.context).apply {
+                        text = dorsal
+                        textOff = dorsal
+                        textOn = dorsal
+                        setBackgroundDrawable(resources.getDrawable(if (equipo == "Local") R.drawable.togglebuttonlocaldesactivado else R.drawable.togglebuttonvisitantedesactivado))
+                        setTextColor(Color.BLACK)
+                    }
+                    view.findViewById<LinearLayout>(if (listToggleButton.size < 5) R.id.ContenedorCambios else R.id.ContenedorCambios2)
+                        .addView(toggleButton)
+
+                    toggleButton.setOnCheckedChangeListener { _, isChecked ->
+                        if (isChecked) {
+                            if (quinteto < 1) {
+                                toggleButton.setBackgroundDrawable(resources.getDrawable(if (equipo == "Local") R.drawable.togglebuttonlocalactivado else R.drawable.togglebuttonvisitanteactivo))
+                                quinteto++
+                            } else {
+                                toggleButton.isChecked = false
+                                Toast.makeText(context, "Solo se puede seleccionar 1 jugador", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            toggleButton.setBackgroundDrawable(resources.getDrawable(if (equipo == "Local") R.drawable.togglebuttonlocaldesactivado else R.drawable.togglebuttonvisitantedesactivado))
+                            quinteto--
+                        }
+                    }
+                    listToggleButton.add(toggleButton)
+                }
+            }
+
+            builder.setView(view).setCancelable(false)
+            val dialog = builder.create()
+            dialog.show()
+
+            view.findViewById<Button>(R.id.btnGuardarPlantillaCambios).setOnClickListener {
+                if (quinteto == 1 && listToggleButton.isNotEmpty()) {
+                    db.collection("MinutoaMinuto").document(idPartido).get().addOnSuccessListener { it2 ->
+                        val listRegistros = it2.get("registro") as ArrayList<Map<String, Any>>
+
+                        listJugador.mapNotNull { esta.get(it) as? Map<String?, Any?> }
+                            .firstOrNull { it["dorsal"].toString() == toggleButtonSale.text && it["equipo"].toString() == equipo }
+                            ?.let { jugador ->
+                                listRegistros.add(crearRegistro(jugador.toMutableMap(), "ABANDONA LA PISTA EL ", "", "3", "1"))
+                                if (equipo == "Local") quintetoL.remove(toggleButtonSale.text.toString()) else quintetoV.remove(toggleButtonSale.text.toString())
+                                actualizaQuinteto(equipoClave)
+                            }
+
+                        listToggleButton.firstOrNull { it.isChecked }?.let { toggleButton ->
+                            toggleButtonSale.text = toggleButton.text
+                            listJugador.forEach { j ->
+                                val jugador = (esta.get(j) as Map<String?, Any?>).toMutableMap()
+                                if (jugador["dorsal"].toString() == toggleButton.text && jugador["equipo"].toString() == equipo) {
+                                    listRegistros.add(crearRegistro(jugador, "ENTRA A LA PISTA EL ", "", "3", "1"))
+                                    if (equipo == "Local") quintetoL.add(toggleButton.text.toString()) else quintetoV.add(toggleButton.text.toString())
+                                    actualizaQuinteto(equipoClave)
+                                    jugador.apply {
+                                        put("minutoEntrada", tiempo)
+                                        put("cuartoEntrada", cuarto)
+                                    }
+                                    db.collection("Estadisticas").document(idPartido).update(jugador)
+                                }
+                            }
+                        }
+
+                        db.collection("MinutoaMinuto").document(idPartido).update("registro", listRegistros).addOnSuccessListener {
+                            actualizaJugadaReciente()
+                        }
+                    }
+                    dialog.dismiss()
+                } else if (quinteto == 0 && listToggleButton.isEmpty()) {
+                    db.collection("MinutoaMinuto").document(idPartido).get().addOnSuccessListener { it2 ->
+                        val listRegistros = it2.get("registro") as ArrayList<Map<String, Any>>
+
+                        listJugador.firstOrNull { jugador ->
+                            val datosJugador = esta.get(jugador) as Map<String?, Any?>
+                            datosJugador["dorsal"].toString() == toggleButtonSale.text && datosJugador["equipo"].toString() == equipo
+                        }?.let { jugadorEncontrado ->
+                            val datosJugador = esta.get(jugadorEncontrado) as Map<String, Any>
+                            listRegistros.add(crearRegistro(datosJugador.toMutableMap(), "ABANDONA LA PISTA EL ", "", "3", "1"))
+                            if (equipo == "Local") {
+                                quintetoL.remove(toggleButtonSale.text.toString())
+                                quintetoL.add(" ")
+                            } else {
+                                quintetoV.remove(toggleButtonSale.text.toString())
+                                quintetoV.add(" ")
+                            }
+                            actualizaQuinteto(equipoClave)
+                        }
+
+                        db.collection("MinutoaMinuto").document(idPartido)
+                            .update("registro", listRegistros)
+                            .addOnSuccessListener { actualizaJugadaReciente() }
+                    }
+                    dialog.dismiss()
+                } else {
+                    Toast.makeText(context, "Seleccione a 1 jugador para continuar", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        vaciarToggle(llenarListToggle())
+        actualizaTiempo()
     }
 
     private fun mostrarJugadoresCampo() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
         val idPartido = prefs.getString("idPartido", "").toString()
 
-        db.collection("Estadisticas").document(idPartido).get()
-            .addOnSuccessListener { esta ->
-                val listJugador = esta.get("ListadoJugadores") as ArrayList<String>
-                db.collection("MinutoaMinuto").document(idPartido).get()
-                    .addOnSuccessListener { it2 ->
-                        val listRegistros = it2.get("registro") as ArrayList<Map<String?, Any?>>
+        db.collection("Estadisticas").document(idPartido).get().addOnSuccessListener { estadisticas ->
+            val listJugador = estadisticas.get("ListadoJugadores") as ArrayList<String>
+            db.collection("MinutoaMinuto").document(idPartido).get().addOnSuccessListener { minutoAMinuto ->
+                val listRegistros = minutoAMinuto.get("registro") as ArrayList<Map<String, Any>>
 
-                        for (j in listJugador) {
-                            val jugador = esta.get(j) as Map<String?, Any?>
-                            for (campo in quintetoL) {
-                                if (jugador["dorsal"].toString() == campo && jugador["equipo"].toString() == "Local") {
-                                    val registro = hashMapOf(
-                                        "cuarto" to cuarto,
-                                        "dorsal" to campo,
-                                        "nombre" to jugador["nombre"],
-                                        "frase" to "ENTRA A LA PISTA EL ",
-                                        "resultado" to "",
-                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                        "equipo" to "Local",
-                                        "tipoFrase" to "3",
-                                        "tipoImg" to "1"
-                                    ) as Map<String?, Any?>
-                                    listRegistros.add(registro)
-                                }
+                listOf("Local" to quintetoL, "Visitante" to quintetoV).forEach { (equipo, quinteto) ->
+                    quinteto.forEach { dorsal ->
+                        listJugador.mapNotNull { estadisticas.get(it) as? Map<String?, Any?> }
+                            .firstOrNull { it["dorsal"].toString() == dorsal && it["equipo"] == equipo }
+                            ?.let { jugador ->
+                                listRegistros.add(crearRegistro(jugador.toMutableMap(), "ENTRA A LA PISTA EL ", "", "3", "1"))
                             }
-                        }
-                        for (j in listJugador) {
-                            val jugador = esta.get(j) as Map<String?, Any?>
-                            for (campo in quintetoV) {
-                                if (jugador["dorsal"].toString() == campo && jugador["equipo"].toString() == "Visitante") {
-                                    val registro = hashMapOf(
-                                        "cuarto" to cuarto,
-                                        "dorsal" to campo,
-                                        "nombre" to jugador["nombre"],
-                                        "frase" to "ENTRA A LA PISTA EL ",
-                                        "resultado" to "",
-                                        "tiempo" to binding.TiempoCuarto.text.toString(),
-                                        "equipo" to "Visitante",
-                                        "tipoFrase" to "3",
-                                        "tipoImg" to "1"
-                                    ) as Map<String?, Any?>
-                                    listRegistros.add(registro)
-                                }
-                            }
-                        }
-
-                        db.collection("MinutoaMinuto")
-                            .document(idPartido)
-                            .update(
-                                hashMapOf(
-                                    "registro" to listRegistros,
-                                ) as Map<String?, Any?>
-                            )
                     }
+                }
+
+                db.collection("MinutoaMinuto").document(idPartido).update("registro", listRegistros).addOnSuccessListener {
+                    actualizaJugadaReciente()
+                }
             }
+        }
     }
 
     @SuppressLint("CutPasteId", "SetTextI18n")
@@ -4702,7 +4096,7 @@ class PartidoFragment : Fragment() {
 
         view.findViewById<Chronometer>(R.id.cronometroTM).setOnChronometerTickListener {
             if (it.text.toString() == "00:00") {
-                dialog.hide()
+                dialog.dismiss()
             }
         }
     }
@@ -5120,6 +4514,16 @@ class PartidoFragment : Fragment() {
         lista.add(binding.TBVisitante4)
         lista.add(binding.TBVisitante5)
         return lista
+    }
+
+    private fun comprobarEquipoJugador(toggleButtons: ArrayList<ToggleButton>): String {
+        for (button in toggleButtons) {
+            if (button.isChecked) {
+                val index = toggleButtons.indexOf(button)
+                return if (index < 5) "Local" else "Visitante"
+            }
+        }
+        return "Ninguno"
     }
 
     private fun vaciarToggle(lista: ArrayList<ToggleButton>) {

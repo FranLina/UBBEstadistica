@@ -22,6 +22,9 @@ import com.franciscolinares.ubb.partido.ListViewPartido.AdaptadorPartido
 import com.franciscolinares.ubb.partido.ListViewPartido.Partido
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class GestionarPartidosFragment : Fragment() {
 
@@ -103,6 +106,9 @@ class GestionarPartidosFragment : Fragment() {
         listaPartidos.clear()
         db.collection("Partidos").orderBy("Fecha").get().addOnSuccessListener {
             for (partido in it) {
+                val fechaString = partido.getString("Fecha").toString()
+                val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val fechaDate = formato.parse(fechaString) ?: Date()
                 val p = Partido(
                     partido.id,
                     partido.get("EquipoLocal").toString(),
@@ -111,12 +117,15 @@ class GestionarPartidosFragment : Fragment() {
                     partido.get("Resultado").toString(),
                     partido.get("Hora").toString(),
                     partido.get("Fecha").toString(),
+                    fechaDate,
                     partido.get("Estado").toString()
                 )
                 listaPartidos.add(p)
             }
 
-            myAdapter = AdaptadorPartido(binding.root.context, listaPartidos)
+            val listaOrdenada = listaPartidos.sortedBy { it.fechaDate }
+
+            myAdapter = AdaptadorPartido(binding.root.context, listaOrdenada)
 
             listView.adapter = myAdapter
         }
