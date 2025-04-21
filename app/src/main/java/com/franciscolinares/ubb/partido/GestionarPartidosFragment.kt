@@ -25,6 +25,7 @@ import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import androidx.navigation.findNavController
 
 class GestionarPartidosFragment : Fragment() {
 
@@ -32,6 +33,7 @@ class GestionarPartidosFragment : Fragment() {
     private val binding get() = _binding!!
     private val db = Firebase.firestore
     private var listaPartidos = mutableListOf<Partido>()
+    private var listaOrdenada = mutableListOf<Partido>()
 
     private lateinit var myAdapter: AdaptadorPartido
     private lateinit var listView: ListView
@@ -56,9 +58,9 @@ class GestionarPartidosFragment : Fragment() {
 
             val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
             val editor = prefs.edit()
-            editor.putString("idPartido", listaPartidos[i].id)
+            editor.putString("idPartido", listaOrdenada[i].id)
             editor.apply()
-            Navigation.findNavController(binding.root)
+            binding.root.findNavController()
                 .navigate(R.id.action_gestionarPartidosFragment_to_cargarPlantillasFragment)
 
         }
@@ -68,18 +70,18 @@ class GestionarPartidosFragment : Fragment() {
             val builder = AlertDialog.Builder(binding.root.context)
             val view = layoutInflater.inflate(R.layout.borrardialog, null)
             builder.setView(view)
-            view.findViewById<TextView>(R.id.txtIdBorrar).text = listaPartidos[pos].local + " vs " + listaPartidos[pos].visitante
+            view.findViewById<TextView>(R.id.txtIdBorrar).text = listaOrdenada[pos].local + " vs " + listaOrdenada[pos].visitante
             val dialog = builder.create()
             dialog.show()
 
             view.findViewById<Button>(R.id.btnSi).setOnClickListener {
-                if (listaPartidos[pos].id != "") {
+                if (listaOrdenada[pos].id != "") {
                     db.collection("Partidos")
-                        .document(listaPartidos[pos].id).delete()
+                        .document(listaOrdenada[pos].id).delete()
                         .addOnSuccessListener {
                             Toast.makeText(binding.root.context, "Borrado con exito", Toast.LENGTH_SHORT).show()
-                            db.collection("Estadisticas").document(listaPartidos[pos].id).delete()
-                            db.collection("MinutoaMinuto").document(listaPartidos[pos].id).delete()
+                            db.collection("Estadisticas").document(listaOrdenada[pos].id).delete()
+                            db.collection("MinutoaMinuto").document(listaOrdenada[pos].id).delete()
                             llenarListView()
                             dialog.hide()
                         }.addOnFailureListener { exception ->
@@ -123,7 +125,7 @@ class GestionarPartidosFragment : Fragment() {
                 listaPartidos.add(p)
             }
 
-            val listaOrdenada = listaPartidos.sortedBy { it.fechaDate }
+            listaOrdenada = listaPartidos.sortedBy { it.fechaDate }.toMutableList()
 
             myAdapter = AdaptadorPartido(binding.root.context, listaOrdenada)
 

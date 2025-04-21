@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import com.franciscolinares.ubb.LoginActivity
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentHomeBinding
+import androidx.navigation.findNavController
 
 class HomeFragment : Fragment() {
 
@@ -32,7 +33,7 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         binding.btnDatos.setOnClickListener {
-            Navigation.findNavController(root)
+            root.findNavController()
                 .navigate(R.id.action_homeFragment_to_datosPersonalesFragment)
         }
         binding.btnConfiguracion.setOnClickListener {
@@ -49,21 +50,21 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
         binding.btnJugadores.setOnClickListener {
-            Navigation.findNavController(root).navigate(R.id.action_homeFragment_to_jugadorFragment)
+            root.findNavController().navigate(R.id.action_homeFragment_to_jugadorFragment)
         }
         binding.btnEquipos.setOnClickListener {
-            Navigation.findNavController(root).navigate(R.id.action_homeFragment_to_equipoFragment)
+            root.findNavController().navigate(R.id.action_homeFragment_to_equipoFragment)
         }
         binding.btnCrearEnfrentamiento.setOnClickListener {
-            Navigation.findNavController(root)
+            root.findNavController()
                 .navigate(R.id.action_homeFragment_to_crearPartidoFragment)
         }
         binding.btnMisPartidos.setOnClickListener {
-            Navigation.findNavController(root)
+            root.findNavController()
                 .navigate(R.id.action_homeFragment_to_gestionarPartidosFragment)
         }
         binding.btnEstadistica.setOnClickListener {
-            Navigation.findNavController(root)
+            root.findNavController()
                 .navigate(R.id.action_homeFragment_to_cargarPartidosEstadisticaFragment)
         }
         return root

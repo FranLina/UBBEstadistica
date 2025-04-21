@@ -12,9 +12,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UBB_estadistica">
         <activity
+            android:name=".invitado.JugadorInvitadoActivity"
+            android:theme="@style/Theme.UBB_estadistica.NoActionBar"
+            android:exported="false" />
+        <activity
+            android:name=".invitado.MainEquipoInvitadoActivity"
+            android:exported="false"
+            android:label="@string/title_activity_main_equipo_invitado"
+            android:theme="@style/Theme.UBB_estadistica.NoActionBar" />
+        <activity
+            android:name=".invitado.MainInvitadoActivity"
+            android:exported="false"
+            android:theme="@style/Theme.UBB_estadistica.NoActionBar" />
+        <activity
             android:name=".partido.MainPartidoActivity"
             android:exported="false"
-            android:theme="@style/Theme.UBB_estadistica.NoActionBar"/>
+            android:theme="@style/Theme.UBB_estadistica.NoActionBar" />
         <activity
             android:name=".estadistica.CargaPartidoActivity"
             android:exported="false"
@@ -34,16 +47,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

@@ -91,6 +91,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textContraseña" />
 
+                <TextView
+                    android:id="@+id/txtInvitado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:singleLine="false"
+                    android:text="Entrar como Invitado"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnEntrar" />
+
+                <View
+                    android:id="@+id/lineaSeparadora2"
+                    android:layout_width="200dp"
+                    android:layout_height="2dp"
+                    android:background="@color/yellow_logo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtInvitado" />
+
                 <EditText
                     android:id="@+id/textContraseña"
                     android:layout_width="250dp"

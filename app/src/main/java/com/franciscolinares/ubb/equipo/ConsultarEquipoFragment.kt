@@ -1,7 +1,9 @@
 package com.franciscolinares.ubb.equipo
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.text.Editable
@@ -26,12 +28,15 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
+import java.io.File
 
 class ConsultarEquipoFragment : Fragment() {
 
     private var _binding: FragmentConsultarEquipoBinding? = null
     private val binding get() = _binding!!
     private val db = Firebase.firestore
+    private val File = 1
     private var listaEquipos = mutableListOf<Equipo>()
     private val listaPlantilla = mutableListOf<JugadorPlantilla>()
 
@@ -100,6 +105,10 @@ class ConsultarEquipoFragment : Fragment() {
                     dialog.hide()
                     Navigation.findNavController(binding.root)
                         .navigate(R.id.action_consultarEquipoFragment_to_agregarJugadorFragment)
+                }
+
+                view.findViewById<Button>(R.id.btnCambiarFotoEscudo).setOnClickListener {
+                    fileUpload()
                 }
 
                 view.findViewById<Button>(R.id.btnGuardarPlantilla).setOnClickListener {
@@ -223,6 +232,42 @@ class ConsultarEquipoFragment : Fragment() {
             }
 
         return root
+    }
+
+    private fun fileUpload() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "*/*"
+        startActivityForResult(intent, File)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+        val equipo = prefs.getString("equipo_id", "").toString()
+
+        val equipoRef = db.collection("Equipos").document(equipo)
+
+        if (requestCode == File) {
+            if (resultCode == Activity.RESULT_OK) {
+                val fileUri = data!!.data
+                val folder: StorageReference = FirebaseStorage.getInstance().reference.child("Equipos")
+                val fileName: StorageReference = folder.child(equipo)
+                fileName.putFile(fileUri!!).addOnSuccessListener {
+                    fileName.downloadUrl.addOnSuccessListener {
+                        equipoRef.update(
+                            hashMapOf(
+                                "UrlFoto" to java.lang.String.valueOf(it),
+                            ) as Map<String, Any>
+                        ).addOnSuccessListener {
+                            Toast.makeText(context, "Cargada la foto con exito", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+
+            }
+        }
     }
 
     //Función para comprobar que no se repita un equipo en la lista

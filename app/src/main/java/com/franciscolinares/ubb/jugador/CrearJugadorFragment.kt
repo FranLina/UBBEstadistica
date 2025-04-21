@@ -166,7 +166,7 @@ class CrearJugadorFragment : Fragment() {
         return root
     }
 
-    fun fileUpload() {
+    private fun fileUpload() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
         jugadorId = prefs.getString("jugadorId", "").toString()
         val intent = Intent(Intent.ACTION_GET_CONTENT)

@@ -17,6 +17,7 @@ import com.franciscolinares.ubb.partido.ListViewPartido.Partido
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import androidx.core.graphics.toColorInt
 
 class AdaptadorPartidoEstadistica(private val mcontext: Context, private val listaPartidos: List<Partido>) :
     ArrayAdapter<Partido>(mcontext, 0, listaPartidos) {
@@ -41,8 +42,8 @@ class AdaptadorPartidoEstadistica(private val mcontext: Context, private val lis
 
             }
             "En Directo" -> {
-                layout.findViewById<View>(R.id.lineaSeparadoraEstado).setBackgroundColor(Color.parseColor("#4CAF50"))
-                layout.findViewById<TextView>(R.id.txtLVEstadoPartido).setTextColor(Color.parseColor("#4CAF50"))
+                layout.findViewById<View>(R.id.lineaSeparadoraEstado).setBackgroundColor("#4CAF50".toColorInt())
+                layout.findViewById<TextView>(R.id.txtLVEstadoPartido).setTextColor("#4CAF50".toColorInt())
             }
             "Finalizado" -> {
                 layout.findViewById<TextView>(R.id.txtLVResultado).text = partido.resultado
