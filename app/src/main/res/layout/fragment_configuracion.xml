@@ -86,7 +86,7 @@
                                 android:layout_weight="1"
                                 android:backgroundTint="@color/yellow_logo"
                                 android:ems="10"
-                                android:hint="Contraseña"
+                                android:hint="Vieja Contraseña"
                                 android:inputType="textPassword" />
                         </LinearLayout>
 
@@ -112,7 +112,7 @@
                                 android:layout_weight="1"
                                 android:backgroundTint="@color/yellow_logo"
                                 android:ems="10"
-                                android:hint="Repite Contraseña"
+                                android:hint="Nueva Contraseña"
                                 android:inputType="textPassword" />
                         </LinearLayout>
 
@@ -133,7 +133,7 @@
                                 android:layout_marginBottom="20dp"
                                 android:layout_weight="1"
                                 android:backgroundTint="@color/yellow_logo"
-                                android:text="Guardar"
+                                android:text="Cambiar"
                                 app:cornerRadius="30dp" />
 
                             <Space

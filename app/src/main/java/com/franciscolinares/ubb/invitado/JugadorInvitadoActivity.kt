@@ -29,6 +29,7 @@ class JugadorInvitadoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityJugadorInvitadoBinding
     private val db = Firebase.firestore
+    private var idJugador: String? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,19 +43,16 @@ class JugadorInvitadoActivity : AppCompatActivity() {
         }
         enableEdgeToEdge()
 
+        idJugador = intent.getStringExtra("idJugador")
         recuperarInfo()
         recuperInfoMediaYtotal()
         recuperarInfoPartidos()
-
     }
 
     @SuppressLint("SetTextI18n")
     private fun recuperarInfo() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-        val idJugador = prefs.getString("idJugador", "").toString()
-
         lifecycleScope.launch {
-            val jugador = db.collection("Jugadores").document(idJugador).get().safeAwait() ?: return@launch
+            val jugador = db.collection("Jugadores").document(idJugador.toString()).get().safeAwait() ?: return@launch
 
             // Datos jugador
             binding.txtJugNomInv.text = "${jugador["Apellido1"]} ${jugador["Apellido2"]}, ${jugador["Nombre"]}"
@@ -96,9 +94,9 @@ class JugadorInvitadoActivity : AppCompatActivity() {
                 val estadistica = db.collection("Estadisticas").document(partido.id).get().safeAwait() ?: continue
                 val listadoJugadores = estadistica.get("ListadoJugadores") as? List<String> ?: continue
 
-                if (!listadoJugadores.contains(idJugador)) continue
+                if (!listadoJugadores.contains(idJugador.toString())) continue
 
-                val jug = estadistica.get(idJugador) as? HashMap<String, Any> ?: continue
+                val jug = estadistica.get(idJugador.toString()) as? HashMap<String, Any> ?: continue
                 val minutos = jug["minutos"]?.toString() ?: "00:00"
                 if (minutos == "00:00") continue
 
@@ -117,11 +115,8 @@ class JugadorInvitadoActivity : AppCompatActivity() {
 
     @SuppressLint("MissingInflatedId", "SetTextI18n")
     private fun recuperarInfoPartidos() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-        val idJugador = prefs.getString("idJugador", "").toString()
-
         lifecycleScope.launch {
-            val jugador = db.collection("Jugadores").document(idJugador).get().safeAwait() ?: return@launch
+            val jugador = db.collection("Jugadores").document(idJugador.toString()).get().safeAwait() ?: return@launch
             val equipoJugador = jugador.getString("Equipo") ?: return@launch
 
             val partidosSnap = db.collection("Partidos").get().safeAwait() ?: return@launch
@@ -158,9 +153,9 @@ class JugadorInvitadoActivity : AppCompatActivity() {
                 val estadistica = db.collection("Estadisticas").document(partido.id).get().safeAwait() ?: continue
                 val listaJugadores = estadistica.get("ListadoJugadores") as? List<String> ?: continue
 
-                if (!listaJugadores.contains(idJugador)) continue
+                if (!listaJugadores.contains(idJugador.toString())) continue
 
-                val jug = estadistica.get(idJugador) as? HashMap<String, Any> ?: continue
+                val jug = estadistica.get(idJugador.toString()) as? HashMap<String, Any> ?: continue
                 if (jug["minutos"] == "00:00") continue
 
                 val registro = LayoutInflater.from(binding.root.context)
@@ -208,9 +203,6 @@ class JugadorInvitadoActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n", "ResourceAsColor", "InflateParams", "MissingInflatedId")
     private fun recuperInfoMediaYtotal() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-        val idJugador = prefs.getString("idJugador", "").toString()
-
         var min = 0
         var pts = 0
         var tc2A = 0
@@ -229,7 +221,7 @@ class JugadorInvitadoActivity : AppCompatActivity() {
         var valoracion = 0
 
         lifecycleScope.launch {
-            val jugador = db.collection("Jugadores").document(idJugador).get().safeAwait() ?: return@launch
+            val jugador = db.collection("Jugadores").document(idJugador.toString()).get().safeAwait() ?: return@launch
             val equipoJugador = jugador.getString("Equipo") ?: return@launch
 
             val partidosSnap = db.collection("Partidos").get().safeAwait() ?: return@launch
@@ -266,9 +258,9 @@ class JugadorInvitadoActivity : AppCompatActivity() {
                 val estadistica = db.collection("Estadisticas").document(partido.id).get().safeAwait() ?: continue
                 val listaJugadores = estadistica.get("ListadoJugadores") as? List<String> ?: continue
 
-                if (!listaJugadores.contains(idJugador)) continue
+                if (!listaJugadores.contains(idJugador.toString())) continue
 
-                val jug = estadistica.get(idJugador) as? HashMap<String, Any> ?: continue
+                val jug = estadistica.get(idJugador.toString()) as? HashMap<String, Any> ?: continue
                 if (jug["minutos"] == "00:00") continue
 
                 parJug++
@@ -306,7 +298,8 @@ class JugadorInvitadoActivity : AppCompatActivity() {
                 ((tc3A.toDouble() / (tc3A.toDouble() + tc3F.toDouble())) * 100).toInt().toString() + "%"
             registroMedia.findViewById<TextView>(R.id.txtRDInvitado).text = String.format(Locale.US, "%.1f", (rebD.toDouble() / parJug))
             registroMedia.findViewById<TextView>(R.id.txtROInvitado).text = String.format(Locale.US, "%.1f", (rebO.toDouble() / parJug))
-            registroMedia.findViewById<TextView>(R.id.txtRTInvitado).text = String.format(Locale.US, "%.1f", ((rebO.toDouble() + rebD.toDouble()) / parJug))
+            registroMedia.findViewById<TextView>(R.id.txtRTInvitado).text =
+                String.format(Locale.US, "%.1f", ((rebO.toDouble() + rebD.toDouble()) / parJug))
             registroMedia.findViewById<TextView>(R.id.txtASTInvitado).text = String.format(Locale.US, "%.1f", (asi.toDouble() / parJug))
             registroMedia.findViewById<TextView>(R.id.txtPERInvitado).text = String.format(Locale.US, "%.1f", (per.toDouble() / parJug))
             registroMedia.findViewById<TextView>(R.id.txtRECInvitado).text = String.format(Locale.US, "%.1f", (rec.toDouble() / parJug))

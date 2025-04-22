@@ -18,6 +18,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 
@@ -55,30 +56,39 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-        val idUser = prefs.getString("idUser", "")
+        val userId = FirebaseAuth.getInstance().currentUser
 
-        val usuarioRef = db.collection("Users").document(idUser.toString())
+        if (userId != null) {
+            val usuarioRef = db.collection("Users").document(userId.uid)
 
-        usuarioRef.get()
-            .addOnSuccessListener {
-                navView.getHeaderView(0).findViewById<TextView>(R.id.tvNombreApellidos).text =
-                    it.get("nombre").toString() + " " + it.get("apellido1")
-                        .toString() + " " + it.get("apellido2").toString()
-                navView.getHeaderView(0).findViewById<TextView>(R.id.tvEmail).text =
-                    it.get("correo").toString()
+            usuarioRef.get()
+                .addOnSuccessListener {
+                    navView.getHeaderView(0).findViewById<TextView>(R.id.tvNombreApellidos).text =
+                        it.getString("nombre").toString() + " " + it.getString("apellido1")
+                            .toString() + " " + it.getString("apellido2").toString()
+                    navView.getHeaderView(0).findViewById<TextView>(R.id.tvEmail).text =
+                        it.getString("correo").toString()
 
-                if (it.get("UrlFoto").toString() != "") {
-                    Picasso.get()
-                        .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.ic_launcher_foreground)
-                        .error(R.drawable.ic_launcher_foreground)
-                        .into(navView.getHeaderView(0).findViewById<ImageView>(R.id.imageMUsuario))
+                    val urlFoto = it.getString("UrlFoto") // Obtiene el valor de "UrlFoto"
+
+                    if (!urlFoto.isNullOrEmpty()) { // Verifica si la URL no es nula ni vacía
+                        Picasso.get()
+                            .load(urlFoto)
+                            .resize(500, 500) // Ajusta el tamaño máximo de la imagen
+                            .centerInside() // Asegura que la imagen no se distorsione// Usa la URL directamente
+                            .placeholder(R.drawable.ic_launcher_foreground) // Imagen de carga
+                            .error(R.drawable.ic_launcher_foreground) // Imagen de error
+                            .into(navView.getHeaderView(0).findViewById<ImageView>(R.id.imageMUsuario)) // Cargar en la ImageView
+                    } else {
+                        // Si no hay URL, tal vez quieres mostrar una imagen por defecto
+                        Picasso.get()
+                            .load(R.drawable.ic_launcher_foreground) // Imagen por defecto
+                            .into(navView.getHeaderView(0).findViewById<ImageView>(R.id.imageMUsuario))
+                    }
+                }.addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents.", exception)
                 }
-
-            }.addOnFailureListener { exception ->
-                Log.w(ContentValues.TAG, "Error getting documents.", exception)
-            }
+        }
     }
 
 

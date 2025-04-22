@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
@@ -12,9 +13,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.franciscolinares.ubb.LoginActivity
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.ActivityMainInvitadoBinding
 import com.franciscolinares.ubb.invitado.RecyclerViewInvitado.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,15 +40,37 @@ class MainInvitadoActivity : AppCompatActivity() {
         setContentView(binding.root)
         enableEdgeToEdge()
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        idsEquipos = prefs.getStringSet("ids_equipos", emptySet())?.toMutableList() ?: mutableListOf()
-        idsJugadores = prefs.getStringSet("idsJugadores", emptySet())?.toMutableList() ?: mutableListOf()
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
 
-        cargarEquipos()
-        cargarJugadores()
+        lifecycleScope.launch {
+            val userDoc = db.collection("Users").document(userId).get().await()
+            idsEquipos = (userDoc.get("mis_equipos") as? List<String>)?.toMutableList() ?: mutableListOf()
+            idsJugadores = (userDoc.get("mis_jugadores") as? List<String>)?.toMutableList() ?: mutableListOf()
 
-        binding.txtAAdirEqu.setOnClickListener { mostrarDialogoAgregarEquipo(prefs) }
-        binding.txtAAdirJug.setOnClickListener { mostrarDialogoAgregarJugador(prefs) }
+            cargarEquipos()
+            cargarJugadores()
+        }
+
+        binding.txtAAdirEqu.setOnClickListener { mostrarDialogoAgregarEquipo() }
+        binding.txtAAdirJug.setOnClickListener { mostrarDialogoAgregarJugador() }
+
+        binding.btnLogout.setOnClickListener {
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user != null) {
+                db.collection("Users").document(user.uid)
+                    .update("deviceToken", FieldValue.delete())
+                    .addOnSuccessListener {
+                        FirebaseAuth.getInstance().signOut()
+                        startActivity(Intent(this, LoginActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        })
+                        finish()
+                    }
+                    .addOnFailureListener {
+                        Log.e("Logout", "Error al borrar el token: ${it.message}")
+                    }
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -66,16 +92,13 @@ class MainInvitadoActivity : AppCompatActivity() {
                 }
             }
             equipoAdapter = EquipoAdapter(equipos, { equipo ->
-                PreferenceManager.getDefaultSharedPreferences(this@MainInvitadoActivity).edit {
-                    putString("idEquipo", equipo.idEquipo)
-                }
-                startActivity(Intent(this@MainInvitadoActivity, MainEquipoInvitadoActivity::class.java))
+                startActivity(Intent(this@MainInvitadoActivity, MainEquipoInvitadoActivity::class.java).apply {
+                    putExtra("idEquipo", equipo.idEquipo)
+                })
             }, { equipo ->
                 equipos.remove(equipo)
                 idsEquipos.remove(equipo.idEquipo)
-                PreferenceManager.getDefaultSharedPreferences(this@MainInvitadoActivity).edit {
-                    putStringSet("ids_equipos", idsEquipos.toSet())
-                }
+                actualizarIds("mis_equipos", idsEquipos)
                 equipoAdapter.notifyDataSetChanged()
             })
 
@@ -103,16 +126,13 @@ class MainInvitadoActivity : AppCompatActivity() {
                 }
             }
             jugadorAdapter = JugadorAdapter(jugadores, { jugador ->
-                PreferenceManager.getDefaultSharedPreferences(this@MainInvitadoActivity).edit {
-                    putString("idJugador", jugador.idJugador)
-                }
-                startActivity(Intent(this@MainInvitadoActivity, JugadorInvitadoActivity::class.java))
+                startActivity(Intent(this@MainInvitadoActivity, JugadorInvitadoActivity::class.java).apply {
+                    putExtra("idJugador", jugador.idJugador)
+                })
             }, { jugador ->
                 jugadores.remove(jugador)
                 idsJugadores.remove(jugador.idJugador)
-                PreferenceManager.getDefaultSharedPreferences(this@MainInvitadoActivity).edit {
-                    putStringSet("idsJugadores", idsJugadores.toSet())
-                }
+                actualizarIds("mis_jugadores", idsJugadores)
                 jugadorAdapter.notifyDataSetChanged()
             })
 
@@ -121,7 +141,12 @@ class MainInvitadoActivity : AppCompatActivity() {
         }
     }
 
-    private fun mostrarDialogoAgregarEquipo(prefs: android.content.SharedPreferences) {
+    private fun actualizarIds(campo: String, lista: List<String>) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        db.collection("Users").document(userId).update(campo, lista)
+    }
+
+    private fun mostrarDialogoAgregarEquipo() {
         val view = layoutInflater.inflate(R.layout.equipo_buscar_invitado, null)
         val spinCategoria = view.findViewById<Spinner>(R.id.spinCategoria)
         val spinSexo = view.findViewById<Spinner>(R.id.spinSexo)
@@ -145,7 +170,7 @@ class MainInvitadoActivity : AppCompatActivity() {
             val id = spinEquipo.selectedItem?.toString()
             if (!id.isNullOrEmpty() && !idsEquipos.contains(id)) {
                 idsEquipos.add(id)
-                prefs.edit { putStringSet("ids_equipos", idsEquipos.toSet()) }
+                actualizarIds("mis_equipos", idsEquipos)
                 cargarEquipos()
                 dialog.dismiss()
             } else {
@@ -156,7 +181,7 @@ class MainInvitadoActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun mostrarDialogoAgregarJugador(prefs: android.content.SharedPreferences) {
+    private fun mostrarDialogoAgregarJugador() {
         val view = layoutInflater.inflate(R.layout.jugador_buscar_invitado, null)
         val spinCategoria = view.findViewById<Spinner>(R.id.spinCategoria)
         val spinSexo = view.findViewById<Spinner>(R.id.spinSexo)
@@ -202,7 +227,7 @@ class MainInvitadoActivity : AppCompatActivity() {
             val id = jugadorSeleccionado?.id
             if (!id.isNullOrEmpty() && !idsJugadores.contains(id)) {
                 idsJugadores.add(id)
-                prefs.edit { putStringSet("idsJugadores", idsJugadores.toSet()) }
+                actualizarIds("mis_jugadores", idsJugadores)
                 cargarJugadores()
                 dialog.dismiss()
             } else {

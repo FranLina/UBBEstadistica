@@ -62,11 +62,9 @@ class JugadoresEquipoInvitadoFragment : Fragment() {
                             .error(R.drawable.jugador_de_baloncesto)
                             .into(registro.findViewById<ImageView>(R.id.fotoJEInvitado))
                     registro.setOnClickListener {
-                        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-                        prefs.edit {
-                            putString("idJugador", jugador.key)
+                        val intent = Intent(binding.root.context, JugadorInvitadoActivity::class.java).apply {
+                            putExtra("idJugador", jugador.key)
                         }
-                        val intent = Intent(binding.root.context, JugadorInvitadoActivity::class.java)
                         startActivity(intent)
                     }
                 }

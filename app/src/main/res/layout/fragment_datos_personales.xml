@@ -167,7 +167,7 @@
                                 android:layout_width="225dp"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/yellow_logo"
-                                android:text="Cargar Foto"
+                                android:text="Cambiar Foto Perfil"
                                 app:cornerRadius="30dp" />
 
                             <Space
@@ -192,31 +192,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginTop="20sp"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:id="@+id/ImageDPUbicacion"
-                                android:layout_width="15sp"
-                                android:layout_height="35sp"
-                                android:layout_weight="1"
-                                android:src="@drawable/placeholder" />
-
-                            <EditText
-                                android:id="@+id/etDPUbicacion"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="10sp"
-                                android:layout_weight="1"
-                                android:backgroundTint="@color/yellow_logo"
-                                android:ems="10"
-                                android:inputType="textPersonName" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
                             android:orientation="horizontal">
 
                             <TextView
@@ -237,38 +212,8 @@
                                 android:layout_weight="1"
                                 android:backgroundTint="@color/yellow_logo"
                                 android:ems="10"
-                                android:inputType="textPersonName"
-                                android:textAlignment="textEnd" />
+                                android:inputType="textPersonName" />
 
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/txtDPProvincia"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginBottom="20sp"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/textView6"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_weight="1"
-                                android:text="Provincia:"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
-
-                            <EditText
-                                android:id="@+id/etDPProvincia"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="10sp"
-                                android:layout_weight="1"
-                                android:backgroundTint="@color/yellow_logo"
-                                android:ems="10"
-                                android:inputType="textPersonName"
-                                android:textAlignment="textEnd" />
                         </LinearLayout>
 
                         <TextView
@@ -305,6 +250,7 @@
                                 android:layout_weight="1"
                                 android:backgroundTint="@color/yellow_logo"
                                 android:ems="10"
+                                android:hint="Correo electrónico"
                                 android:inputType="textEmailAddress" />
                         </LinearLayout>
 
@@ -328,6 +274,7 @@
                                 android:layout_weight="1"
                                 android:backgroundTint="@color/yellow_logo"
                                 android:ems="10"
+                                android:hint="Teléfono"
                                 android:inputType="phone" />
                         </LinearLayout>
 

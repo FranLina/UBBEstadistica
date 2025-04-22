@@ -22,6 +22,7 @@ class MainEquipoInvitadoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainEquipoInvitadoBinding
     private val db = Firebase.firestore
     var tabTitle = arrayOf("Partidos", "Jugadores")
+    private var idEquipo: String? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +33,7 @@ class MainEquipoInvitadoActivity : AppCompatActivity() {
         var pager = binding.vPVistasInvitado
         var t1 = binding.tabs
 
+        idEquipo = intent.getStringExtra("idEquipo")
         recuperarInfo()
 
         pager.adapter = MyAdapterInvitado(supportFragmentManager, lifecycle)
@@ -42,10 +44,8 @@ class MainEquipoInvitadoActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun recuperarInfo() {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-        val idEquipo = prefs.getString("idEquipo", "").toString()
 
-        db.collection("Equipos").document(idEquipo).get()
+        db.collection("Equipos").document(idEquipo.toString()).get()
             .addOnSuccessListener {
                 binding.txtEquipoInvitadoAB.text = it.get("Nombre").toString().uppercase(Locale.ROOT)
                 binding.txtCategoriaInvitadoAB.text =
