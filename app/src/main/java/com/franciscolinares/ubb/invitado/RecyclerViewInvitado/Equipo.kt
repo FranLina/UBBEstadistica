@@ -5,5 +5,7 @@ data class Equipo(
     val nombre: String,
     val categoria: String,
     val sexo: String,
+    val pj: String,
+    val pg: String,
     val logoResId: String
 )

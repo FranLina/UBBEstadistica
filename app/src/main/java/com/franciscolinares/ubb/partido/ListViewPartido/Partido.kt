@@ -6,6 +6,8 @@ class Partido(
     val id: String,
     val local: String,
     val visitante: String,
+    val nombreLocal: String,
+    val nombreVisitante: String,
     val polideportivo: String,
     val resultado: String,
     val hora: String,

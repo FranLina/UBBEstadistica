@@ -28,6 +28,7 @@ class JugadoresEquipoInvitadoFragment : Fragment() {
     private var _binding: FragmentJugadoresEquipoInvitadoBinding? = null
     private val binding get() = _binding!!
     private val db = Firebase.firestore
+    private var idEquipo: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,10 +42,9 @@ class JugadoresEquipoInvitadoFragment : Fragment() {
         _binding = FragmentJugadoresEquipoInvitadoBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-        val idEquipo = prefs.getString("idEquipo", "").toString()
+        idEquipo = activity?.intent?.getStringExtra("idEquipo")
 
-        db.collection("Equipos").document(idEquipo).get().addOnSuccessListener {
+        db.collection("Equipos").document(idEquipo.toString()).get().addOnSuccessListener {
             val plantilla: HashMap<String, String> = it.get("Jugadores") as HashMap<String, String>
 
             plantilla.entries.withIndex().forEach { (index, jugador) ->

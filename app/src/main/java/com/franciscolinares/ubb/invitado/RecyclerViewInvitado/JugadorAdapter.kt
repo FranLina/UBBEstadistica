@@ -20,6 +20,8 @@ class JugadorAdapter(
         val logo: ImageView = itemView.findViewById(R.id.logoJugadorInvitado)
         val nombre: TextView = itemView.findViewById(R.id.txtNombreJInvitado)
         val categoria: TextView = itemView.findViewById(R.id.txtCategoriaJInvitado)
+        val pj: TextView = itemView.findViewById(R.id.txtItemPJJugador)
+        val pts: TextView = itemView.findViewById(R.id.txtItemPTSJugador)
         val btnEliminar: ImageView = itemView.findViewById(R.id.btnEliminarJInvitado)
     }
 
@@ -34,11 +36,12 @@ class JugadorAdapter(
         val jugador = jugadores[position]
         holder.nombre.text = jugador.nombre
         holder.categoria.text = jugador.categoria + " " + jugador.sexo
+        holder.pj.text = "PJ: " + jugador.pj
+        holder.pts.text = "PTS: " + jugador.pts
 
         if (jugador.logoResId != "") {
             Picasso.get()
                 .load(jugador.logoResId)
-                .placeholder(R.drawable.jugador_de_baloncesto)
                 .error(R.drawable.jugador_de_baloncesto)
                 .into(holder.logo)
         }

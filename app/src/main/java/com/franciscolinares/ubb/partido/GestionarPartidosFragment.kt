@@ -115,6 +115,8 @@ class GestionarPartidosFragment : Fragment() {
                     partido.id,
                     partido.get("EquipoLocal").toString(),
                     partido.get("EquipoVisitante").toString(),
+                    partido.get("EquipoLocal").toString().dropLast(2),
+                    partido.get("EquipoVisitante").toString().dropLast(2),
                     partido.get("Polideportivo").toString(),
                     partido.get("Resultado").toString(),
                     partido.get("Hora").toString(),

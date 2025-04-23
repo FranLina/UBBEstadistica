@@ -9,9 +9,10 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/fotoJEInvitado"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_width="5dp"
+        android:layout_height="40dp"
         android:layout_weight="1"
+        android:background="@color/white"
         android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/circular"
         app:srcCompat="@drawable/jugador_de_baloncesto" />

@@ -18,6 +18,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import androidx.core.graphics.toColorInt
+import java.util.Locale
 
 class AdaptadorPartidoEstadistica(private val mcontext: Context, private val listaPartidos: List<Partido>) :
     ArrayAdapter<Partido>(mcontext, 0, listaPartidos) {
@@ -30,8 +31,8 @@ class AdaptadorPartidoEstadistica(private val mcontext: Context, private val lis
 
         val partido = listaPartidos[position]
 
-        layout.findViewById<TextView>(R.id.txtLVEquipoLocal).text = partido.local
-        layout.findViewById<TextView>(R.id.txtLVEquipoVisitante).text = partido.visitante
+        layout.findViewById<TextView>(R.id.txtLVEquipoLocal).text = partido.nombreLocal.uppercase()
+        layout.findViewById<TextView>(R.id.txtLVEquipoVisitante).text = partido.nombreVisitante.uppercase()
         layout.findViewById<TextView>(R.id.txtLVPolideportivo).text = partido.polideportivo
         layout.findViewById<TextView>(R.id.txtLVFecha).text = partido.fecha
         layout.findViewById<TextView>(R.id.txtLVHora).text = partido.hora

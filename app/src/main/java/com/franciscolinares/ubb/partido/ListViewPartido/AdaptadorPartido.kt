@@ -15,6 +15,7 @@ import com.franciscolinares.ubb.R
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import androidx.core.graphics.toColorInt
 
 class AdaptadorPartido(private val mcontext: Context, private val listaPartidos: List<Partido>) :
     ArrayAdapter<Partido>(mcontext, 0, listaPartidos) {
@@ -27,8 +28,8 @@ class AdaptadorPartido(private val mcontext: Context, private val listaPartidos:
 
         val partido = listaPartidos[position]
 
-        layout.findViewById<TextView>(R.id.txtLVEquipoLocal).text = partido.local
-        layout.findViewById<TextView>(R.id.txtLVEquipoVisitante).text = partido.visitante
+        layout.findViewById<TextView>(R.id.txtLVEquipoLocal).text = partido.nombreLocal.uppercase()
+        layout.findViewById<TextView>(R.id.txtLVEquipoVisitante).text = partido.nombreVisitante.uppercase()
         layout.findViewById<TextView>(R.id.txtLVPolideportivo).text = partido.polideportivo
         layout.findViewById<TextView>(R.id.txtLVFecha).text = partido.fecha
         layout.findViewById<TextView>(R.id.txtLVHora).text = partido.hora
@@ -40,7 +41,7 @@ class AdaptadorPartido(private val mcontext: Context, private val listaPartidos:
 
         } else if (partido.estado == "En Directo") {
             layout.findViewById<TextView>(R.id.txtLVEstado)
-                .setBackgroundColor(Color.parseColor("#4CAF50"))
+                .setBackgroundColor("#4CAF50".toColorInt())
             layout.findViewById<TextView>(R.id.txtLVResultado).visibility = View.GONE
 
         } else if (partido.estado == "Finalizado") {

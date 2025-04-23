@@ -46,17 +46,19 @@ class CargarPartidosEstadisticaFragment : Fragment() {
                 val fechaString = partido.getString("Fecha").toString()
                 val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val fechaDate = formato.parse(fechaString) ?: Date()
-                    val p = Partido(
-                        partido.id,
-                        partido.get("EquipoLocal").toString(),
-                        partido.get("EquipoVisitante").toString(),
-                        partido.get("Polideportivo").toString(),
-                        partido.get("Resultado").toString(),
-                        partido.get("Hora").toString(),
-                        partido.get("Fecha").toString(),
-                        fechaDate,
-                        partido.get("Estado").toString()
-                    )
+                val p = Partido(
+                    partido.id,
+                    partido.get("EquipoLocal").toString(),
+                    partido.get("EquipoVisitante").toString(),
+                    partido.get("EquipoLocal").toString().dropLast(2),
+                    partido.get("EquipoVisitante").toString().dropLast(2),
+                    partido.get("Polideportivo").toString(),
+                    partido.get("Resultado").toString(),
+                    partido.get("Hora").toString(),
+                    partido.get("Fecha").toString(),
+                    fechaDate,
+                    partido.get("Estado").toString()
+                )
                 listaPartido.add(p)
             }
 

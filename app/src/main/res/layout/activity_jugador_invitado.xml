@@ -9,7 +9,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="200dp"
         android:background="@color/white"
         android:theme="@style/Theme.UBB_estadistica.AppBarOverlay"
@@ -18,8 +18,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="15dp"
             app:cardCornerRadius="15dp">
 
@@ -32,22 +32,24 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/imgJugInv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
+                        android:layout_width="90dp"
+                        android:layout_height="80dp"
+                        android:layout_weight="0.05"
+                        android:background="@color/white"
+                        android:elevation="8dp"
                         android:scaleType="centerCrop"
                         app:shapeAppearanceOverlay="@style/circular"
                         app:srcCompat="@drawable/jugador_de_baloncesto" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:layout_weight="1"
                         android:orientation="vertical">
@@ -56,7 +58,7 @@
                             android:id="@+id/txtJugNomInv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="35dp"
+                            android:layout_marginTop="20dp"
                             android:text="Nombre"
                             android:textColor="@color/black"
                             android:textSize="20sp"
@@ -75,20 +77,21 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/imgEquInv"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="60dp"
                         android:layout_weight="7"
-                        app:srcCompat="@drawable/escudo_equipo" />
+                        app:srcCompat="@drawable/escudopredeterminado" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
@@ -96,7 +99,6 @@
                             android:id="@+id/txtEquInv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:layout_weight="1"
                             android:text="Nombre Equipo"
                             android:textAlignment="center"
@@ -107,7 +109,6 @@
                             android:id="@+id/txtPJInv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:layout_weight="1"
                             android:text="PJ: "
                             android:textAlignment="center"
@@ -117,7 +118,6 @@
                             android:id="@+id/txtPPPInv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:layout_weight="1"
                             android:text="PPP:"
                             android:textAlignment="center"
@@ -127,7 +127,6 @@
                             android:id="@+id/txtPTSInv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:layout_weight="1"
                             android:text="PTS: "
                             android:textAlignment="center"

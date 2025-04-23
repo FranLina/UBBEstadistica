@@ -21,6 +21,8 @@ class EquipoAdapter(
         val nombre: TextView = itemView.findViewById(R.id.txtNombreEInvitado)
         val categoria: TextView = itemView.findViewById(R.id.txtCategoriaEInvitado)
         val btnEliminar: ImageView = itemView.findViewById(R.id.btnEliminarEInvitado)
+        val pj: TextView = itemView.findViewById(R.id.txtItemPJEquipo)
+        val pg: TextView = itemView.findViewById(R.id.txtItemPGEquipo)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EquipoViewHolder {
@@ -34,12 +36,13 @@ class EquipoAdapter(
         val equipo = equipos[position]
         holder.nombre.text = equipo.nombre
         holder.categoria.text = equipo.categoria + " " + equipo.sexo
+        holder.pj.text = "PJ: " + equipo.pj
+        holder.pg.text = "PG: " + equipo.pg
 
         if (equipo.logoResId != "") {
             Picasso.get()
                 .load(equipo.logoResId)
-                .placeholder(R.drawable.escudo_equipo)
-                .error(R.drawable.escudo_equipo)
+                .error(R.drawable.escudopredeterminado)
                 .into(holder.logo)
         }
 

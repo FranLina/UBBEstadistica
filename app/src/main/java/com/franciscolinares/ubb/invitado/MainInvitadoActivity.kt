@@ -17,6 +17,7 @@ import com.franciscolinares.ubb.LoginActivity
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.ActivityMainInvitadoBinding
 import com.franciscolinares.ubb.invitado.RecyclerViewInvitado.*
+import com.franciscolinares.ubb.utils.safeAwait
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -51,6 +52,7 @@ class MainInvitadoActivity : AppCompatActivity() {
             cargarJugadores()
         }
 
+
         binding.txtAAdirEqu.setOnClickListener { mostrarDialogoAgregarEquipo() }
         binding.txtAAdirJug.setOnClickListener { mostrarDialogoAgregarJugador() }
 
@@ -76,30 +78,56 @@ class MainInvitadoActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun cargarEquipos() {
         lifecycleScope.launch {
-            val equipos = mutableListOf<Equipo>()
+            val equiposMap = mutableMapOf<String, Equipo>()
             val snapshot = db.collection("Equipos").get().await()
+            val partidosSnap = db.collection("Partidos").get().safeAwait() ?: return@launch
+
             for (equi in snapshot) {
                 if (idsEquipos.contains(equi.id)) {
-                    equipos.add(
-                        Equipo(
-                            equi.id,
-                            equi["Nombre"].toString(),
-                            equi["Categoria"].toString(),
-                            equi["Sexo"].toString(),
-                            equi["UrlFoto"].toString()
-                        )
+                    // Partidos y estadísticas
+                    var conPar = 0
+                    var conParG = 0
+                    for (partido in partidosSnap) {
+                        if (partido["EquipoLocal"].toString() == equi.id || partido["EquipoVisitante"].toString() == equi.id) {
+                            conPar++
+                            if (partido["EquipoLocal"].toString() == equi.id) {
+                                if (comprobarGanador(partido["Resultado"].toString()) == 1)
+                                    conParG++
+                            } else if (partido["EquipoVisitante"].toString() == equi.id) {
+                                if (comprobarGanador(partido["Resultado"].toString()) == 0)
+                                    conParG++
+                            }
+                        }
+                    }
+
+                    equiposMap[equi.id] = Equipo(
+                        equi.id,
+                        equi["Nombre"].toString(),
+                        equi["Categoria"].toString(),
+                        equi["Sexo"].toString(),
+                        conPar.toString(),
+                        conParG.toString(),
+                        equi["UrlFoto"].toString()
                     )
                 }
             }
-            equipoAdapter = EquipoAdapter(equipos, { equipo ->
+
+            // Ordenar los equipos según el orden de idsEquipos
+            val equiposOrdenados = idsEquipos.mapNotNull { equiposMap[it] }.toMutableList()
+
+            equipoAdapter = EquipoAdapter(equiposOrdenados, { equipo ->
                 startActivity(Intent(this@MainInvitadoActivity, MainEquipoInvitadoActivity::class.java).apply {
                     putExtra("idEquipo", equipo.idEquipo)
                 })
             }, { equipo ->
-                equipos.remove(equipo)
+                val index = equiposOrdenados.indexOfFirst { it.idEquipo == equipo.idEquipo }
+                if (index != -1) {
+                    equiposOrdenados.removeAt(index)
+                    equipoAdapter.notifyItemRemoved(index)
+                }
                 idsEquipos.remove(equipo.idEquipo)
                 actualizarIds("mis_equipos", idsEquipos)
-                equipoAdapter.notifyDataSetChanged()
+
             })
 
             binding.rvEquipos.layoutManager = LinearLayoutManager(this@MainInvitadoActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -110,35 +138,73 @@ class MainInvitadoActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun cargarJugadores() {
         lifecycleScope.launch {
-            val jugadores = mutableListOf<Jugador>()
+            val jugadoresMap = mutableMapOf<String, Jugador>()
             val snapshot = db.collection("Jugadores").get().await()
+            val partidosSnap = db.collection("Partidos").get().safeAwait() ?: return@launch
+
             for (jug in snapshot) {
                 if (idsJugadores.contains(jug.id)) {
-                    jugadores.add(
-                        Jugador(
-                            jug.id,
-                            "${jug["Apellido1"]} ${jug["Apellido2"]}, ${jug["Nombre"]}",
-                            jug["Categoria"].toString(),
-                            jug["Sexo"].toString(),
-                            jug["UrlFoto"].toString()
-                        )
+                    var parJug = 0
+                    var punTot = 0
+
+                    for (partido in partidosSnap.documents) {
+                        val esDelEquipo =
+                            partido.getString("EquipoLocal") == jug["Equipo"].toString() || partido.getString("EquipoVisitante") == jug["Equipo"].toString()
+                        if (!esDelEquipo) continue
+
+                        val estadistica = db.collection("Estadisticas").document(partido.id).get().safeAwait() ?: continue
+                        val listadoJugadores = estadistica.get("ListadoJugadores") as? List<String> ?: continue
+
+                        if (!listadoJugadores.contains(jug.id)) continue
+
+                        val jugStats = estadistica.get(jug.id) as? HashMap<String, Any> ?: continue
+                        val minutos = jugStats["minutos"]?.toString() ?: "00:00"
+                        if (minutos == "00:00") continue
+
+                        parJug++
+                        punTot += jugStats["puntos"].toString().toIntOrNull() ?: 0
+                    }
+
+                    jugadoresMap[jug.id] = Jugador(
+                        jug.id,
+                        "${jug["Apellido1"]} ${jug["Apellido2"]}, ${jug["Nombre"]}",
+                        jug["Categoria"].toString(),
+                        jug["Sexo"].toString(),
+                        punTot.toString(),
+                        parJug.toString(),
+                        jug["UrlFoto"].toString()
                     )
                 }
             }
-            jugadorAdapter = JugadorAdapter(jugadores, { jugador ->
+
+            // Ordenar los jugadores según el orden de idsJugadores
+            val jugadoresOrdenados = idsJugadores.mapNotNull { jugadoresMap[it] }.toMutableList()
+
+            jugadorAdapter = JugadorAdapter(jugadoresOrdenados, { jugador ->
                 startActivity(Intent(this@MainInvitadoActivity, JugadorInvitadoActivity::class.java).apply {
                     putExtra("idJugador", jugador.idJugador)
                 })
             }, { jugador ->
-                jugadores.remove(jugador)
+                val index = jugadoresOrdenados.indexOfFirst { it.idJugador == jugador.idJugador }
+                if (index != -1) {
+                    jugadoresOrdenados.removeAt(index)
+                    jugadorAdapter.notifyItemRemoved(index)
+                }
                 idsJugadores.remove(jugador.idJugador)
                 actualizarIds("mis_jugadores", idsJugadores)
-                jugadorAdapter.notifyDataSetChanged()
             })
 
             binding.rvJugadores.layoutManager = LinearLayoutManager(this@MainInvitadoActivity, LinearLayoutManager.HORIZONTAL, false)
             binding.rvJugadores.adapter = jugadorAdapter
         }
+    }
+
+
+    private fun comprobarGanador(resultado: String): Int {
+        val ptsL = resultado.split(" - ")[0].toInt()
+        val ptsV = resultado.split(" - ")[1].toInt()
+
+        return if (ptsL > ptsV) 1 else 0
     }
 
     private fun actualizarIds(campo: String, lista: List<String>) {

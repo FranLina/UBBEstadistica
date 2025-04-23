@@ -28,6 +28,7 @@ class PartidosEquipoinvitadoFragment : Fragment() {
     private var _binding: FragmentPartidosEquipoinvitadoBinding? = null
     private val binding get() = _binding!!
     private val db = Firebase.firestore
+    private var idEquipo: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +41,7 @@ class PartidosEquipoinvitadoFragment : Fragment() {
         _binding = FragmentPartidosEquipoinvitadoBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-        val idEquipo = prefs.getString("idEquipo", "").toString()
+        idEquipo = activity?.intent?.getStringExtra("idEquipo")
 
         db.collection("Partidos").orderBy("Fecha").get().addOnSuccessListener {
             val listaPartido = mutableListOf<Partido>()
@@ -54,6 +54,8 @@ class PartidosEquipoinvitadoFragment : Fragment() {
                         partido.id,
                         partido.get("EquipoLocal").toString(),
                         partido.get("EquipoVisitante").toString(),
+                        partido.get("EquipoLocal").toString().dropLast(2),
+                        partido.get("EquipoVisitante").toString().dropLast(2),
                         partido.get("Polideportivo").toString(),
                         partido.get("Resultado").toString(),
                         partido.get("Hora").toString(),
