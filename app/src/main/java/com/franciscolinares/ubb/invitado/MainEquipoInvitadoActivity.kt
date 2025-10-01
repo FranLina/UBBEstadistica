@@ -2,19 +2,14 @@ package com.franciscolinares.ubb.invitado
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.view.LayoutInflater
-import android.widget.ImageView
-import android.widget.TableRow
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.toColorInt
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.ActivityMainEquipoInvitadoBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.squareup.picasso.Picasso
 import java.util.Locale
 
 class MainEquipoInvitadoActivity : AppCompatActivity() {
@@ -34,7 +29,7 @@ class MainEquipoInvitadoActivity : AppCompatActivity() {
         var t1 = binding.tabs
 
         idEquipo = intent.getStringExtra("idEquipo")
-        recuperarInfo()
+        recuperarInfo(binding.root)
 
         pager.adapter = MyAdapterInvitado(supportFragmentManager, lifecycle)
         TabLayoutMediator(t1, pager) { tab, position ->
@@ -43,7 +38,7 @@ class MainEquipoInvitadoActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun recuperarInfo() {
+    private fun recuperarInfo(root: CoordinatorLayout) {
 
         db.collection("Equipos").document(idEquipo.toString()).get()
             .addOnSuccessListener {
@@ -52,10 +47,10 @@ class MainEquipoInvitadoActivity : AppCompatActivity() {
                     it.get("Categoria").toString().uppercase(Locale.ROOT) + " " + it.get("Sexo").toString().uppercase(Locale.ROOT)
                 binding.txtLocalidadInvitadoAB.text = it.get("Localidad").toString().uppercase(Locale.ROOT)
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(root.context)
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.escudo_equipo)
-                        .error(R.drawable.escudo_equipo)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.logoEquipoInvitadoAB)
                 }
             }
@@ -67,7 +62,8 @@ class MainEquipoInvitadoActivity : AppCompatActivity() {
             var ppc = 0
             for (partido in it) {
                 if (partido["EquipoLocal"].toString() == idEquipo || partido["EquipoVisitante"].toString() == idEquipo) {
-                    conPar++
+                    if (partido["Estado"].toString() == "Finalizado")
+                        conPar++
                     if (partido["EquipoLocal"].toString() == idEquipo) {
                         ppp += partido["Resultado"].toString().split(" - ")[0].toInt()
                         ppc += partido["Resultado"].toString().split(" - ")[1].toInt()
@@ -97,7 +93,6 @@ class MainEquipoInvitadoActivity : AppCompatActivity() {
         val ptsL = resultado.split(" - ")[0].toInt()
         val ptsV = resultado.split(" - ")[1].toInt()
 
-        return if (ptsL > ptsV) 1 else 0
-
+        return if (ptsL > ptsV) 1 else if (ptsV > ptsL) 0 else -1
     }
 }

@@ -15,13 +15,15 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
 import androidx.constraintlayout.widget.ConstraintSet.Layout
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import java.util.Locale
+import androidx.core.graphics.toColorInt
 
-class AdaptadorMinuto (private val mcontext: Context, private var listaMinuto: List<MinutoAMinuto>) :
+class AdaptadorMinuto(private val mcontext: Context, private var listaMinuto: List<MinutoAMinuto>) :
     ArrayAdapter<MinutoAMinuto>(mcontext, 0, listaMinuto) {
 
     private val db = Firebase.firestore
@@ -35,13 +37,13 @@ class AdaptadorMinuto (private val mcontext: Context, private var listaMinuto: L
         val layout: View
         val minuto = listaMinuto[position]
 
-        layout = if(minuto.equipo=="Local"){
+        layout = if (minuto.equipo == "Local") {
             LayoutInflater.from(mcontext).inflate(R.layout.minutoaminuto, parent, false)
-        }else{
+        } else {
             LayoutInflater.from(mcontext).inflate(R.layout.minutoaminuto_visitante, parent, false)
         }
 
-        cambiaFoto(minuto.imgAccion,layout.findViewById<ImageView>(R.id.imgAccionMAM))
+        cambiaFoto(minuto.imgAccion, layout.findViewById(R.id.imgAccionMAM))
 
         db.collection("Estadisticas").document(idPartido).get()
             .addOnSuccessListener { esta ->
@@ -50,13 +52,15 @@ class AdaptadorMinuto (private val mcontext: Context, private var listaMinuto: L
                     val jugador = esta.get(j) as Map<String?, Any?>
                     if (jugador["equipo"].toString() == minuto.equipo && jugador["dorsal"].toString() == minuto.dorsal) {
                         db.collection("Jugadores").document(j).get()
-                            .addOnSuccessListener { p->
+                            .addOnSuccessListener { p ->
                                 if (p.get("UrlFoto") != "") {
-                                    Picasso.get()
+                                    Glide.with(mcontext)
                                         .load(p.get("UrlFoto").toString())
-                                        .placeholder(R.drawable.jugador_blanco)
-                                        .error(R.drawable.jugador_blanco)
-                                        .into(layout.findViewById<ImageView>(R.id.imgJugadorMAM))
+                                        .placeholder(R.drawable.jugador_de_baloncesto)
+                                        .override(120,100)
+                                        .centerCrop()
+                                        .error(R.drawable.jugador_de_baloncesto)
+                                        .into(layout.findViewById(R.id.imgJugadorMAM))
                                 }
                             }
                     }
@@ -71,45 +75,48 @@ class AdaptadorMinuto (private val mcontext: Context, private var listaMinuto: L
                 layout.findViewById<TextView>(R.id.txtLVMResultado).visibility = View.VISIBLE
                 layout.findViewById<TextView>(R.id.txtLVMResultado).text = minuto.resultado
             }
+
             "2" -> {
-                layout.setPaddingRelative(120,0,120,0)
+                layout.setPaddingRelative(120, 0, 120, 0)
                 layout.findViewById<ImageView>(R.id.imgAccionMAM).visibility = View.GONE
                 layout.findViewById<TextView>(R.id.txtLVMFrase).setPadding(0, 30, 0, 10)
                 layout.findViewById<TextView>(R.id.txtLVMFrase).text = minuto.frase + " " + minuto.cuarto
-                layout.findViewById<TextView>(R.id.txtLVMFrase).setBackgroundColor(Color.parseColor("#FF4CAF50"))
+                layout.findViewById<TextView>(R.id.txtLVMFrase).setBackgroundColor("#FF4CAF50".toColorInt())
                 layout.findViewById<TextView>(R.id.txtLVMFrase).setTextColor(Color.WHITE)
                 layout.findViewById<TextView>(R.id.txtLVMFrase).gravity = Gravity.CENTER
                 layout.findViewById<TextView>(R.id.txtLVM).setPadding(0, 0, 0, 20)
                 layout.findViewById<TextView>(R.id.txtLVM).text = minuto.tiempo + " h."
                 layout.findViewById<TextView>(R.id.txtLVM).gravity = Gravity.CENTER
-                layout.findViewById<TextView>(R.id.txtLVM).setBackgroundColor(Color.parseColor("#FF4CAF50"))
+                layout.findViewById<TextView>(R.id.txtLVM).setBackgroundColor("#FF4CAF50".toColorInt())
                 layout.findViewById<TextView>(R.id.txtLVM).setTextColor(Color.WHITE)
                 layout.findViewById<View>(R.id.lineaSeparadora).visibility = View.GONE
                 layout.findViewById<TextView>(R.id.txtLVMNombre).visibility = View.GONE
                 layout.findViewById<ImageView>(R.id.imgJugadorMAM).visibility = View.GONE
             }
+
             "3" -> {
-                if(minuto.resultado == ""){
+                if (minuto.resultado == "") {
                     layout.findViewById<TextView>(R.id.txtLVMFrase).text = minuto.frase + " #" + minuto.dorsal
                     layout.findViewById<TextView>(R.id.txtLVM).text = "p " + minuto.cuarto + ", " + minuto.tiempo
-                }else{
+                } else {
                     layout.findViewById<TextView>(R.id.txtLVMFrase).text = minuto.frase
                     layout.findViewById<TextView>(R.id.txtLVM).text = "#" + minuto.dorsal + ", p " + minuto.cuarto + ", " + minuto.tiempo
                 }
                 layout.findViewById<TextView>(R.id.txtLVMNombre).text = minuto.nombre.uppercase(Locale.ROOT)
             }
+
             "4" -> {
-                layout.setPaddingRelative(120,0,120,0)
+                layout.setPaddingRelative(120, 0, 120, 0)
                 layout.findViewById<ImageView>(R.id.imgAccionMAM).visibility = View.GONE
                 layout.findViewById<TextView>(R.id.txtLVMFrase).setPadding(0, 30, 0, 0)
                 layout.findViewById<TextView>(R.id.txtLVMFrase).text = minuto.frase + " " + minuto.cuarto
-                layout.findViewById<TextView>(R.id.txtLVMFrase).setBackgroundColor(Color.parseColor("#3A3A3A"))
+                layout.findViewById<TextView>(R.id.txtLVMFrase).setBackgroundColor("#3A3A3A".toColorInt())
                 layout.findViewById<TextView>(R.id.txtLVMFrase).setTextColor(Color.WHITE)
                 layout.findViewById<TextView>(R.id.txtLVMFrase).gravity = Gravity.CENTER
                 layout.findViewById<TextView>(R.id.txtLVM).setPadding(0, 0, 0, 20)
-                layout.findViewById<TextView>(R.id.txtLVM).text = minuto.tiempo  + " h."
+                layout.findViewById<TextView>(R.id.txtLVM).text = minuto.tiempo + " h."
                 layout.findViewById<TextView>(R.id.txtLVM).gravity = Gravity.CENTER
-                layout.findViewById<TextView>(R.id.txtLVM).setBackgroundColor(Color.parseColor("#3A3A3A"))
+                layout.findViewById<TextView>(R.id.txtLVM).setBackgroundColor("#3A3A3A".toColorInt())
                 layout.findViewById<TextView>(R.id.txtLVM).setTextColor(Color.WHITE)
                 layout.findViewById<View>(R.id.lineaSeparadora).visibility = View.GONE
                 layout.findViewById<TextView>(R.id.txtLVMNombre).visibility = View.GONE
@@ -125,110 +132,30 @@ class AdaptadorMinuto (private val mcontext: Context, private var listaMinuto: L
         notifyDataSetChanged() // Esto refresca la vista, pero no recrea todos los elementos
     }
 
-    private fun cambiaFoto(tipoImg :String, imagenAccion :ImageView){
-
-        when(tipoImg){
-            "1"->{
-                Picasso.get()
-                    .load(R.drawable.cambio)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "2"->{
-                Picasso.get()
-                    .load(R.drawable.tmblanco)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "3"->{
-                Picasso.get()
-                    .load(R.drawable.faltanb)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "4"->{
-                Picasso.get()
-                    .load(R.drawable.tiro_libre)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "5"->{
-                Picasso.get()
-                    .load(R.drawable.canasta1)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "6"->{
-                Picasso.get()
-                    .load(R.drawable.canasta_fallada)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "7"->{
-                Picasso.get()
-                    .load(R.drawable.canasta2)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "8"->{
-                Picasso.get()
-                    .load(R.drawable.canasta3)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "9"->{
-                Picasso.get()
-                    .load(R.drawable.asistencia)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "10"->{
-                Picasso.get()
-                    .load(R.drawable.perdida)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "11"->{
-                Picasso.get()
-                    .load(R.drawable.recuperacion)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "12"->{
-                Picasso.get()
-                    .load(R.drawable.tapon_recibido)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "13"->{
-                Picasso.get()
-                    .load(R.drawable.tapon_cometido)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-            "14"->{
-                Picasso.get()
-                    .load(R.drawable.rebote)
-                    .placeholder(R.drawable.equipacion)
-                    .error(R.drawable.equipacion)
-                    .into(imagenAccion)
-            }
-
+    private fun cambiaFoto(tipoImg: String, imagenAccion: ImageView) {
+        val drawableRes = when (tipoImg) {
+            "1" -> R.drawable.cambio
+            "2" -> R.drawable.tmblanco
+            "3" -> R.drawable.faltanb
+            "4" -> R.drawable.tiro_libre
+            "5" -> R.drawable.canasta1
+            "6" -> R.drawable.canasta_fallada
+            "7" -> R.drawable.canasta2
+            "8" -> R.drawable.canasta3
+            "9" -> R.drawable.asistencia
+            "10" -> R.drawable.perdida
+            "11" -> R.drawable.recuperacion
+            "12" -> R.drawable.tapon_recibido
+            "13" -> R.drawable.tapon_cometido
+            "14" -> R.drawable.rebote
+            else -> R.drawable.camiseta_de_baloncesto
         }
 
+        Glide.with(mcontext)
+            .load(drawableRes)
+            .placeholder(drawableRes)
+            .error(drawableRes)
+            .into(imagenAccion)
     }
 
 }

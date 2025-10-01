@@ -57,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
                                 }
                             }
                     } else {
-                        Toast.makeText(this, "Correo o contraseña errónea", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -76,7 +76,7 @@ class LoginActivity : AppCompatActivity() {
                         crearUsuarioEnFirestoreSiNoExiste(user!!)
                         Toast.makeText(this, "Usuario registrado", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(this, "Error al registrar al usuario", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
                     }
                 }
             }

@@ -12,6 +12,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.squareup.picasso.Picasso
 import java.util.Locale
@@ -42,10 +43,10 @@ class AdaptadorJugadorConvocado(private val mcontext: Context, private var lista
             )
         listItemView.findViewById<EditText>(R.id.ettConvocadoDorsal).setText(jugador.dorsal)
         if (jugador.foto != "") {
-            Picasso.get()
+            Glide.with(mcontext)
                 .load(jugador.foto)
-                .placeholder(R.drawable.jugador_blanco)
-                .error(R.drawable.jugador_blanco)
+                .placeholder(R.drawable.jugador_de_baloncesto)
+                .error(R.drawable.jugador_de_baloncesto)
                 .into(listItemView.findViewById<ImageView>(R.id.imgConvocadoJugador))
         }
         cb.isChecked = checkboxState[position] ?: false

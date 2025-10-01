@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -40,11 +41,13 @@ class AdaptadorMvp(private val mcontext: Context, private var listaJugadores: Li
                         db.collection("Jugadores").document(j).get()
                             .addOnSuccessListener { p ->
                                 if (p.get("UrlFoto") != "") {
-                                    Picasso.get()
+                                    Glide.with(mcontext)
                                         .load(p.get("UrlFoto").toString())
-                                        .placeholder(R.drawable.jugador_blanco)
-                                        .error(R.drawable.jugador_blanco)
-                                        .into(layout.findViewById<ImageView>(R.id.imgMVPJugador))
+                                        .placeholder(R.drawable.jugador_de_baloncesto)
+                                        .error(R.drawable.jugador_de_baloncesto)
+                                        .override(200,200)
+                                        .centerCrop()
+                                        .into(layout.findViewById(R.id.imgMVPJugador))
                                 }
                             }
                     }

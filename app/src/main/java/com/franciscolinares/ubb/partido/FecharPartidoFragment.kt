@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentFecharPartidoBinding
 import com.google.firebase.firestore.ktx.firestore
@@ -42,7 +43,7 @@ class FecharPartidoFragment : Fragment() {
             .addOnSuccessListener {
                 binding.txtEENombreLocal.text = it.get("Nombre").toString()
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
                         .placeholder(R.drawable.escudopredeterminado)
                         .error(R.drawable.escudopredeterminado)
@@ -54,7 +55,7 @@ class FecharPartidoFragment : Fragment() {
             .addOnSuccessListener {
                 binding.txtEENombreVisitante.text = it.get("Nombre").toString()
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
                         .placeholder(R.drawable.escudopredeterminado)
                         .error(R.drawable.escudopredeterminado)
@@ -74,6 +75,7 @@ class FecharPartidoFragment : Fragment() {
                     "Fecha" to binding.txtEEFecha.text.toString(),
                     "Hora" to binding.txtEEHora.text.toString(),
                     "Cuarto" to "1",
+                    "Cuartos" to listOf<String>(),
                     "Tiempo" to "10:00",
                     "FaltaL" to 0,
                     "FaltaV" to 0,

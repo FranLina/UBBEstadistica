@@ -38,7 +38,7 @@
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/imgJugInv"
-                        android:layout_width="90dp"
+                        android:layout_width="85dp"
                         android:layout_height="80dp"
                         android:layout_weight="0.05"
                         android:background="@color/white"
@@ -83,15 +83,15 @@
 
                     <ImageView
                         android:id="@+id/imgEquInv"
-                        android:layout_width="wrap_content"
+                        android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:layout_weight="7"
+                        android:layout_weight="1"
                         app:srcCompat="@drawable/escudopredeterminado" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="23dp"
                         android:layout_weight="1"
                         android:orientation="horizontal">
 
@@ -164,12 +164,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageButton
+                android:id="@+id/btnExcelJugador"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/excel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/btnExcelJugador">
 
                 <LinearLayout
                     android:layout_width="match_parent"

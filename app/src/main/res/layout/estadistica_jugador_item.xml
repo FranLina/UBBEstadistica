@@ -19,7 +19,7 @@
             android:layout_marginLeft="10dp"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/circular"
-            app:srcCompat="@drawable/escudo_equipo" />
+            app:srcCompat="@drawable/escudopredeterminado" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgMVPJugador"
@@ -28,7 +28,7 @@
             android:layout_marginLeft="20dp"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/circular"
-            app:srcCompat="@drawable/jugador_blanco" />
+            app:srcCompat="@drawable/jugador_de_baloncesto" />
 
         <LinearLayout
             android:layout_width="90dp"

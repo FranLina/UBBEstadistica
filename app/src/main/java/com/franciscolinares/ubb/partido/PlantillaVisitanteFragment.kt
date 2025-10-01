@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
 import androidx.navigation.Navigation
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentPlantillaVisitanteBinding
 import com.franciscolinares.ubb.partido.ListViewPartido.AdaptadorJugadorConvocado
@@ -22,6 +23,7 @@ import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import java.util.Locale
 import java.util.UUID
+import androidx.navigation.findNavController
 
 class PlantillaVisitanteFragment : Fragment() {
 
@@ -54,10 +56,10 @@ class PlantillaVisitanteFragment : Fragment() {
             binding.txtPlantillaEquipoV.text = it.get("Nombre").toString().uppercase(Locale.ROOT)
 
             if (it.get("UrlFoto") != "") {
-                Picasso.get()
+                Glide.with(binding.root.context)
                     .load(it.get("UrlFoto").toString())
-                    .placeholder(R.drawable.escudo_equipo)
-                    .error(R.drawable.escudo_equipo)
+                    .placeholder(R.drawable.escudopredeterminado)
+                    .error(R.drawable.escudopredeterminado)
                     .into(binding.imageEquipoViistante)
             }
 
@@ -201,7 +203,7 @@ class PlantillaVisitanteFragment : Fragment() {
                             )
                     }
                     Toast.makeText(binding.root.context, "Cargado el equipo visitante con exito", Toast.LENGTH_SHORT).show()
-                    Navigation.findNavController(binding.root).navigate(R.id.action_plantillaVisitanteFragment_to_cargarPlantillasFragment)
+                    binding.root.findNavController().navigate(R.id.action_plantillaVisitanteFragment_to_cargarPlantillasFragment)
                 }
             } else {
                 // Manejar errores aquí

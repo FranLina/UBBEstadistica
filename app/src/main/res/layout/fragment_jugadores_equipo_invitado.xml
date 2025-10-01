@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".invitado.JugadoresEquipoInvitadoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <ImageView
         android:id="@+id/imageView17"
         android:layout_width="match_parent"
@@ -23,6 +22,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageButton
+                android:id="@+id/btnExcelPlantilla"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/excel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -34,7 +44,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/btnExcelPlantilla">
 
                 <TableLayout
                     android:id="@+id/TLJugadoresInvitado"
@@ -117,7 +127,7 @@
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="12sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/textView88"
@@ -128,12 +138,19 @@
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textSize="12sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
                     </TableRow>
 
                 </TableLayout>
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <com.franciscolinares.ubb.utils.LoadingOverlayView
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="10dp"
+        android:visibility="gone" />
 
 </FrameLayout>

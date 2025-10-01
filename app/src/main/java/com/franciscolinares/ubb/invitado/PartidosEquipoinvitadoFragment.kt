@@ -43,47 +43,57 @@ class PartidosEquipoinvitadoFragment : Fragment() {
 
         idEquipo = activity?.intent?.getStringExtra("idEquipo")
 
-        db.collection("Partidos").orderBy("Fecha").get().addOnSuccessListener {
-            val listaPartido = mutableListOf<Partido>()
-            for (partido in it) {
-                if (partido["EquipoLocal"].toString() == idEquipo || partido["EquipoVisitante"].toString() == idEquipo) {
-                    val fechaString = partido.getString("Fecha").toString()
-                    val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                    val fechaDate = formato.parse(fechaString) ?: Date()
-                    val p = Partido(
-                        partido.id,
-                        partido.get("EquipoLocal").toString(),
-                        partido.get("EquipoVisitante").toString(),
-                        partido.get("EquipoLocal").toString().dropLast(2),
-                        partido.get("EquipoVisitante").toString().dropLast(2),
-                        partido.get("Polideportivo").toString(),
-                        partido.get("Resultado").toString(),
-                        partido.get("Hora").toString(),
-                        partido.get("Fecha").toString(),
-                        fechaDate,
-                        partido.get("Estado").toString()
-                    )
-                    listaPartido.add(p)
-                }
-            }
+        binding.loadingOverlay.show()
 
-            val listaOrdenada = listaPartido.sortedBy { it.fechaDate }
-
-            val adapter = AdaptadorPartidoEstadistica(binding.root.context, listaOrdenada)
-
-            binding.LVPartidosInvitado.adapter = adapter
-
-            binding.LVPartidosInvitado.setOnItemClickListener { adapterView, view, i, l ->
-                if (listaOrdenada[i].estado != "No Comenzado") {
-                    val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
-                    prefs.edit() {
-                        putString("idPartido", listaOrdenada[i].id)
+        try {
+            db.collection("Partidos").orderBy("Fecha").get().addOnSuccessListener {
+                val listaPartido = mutableListOf<Partido>()
+                for (partido in it) {
+                    if (partido["EquipoLocal"].toString() == idEquipo || partido["EquipoVisitante"].toString() == idEquipo) {
+                        val fechaString = partido.getString("Fecha").toString()
+                        val formato = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                        val fechaDate = formato.parse(fechaString) ?: Date()
+                        val p = Partido(
+                            partido.id,
+                            partido.get("EquipoLocal").toString(),
+                            partido.get("EquipoVisitante").toString(),
+                            partido.get("EquipoLocal").toString().dropLast(2),
+                            partido.get("EquipoVisitante").toString().dropLast(2),
+                            partido.get("Polideportivo").toString(),
+                            partido.get("Resultado").toString(),
+                            partido.get("Cuartos") as List<String>,
+                            partido.get("Hora").toString(),
+                            partido.get("Fecha").toString(),
+                            fechaDate,
+                            partido.get("Estado").toString()
+                        )
+                        listaPartido.add(p)
                     }
-                    val intent = Intent(binding.root.context, CargaPartidoActivity::class.java)
-                    startActivity(intent)
+                }
+
+                val listaOrdenada = listaPartido.sortedBy { it.fechaDate }
+
+                val adapter = AdaptadorPartidoEstadistica(binding.root.context, listaOrdenada)
+
+                binding.LVPartidosInvitado.adapter = adapter
+
+                binding.LVPartidosInvitado.setOnItemClickListener { adapterView, view, i, l ->
+                    if (listaOrdenada[i].estado != "No Comenzado") {
+                        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+                        prefs.edit() {
+                            putString("idPartido", listaOrdenada[i].id)
+                        }
+                        val intent = Intent(binding.root.context, CargaPartidoActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
             }
+        } catch (_: Exception) {
+
+        } finally {
+            binding.loadingOverlay.hide()
         }
+
 
         return root
     }

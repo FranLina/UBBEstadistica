@@ -53,15 +53,8 @@ class SplashActivity : AppCompatActivity() {
                         if (document != null && document.exists()) {
                             val rol = document.getString("rol")
                             when (rol) {
-                                "admin" -> {
-                                    startActivity(Intent(this, MainActivity::class.java))
-                                }
-                                "invitado" -> {
-                                    startActivity(Intent(this, MainInvitadoActivity::class.java))
-                                }
-                                else -> {
-                                    Toast.makeText(this, "Rol no reconocido", Toast.LENGTH_SHORT).show()
-                                }
+                                "admin" -> startActivity(Intent(this, MainActivity::class.java))
+                                "invitado" -> startActivity(Intent(this, MainInvitadoActivity::class.java))
                             }
                             finish() // Asegurarse de cerrar la SplashActivity
                         } else {

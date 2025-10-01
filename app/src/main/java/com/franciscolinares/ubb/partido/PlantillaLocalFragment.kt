@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
 import androidx.navigation.Navigation
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentPlantillaLocalBinding
 import com.franciscolinares.ubb.partido.ListViewPartido.AdaptadorJugadorConvocado
@@ -54,10 +55,10 @@ class PlantillaLocalFragment : Fragment() {
             binding.txtPlantillaEquipoL.text = it.get("Nombre").toString().uppercase(Locale.ROOT)
 
             if (it.get("UrlFoto") != "") {
-                Picasso.get()
+                Glide.with(binding.root.context)
                     .load(it.get("UrlFoto").toString())
-                    .placeholder(R.drawable.escudo_equipo)
-                    .error(R.drawable.escudo_equipo)
+                    .placeholder(R.drawable.escudopredeterminado)
+                    .error(R.drawable.escudopredeterminado)
                     .into(binding.imageEquipoLocal)
             }
 

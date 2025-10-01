@@ -16,6 +16,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import androidx.core.graphics.toColorInt
+import com.bumptech.glide.Glide
 
 class AdaptadorPartido(private val mcontext: Context, private val listaPartidos: List<Partido>) :
     ArrayAdapter<Partido>(mcontext, 0, listaPartidos) {
@@ -52,7 +53,7 @@ class AdaptadorPartido(private val mcontext: Context, private val listaPartidos:
         db.collection("Equipos").document(partido.local).get()
             .addOnSuccessListener {
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(mcontext)
                         .load(it.get("UrlFoto").toString())
                         .placeholder(R.drawable.escudopredeterminado)
                         .error(R.drawable.escudopredeterminado)
@@ -65,7 +66,7 @@ class AdaptadorPartido(private val mcontext: Context, private val listaPartidos:
         db.collection("Equipos").document(partido.visitante).get()
             .addOnSuccessListener {
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(mcontext)
                         .load(it.get("UrlFoto").toString())
                         .placeholder(R.drawable.escudopredeterminado)
                         .error(R.drawable.escudopredeterminado)

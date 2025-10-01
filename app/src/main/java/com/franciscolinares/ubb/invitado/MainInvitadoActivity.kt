@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.LoginActivity
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.ActivityMainInvitadoBinding
@@ -34,6 +35,7 @@ class MainInvitadoActivity : AppCompatActivity() {
     private lateinit var jugadorAdapter: JugadorAdapter
     private lateinit var idsEquipos: MutableList<String>
     private lateinit var idsJugadores: MutableList<String>
+    private var cargasActivas = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,133 +80,169 @@ class MainInvitadoActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun cargarEquipos() {
         lifecycleScope.launch {
-            val equiposMap = mutableMapOf<String, Equipo>()
-            val snapshot = db.collection("Equipos").get().await()
-            val partidosSnap = db.collection("Partidos").get().safeAwait() ?: return@launch
+            iniciarCarga()
+            try {
+                val equiposMap = mutableMapOf<String, Equipo>()
+                val snapshot = db.collection("Equipos").get().await()
+                val partidosSnap = db.collection("Partidos").get().safeAwait() ?: return@launch
 
-            for (equi in snapshot) {
-                if (idsEquipos.contains(equi.id)) {
-                    // Partidos y estadísticas
-                    var conPar = 0
-                    var conParG = 0
-                    for (partido in partidosSnap) {
-                        if (partido["EquipoLocal"].toString() == equi.id || partido["EquipoVisitante"].toString() == equi.id) {
-                            conPar++
-                            if (partido["EquipoLocal"].toString() == equi.id) {
-                                if (comprobarGanador(partido["Resultado"].toString()) == 1)
-                                    conParG++
-                            } else if (partido["EquipoVisitante"].toString() == equi.id) {
-                                if (comprobarGanador(partido["Resultado"].toString()) == 0)
-                                    conParG++
+                for (equi in snapshot) {
+                    if (idsEquipos.contains(equi.id)) {
+                        // Partidos y estadísticas
+                        var conPar = 0
+                        var conParG = 0
+                        for (partido in partidosSnap) {
+                            if (partido["EquipoLocal"].toString() == equi.id || partido["EquipoVisitante"].toString() == equi.id) {
+                                if (partido["Estado"].toString() == "Finalizado")
+                                    conPar++
+                                if (partido["EquipoLocal"].toString() == equi.id) {
+                                    if (comprobarGanador(partido["Resultado"].toString()) == 1)
+                                        conParG++
+                                } else if (partido["EquipoVisitante"].toString() == equi.id) {
+                                    if (comprobarGanador(partido["Resultado"].toString()) == 0)
+                                        conParG++
+                                }
                             }
                         }
+
+                        equiposMap[equi.id] = Equipo(
+                            equi.id,
+                            equi["Nombre"].toString(),
+                            equi["Categoria"].toString(),
+                            equi["Sexo"].toString(),
+                            conPar.toString(),
+                            conParG.toString(),
+                            equi["UrlFoto"].toString()
+                        )
                     }
-
-                    equiposMap[equi.id] = Equipo(
-                        equi.id,
-                        equi["Nombre"].toString(),
-                        equi["Categoria"].toString(),
-                        equi["Sexo"].toString(),
-                        conPar.toString(),
-                        conParG.toString(),
-                        equi["UrlFoto"].toString()
-                    )
                 }
-            }
 
-            // Ordenar los equipos según el orden de idsEquipos
-            val equiposOrdenados = idsEquipos.mapNotNull { equiposMap[it] }.toMutableList()
+                // Ordenar los equipos según el orden de idsEquipos
+                val equiposOrdenados = idsEquipos.mapNotNull { equiposMap[it] }.toMutableList()
 
-            equipoAdapter = EquipoAdapter(equiposOrdenados, { equipo ->
-                startActivity(Intent(this@MainInvitadoActivity, MainEquipoInvitadoActivity::class.java).apply {
-                    putExtra("idEquipo", equipo.idEquipo)
+                equipoAdapter = EquipoAdapter(equiposOrdenados, { equipo ->
+                    startActivity(Intent(this@MainInvitadoActivity, MainEquipoInvitadoActivity::class.java).apply {
+                        putExtra("idEquipo", equipo.idEquipo)
+                    })
+                }, { equipo ->
+                    val index = equiposOrdenados.indexOfFirst { it.idEquipo == equipo.idEquipo }
+                    if (index != -1) {
+                        equiposOrdenados.removeAt(index)
+                        equipoAdapter.notifyItemRemoved(index)
+                    }
+                    idsEquipos.remove(equipo.idEquipo)
+                    actualizarIds("mis_equipos", idsEquipos)
+
                 })
-            }, { equipo ->
-                val index = equiposOrdenados.indexOfFirst { it.idEquipo == equipo.idEquipo }
-                if (index != -1) {
-                    equiposOrdenados.removeAt(index)
-                    equipoAdapter.notifyItemRemoved(index)
-                }
-                idsEquipos.remove(equipo.idEquipo)
-                actualizarIds("mis_equipos", idsEquipos)
 
-            })
-
-            binding.rvEquipos.layoutManager = LinearLayoutManager(this@MainInvitadoActivity, LinearLayoutManager.HORIZONTAL, false)
-            binding.rvEquipos.adapter = equipoAdapter
+                binding.rvEquipos.layoutManager = LinearLayoutManager(this@MainInvitadoActivity, LinearLayoutManager.HORIZONTAL, false)
+                binding.rvEquipos.adapter = equipoAdapter
+            } catch (e: Exception) {
+                Log.e("Firebase", "Error al cargar jugadores: ${e.message}")
+            } finally {
+                finalizarCarga()
+            }
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun cargarJugadores() {
         lifecycleScope.launch {
-            val jugadoresMap = mutableMapOf<String, Jugador>()
-            val snapshot = db.collection("Jugadores").get().await()
-            val partidosSnap = db.collection("Partidos").get().safeAwait() ?: return@launch
+            iniciarCarga()
+            try {
+                val jugadoresMap = mutableMapOf<String, Jugador>()
+                val snapshot = db.collection("Jugadores").get().await()
+                val partidosSnap = db.collection("Partidos").get().safeAwait() ?: return@launch
 
-            for (jug in snapshot) {
-                if (idsJugadores.contains(jug.id)) {
-                    var parJug = 0
-                    var punTot = 0
+                for (jug in snapshot) {
+                    if (idsJugadores.contains(jug.id)) {
+                        var parJug = 0
+                        var punTot = 0
 
-                    for (partido in partidosSnap.documents) {
-                        val esDelEquipo =
-                            partido.getString("EquipoLocal") == jug["Equipo"].toString() || partido.getString("EquipoVisitante") == jug["Equipo"].toString()
-                        if (!esDelEquipo) continue
+                        for (partido in partidosSnap.documents) {
+                            val esDelEquipo =
+                                partido.getString("EquipoLocal") == jug["Equipo"].toString() || partido.getString("EquipoVisitante") == jug["Equipo"].toString()
+                            if (!esDelEquipo) continue
 
-                        val estadistica = db.collection("Estadisticas").document(partido.id).get().safeAwait() ?: continue
-                        val listadoJugadores = estadistica.get("ListadoJugadores") as? List<String> ?: continue
+                            val estadistica = db.collection("Estadisticas").document(partido.id).get().safeAwait() ?: continue
+                            val listadoJugadores = estadistica.get("ListadoJugadores") as? List<String> ?: continue
 
-                        if (!listadoJugadores.contains(jug.id)) continue
+                            if (!listadoJugadores.contains(jug.id)) continue
 
-                        val jugStats = estadistica.get(jug.id) as? HashMap<String, Any> ?: continue
-                        val minutos = jugStats["minutos"]?.toString() ?: "00:00"
-                        if (minutos == "00:00") continue
+                            val jugStats = estadistica.get(jug.id) as? HashMap<String, Any> ?: continue
+                            val minutos = jugStats["minutos"]?.toString() ?: "00:00"
+                            if (minutos == "00:00") continue
 
-                        parJug++
-                        punTot += jugStats["puntos"].toString().toIntOrNull() ?: 0
+                            parJug++
+                            punTot += jugStats["puntos"].toString().toIntOrNull() ?: 0
+                        }
+
+                        jugadoresMap[jug.id] = Jugador(
+                            jug.id,
+                            "${jug["Apellido1"]} ${jug["Apellido2"]}, ${jug["Nombre"]}",
+                            jug["Categoria"].toString(),
+                            jug["Sexo"].toString(),
+                            punTot.toString(),
+                            parJug.toString(),
+                            jug["UrlFoto"].toString()
+                        )
                     }
-
-                    jugadoresMap[jug.id] = Jugador(
-                        jug.id,
-                        "${jug["Apellido1"]} ${jug["Apellido2"]}, ${jug["Nombre"]}",
-                        jug["Categoria"].toString(),
-                        jug["Sexo"].toString(),
-                        punTot.toString(),
-                        parJug.toString(),
-                        jug["UrlFoto"].toString()
-                    )
                 }
-            }
 
-            // Ordenar los jugadores según el orden de idsJugadores
-            val jugadoresOrdenados = idsJugadores.mapNotNull { jugadoresMap[it] }.toMutableList()
+                // Ordenar los jugadores según el orden de idsJugadores
+                val jugadoresOrdenados = idsJugadores.mapNotNull { jugadoresMap[it] }.toMutableList()
 
-            jugadorAdapter = JugadorAdapter(jugadoresOrdenados, { jugador ->
-                startActivity(Intent(this@MainInvitadoActivity, JugadorInvitadoActivity::class.java).apply {
-                    putExtra("idJugador", jugador.idJugador)
+                jugadorAdapter = JugadorAdapter(jugadoresOrdenados, { jugador ->
+                    startActivity(Intent(this@MainInvitadoActivity, JugadorInvitadoActivity::class.java).apply {
+                        putExtra("idJugador", jugador.idJugador)
+                    })
+                }, { jugador ->
+                    val index = jugadoresOrdenados.indexOfFirst { it.idJugador == jugador.idJugador }
+                    if (index != -1) {
+                        jugadoresOrdenados.removeAt(index)
+                        jugadorAdapter.notifyItemRemoved(index)
+                    }
+                    idsJugadores.remove(jugador.idJugador)
+                    actualizarIds("mis_jugadores", idsJugadores)
                 })
-            }, { jugador ->
-                val index = jugadoresOrdenados.indexOfFirst { it.idJugador == jugador.idJugador }
-                if (index != -1) {
-                    jugadoresOrdenados.removeAt(index)
-                    jugadorAdapter.notifyItemRemoved(index)
-                }
-                idsJugadores.remove(jugador.idJugador)
-                actualizarIds("mis_jugadores", idsJugadores)
-            })
 
-            binding.rvJugadores.layoutManager = LinearLayoutManager(this@MainInvitadoActivity, LinearLayoutManager.HORIZONTAL, false)
-            binding.rvJugadores.adapter = jugadorAdapter
+                binding.rvJugadores.layoutManager = LinearLayoutManager(this@MainInvitadoActivity, LinearLayoutManager.HORIZONTAL, false)
+                binding.rvJugadores.adapter = jugadorAdapter
+            } catch (e: Exception) {
+                Log.e("Firebase", "Error al cargar jugadores: ${e.message}")
+            } finally {
+                finalizarCarga()
+            }
         }
     }
 
+    private fun iniciarCarga() {
+        cargasActivas++
+        mostrarCarga(true)
+    }
+
+    private fun finalizarCarga() {
+        cargasActivas--
+        if (cargasActivas <= 0) {
+            mostrarCarga(false)
+            cargasActivas = 0
+        }
+    }
+
+
+    private fun mostrarCarga(mostrar: Boolean) {
+        if (mostrar) {
+            binding.loadingOverlay.show()
+        } else {
+            binding.loadingOverlay.hide()
+        }
+    }
 
     private fun comprobarGanador(resultado: String): Int {
         val ptsL = resultado.split(" - ")[0].toInt()
         val ptsV = resultado.split(" - ")[1].toInt()
 
-        return if (ptsL > ptsV) 1 else 0
+        return if (ptsL > ptsV) 1 else if (ptsV > ptsL) 0 else -1
     }
 
     private fun actualizarIds(campo: String, lista: List<String>) {

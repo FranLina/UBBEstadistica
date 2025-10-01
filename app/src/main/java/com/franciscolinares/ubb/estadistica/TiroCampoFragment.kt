@@ -14,6 +14,7 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.ListView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentTiroCampoBinding
 import com.franciscolinares.ubb.estadistica.ListViewEstadistica.AdaptadorTiroJugador
@@ -262,10 +263,10 @@ class TiroCampoFragment : Fragment() {
         db.collection("Equipos").document(eLocal).get()
             .addOnSuccessListener {
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.escudo_equipo)
-                        .error(R.drawable.escudo_equipo)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.imageLocalPartido)
                 }
             }.addOnFailureListener { exception ->
@@ -275,10 +276,10 @@ class TiroCampoFragment : Fragment() {
         db.collection("Equipos").document(eVisitante).get()
             .addOnSuccessListener {
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.escudo_equipo)
-                        .error(R.drawable.escudo_equipo)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.imageVisitantePartido)
                 }
             }.addOnFailureListener { exception ->

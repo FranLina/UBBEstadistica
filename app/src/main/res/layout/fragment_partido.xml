@@ -41,7 +41,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/escudo_equipo" />
+                app:srcCompat="@drawable/escudopredeterminado" />
 
             <ImageView
                 android:id="@+id/imageTML"
@@ -214,7 +214,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/escudo_equipo" />
+                app:srcCompat="@drawable/escudopredeterminado" />
 
         </LinearLayout>
 

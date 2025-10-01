@@ -2,6 +2,7 @@ package com.franciscolinares.ubb.estadistica
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.preference.PreferenceManager
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentEnVivoBinding
 import com.franciscolinares.ubb.estadistica.ListViewEstadistica.AdaptadorMinuto
@@ -21,6 +23,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import java.util.Locale
+import androidx.core.view.isVisible
 
 class EnVivoFragment : Fragment() {
 
@@ -52,7 +55,7 @@ class EnVivoFragment : Fragment() {
         listView = binding.LVMinutoAMinuto
 
         binding.txtBTJP.setOnClickListener {
-            if (binding.contenedorJugCam.visibility == View.VISIBLE) {
+            if (binding.contenedorJugCam.isVisible) {
                 binding.contenedorJugCam.visibility = View.GONE
             } else {
                 recuperaQuinteto()
@@ -101,6 +104,10 @@ class EnVivoFragment : Fragment() {
                 )
                 listaminuto.add(minuto)
             }
+            if (lista.isEmpty()) {
+                binding.loadingOverlay.visibility = View.VISIBLE
+                listView.visibility = View.GONE
+            }
             myAdapter = AdaptadorMinuto(binding.root.context, listaminuto)
             listView.adapter = myAdapter
         }
@@ -143,7 +150,15 @@ class EnVivoFragment : Fragment() {
                                             )
                                             listaminuto.add(minuto)
                                         }
-                                        myAdapter.updateData(listaminuto)
+                                        if (listaminuto.isEmpty()) {
+                                            binding.loadingOverlay.visibility = View.VISIBLE
+                                            listView.visibility = View.GONE
+                                        } else {
+                                            myAdapter.updateData(listaminuto)
+                                            binding.loadingOverlay.visibility = View.GONE
+                                            listView.visibility = View.VISIBLE
+                                        }
+
                                     }
 
                                 db.collection("Partidos").document(idPartido).get()
@@ -264,11 +279,11 @@ class EnVivoFragment : Fragment() {
                             db.collection("Jugadores").document(listJugador[j]).get()
                                 .addOnSuccessListener { p ->
                                     if (p.get("UrlFoto") != "") {
-                                        Picasso.get()
+                                        Glide.with(binding.root.context)
                                             .load(p.get("UrlFoto").toString())
-                                            .placeholder(R.drawable.jugador_blanco)
-                                            .error(R.drawable.jugador_blanco)
-                                            .into(registro.findViewById<ImageView>(R.id.imgJCFoto))
+                                            .placeholder(R.drawable.jugador_de_baloncesto)
+                                            .error(R.drawable.jugador_de_baloncesto)
+                                            .into(registro.findViewById(R.id.imgJCFoto))
                                     }
                                 }
                         }
@@ -313,16 +328,16 @@ class EnVivoFragment : Fragment() {
         db.collection("Equipos").document(eLocal).get()
             .addOnSuccessListener {
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.escudo_equipo)
-                        .error(R.drawable.escudo_equipo)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.imageLocalPartido)
 
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.escudo_equipo)
-                        .error(R.drawable.escudo_equipo)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.imgEquipoLJC)
                 }
             }.addOnFailureListener { exception ->
@@ -332,16 +347,16 @@ class EnVivoFragment : Fragment() {
         db.collection("Equipos").document(eVisitante).get()
             .addOnSuccessListener {
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.escudo_equipo)
-                        .error(R.drawable.escudo_equipo)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.imageVisitantePartido)
 
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.escudo_equipo)
-                        .error(R.drawable.escudo_equipo)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.imgEquipoVJC)
                 }
             }.addOnFailureListener { exception ->

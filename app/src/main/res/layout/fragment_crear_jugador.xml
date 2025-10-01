@@ -89,9 +89,11 @@
 
                             <com.google.android.material.imageview.ShapeableImageView
                                 android:id="@+id/imgCJFoto"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1.7"
+                                android:layout_width="300dp"
+                                android:layout_height="150dp"
+                                android:layout_weight="1"
+                                android:background="@color/white"
+                                android:elevation="4dp"
                                 android:scaleType="centerCrop"
                                 app:shapeAppearanceOverlay="@style/circular"
                                 app:srcCompat="@drawable/jugador_de_baloncesto" />

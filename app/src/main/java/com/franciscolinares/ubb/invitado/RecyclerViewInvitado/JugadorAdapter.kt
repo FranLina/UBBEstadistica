@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.squareup.picasso.Picasso
 
@@ -40,8 +41,9 @@ class JugadorAdapter(
         holder.pts.text = "PTS: " + jugador.pts
 
         if (jugador.logoResId != "") {
-            Picasso.get()
+            Glide.with(holder.itemView.context)
                 .load(jugador.logoResId)
+                .placeholder(R.drawable.jugador_de_baloncesto)
                 .error(R.drawable.jugador_de_baloncesto)
                 .into(holder.logo)
         }

@@ -38,7 +38,7 @@
                         android:id="@+id/imageLVLocal"
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        app:srcCompat="@drawable/ic_launcher_foreground" />
+                        app:srcCompat="@drawable/escudopredeterminado" />
 
                     <TextView
                         android:id="@+id/txtLVEquipoLocal"
@@ -104,7 +104,7 @@
                         android:id="@+id/imageLVVisitante"
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        app:srcCompat="@drawable/ic_launcher_foreground" />
+                        app:srcCompat="@drawable/escudopredeterminado" />
 
                     <TextView
                         android:id="@+id/txtLVEquipoVisitante"

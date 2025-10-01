@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.franciscolinares.ubb.R
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 
 class EquipoAdapter(
@@ -40,8 +41,9 @@ class EquipoAdapter(
         holder.pg.text = "PG: " + equipo.pg
 
         if (equipo.logoResId != "") {
-            Picasso.get()
+            Glide.with(holder.itemView.context)
                 .load(equipo.logoResId)
+                .placeholder(R.drawable.escudopredeterminado)
                 .error(R.drawable.escudopredeterminado)
                 .into(holder.logo)
         }

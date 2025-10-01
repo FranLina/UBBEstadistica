@@ -45,8 +45,7 @@
                 android:id="@+id/imageLocalPartido"
                 android:layout_width="60sp"
                 android:layout_height="50sp"
-                android:src="@drawable/ic_launcher_foreground"
-                app:srcCompat="@drawable/escudo_equipo" />
+                app:srcCompat="@drawable/escudopredeterminado" />
 
             <TextView
                 android:id="@+id/txtNombreELocal"
@@ -81,8 +80,7 @@
                 android:id="@+id/imageVisitantePartido"
                 android:layout_width="60sp"
                 android:layout_height="50sp"
-                android:src="@drawable/ic_launcher_foreground"
-                app:srcCompat="@drawable/escudo_equipo" />
+                app:srcCompat="@drawable/escudopredeterminado" />
 
             <TextView
                 android:id="@+id/txtNombreEVisitante"

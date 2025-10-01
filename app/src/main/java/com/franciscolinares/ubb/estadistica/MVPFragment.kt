@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentMVPBinding
 import com.franciscolinares.ubb.estadistica.ListViewEstadistica.AdaptadorMvp
@@ -176,15 +177,15 @@ class MVPFragment : Fragment() {
         db.collection("Equipos").document(eLocal).get()
             .addOnSuccessListener {
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.escudo_equipo)
-                        .error(R.drawable.escudo_equipo)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.imageLocalPartido)
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.escudo_equipo)
-                        .error(R.drawable.escudo_equipo)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.imageLocalPartidoMVP)
                 }
             }.addOnFailureListener { exception ->
@@ -194,15 +195,15 @@ class MVPFragment : Fragment() {
         db.collection("Equipos").document(eVisitante).get()
             .addOnSuccessListener {
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.escudo_equipo)
-                        .error(R.drawable.escudo_equipo)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.imageVisitantePartido)
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
-                        .placeholder(R.drawable.escudo_equipo)
-                        .error(R.drawable.escudo_equipo)
+                        .placeholder(R.drawable.escudopredeterminado)
+                        .error(R.drawable.escudopredeterminado)
                         .into(binding.imageVisitantePartidoMVP)
                 }
             }.addOnFailureListener { exception ->

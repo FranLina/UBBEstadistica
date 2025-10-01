@@ -77,7 +77,7 @@
                                     android:id="@+id/imageEELocal"
                                     android:layout_width="match_parent"
                                     android:layout_height="75dp"
-                                    android:src="@drawable/ic_launcher_foreground" />
+                                    android:src="@drawable/escudopredeterminado" />
 
                                 <TextView
                                     android:id="@+id/txtEENombreLocal"
@@ -99,7 +99,7 @@
                                     android:id="@+id/imageEEVisitante"
                                     android:layout_width="match_parent"
                                     android:layout_height="75dp"
-                                    android:src="@drawable/ic_launcher_foreground" />
+                                    android:src="@drawable/escudopredeterminado" />
 
                                 <TextView
                                     android:id="@+id/txtEENombreVisitante"

@@ -22,6 +22,7 @@ import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentEstadisticasBinding
 import com.google.firebase.firestore.ktx.firestore
@@ -748,8 +749,8 @@ class EstadisticasFragment : Fragment() {
 
                                 db.collection("Jugadores").document(listJugador[j]).get().addOnSuccessListener { p ->
                                     if (p.get("UrlFoto") != "") {
-                                        Picasso.get().load(p.get("UrlFoto").toString()).placeholder(R.drawable.jugador_blanco)
-                                            .error(R.drawable.jugador_blanco).into(view.findViewById<ImageView>(R.id.imgMVPJugador))
+                                        Glide.with(binding.root.context).load(p.get("UrlFoto").toString()).placeholder(R.drawable.jugador_de_baloncesto)
+                                            .error(R.drawable.jugador_de_baloncesto).into(view.findViewById(R.id.imgMVPJugador))
                                     }
                                 }
 
@@ -759,8 +760,8 @@ class EstadisticasFragment : Fragment() {
 
                                     db.collection("Equipos").document(e).get().addOnSuccessListener {
                                         if (it.get("UrlFoto") != "") {
-                                            Picasso.get().load(it.get("UrlFoto").toString()).placeholder(R.drawable.escudo_equipo)
-                                                .error(R.drawable.escudo_equipo).into(view.findViewById<ImageView>(R.id.imgMVPEquipo))
+                                            Glide.with(binding.root.context).load(it.get("UrlFoto").toString()).placeholder(R.drawable.escudopredeterminado)
+                                                .error(R.drawable.escudopredeterminado).into(view.findViewById(R.id.imgMVPEquipo))
                                         }
                                     }
                                 }
@@ -805,9 +806,9 @@ class EstadisticasFragment : Fragment() {
 
         db.collection("Equipos").document(eLocal).get().addOnSuccessListener {
             if (it.get("UrlFoto") != "") {
-                Picasso.get().load(it.get("UrlFoto").toString()).placeholder(R.drawable.escudo_equipo).error(R.drawable.escudo_equipo)
+                Glide.with(binding.root.context).load(it.get("UrlFoto").toString()).placeholder(R.drawable.escudopredeterminado).error(R.drawable.escudopredeterminado)
                     .into(binding.imageLocalPartido)
-                Picasso.get().load(it.get("UrlFoto").toString()).placeholder(R.drawable.escudo_equipo).error(R.drawable.escudo_equipo)
+                Glide.with(binding.root.context).load(it.get("UrlFoto").toString()).placeholder(R.drawable.escudopredeterminado).error(R.drawable.escudopredeterminado)
                     .into(binding.imageLocalPartidoEsta)
             }
         }.addOnFailureListener { exception ->
@@ -816,9 +817,9 @@ class EstadisticasFragment : Fragment() {
 
         db.collection("Equipos").document(eVisitante).get().addOnSuccessListener {
             if (it.get("UrlFoto") != "") {
-                Picasso.get().load(it.get("UrlFoto").toString()).placeholder(R.drawable.escudo_equipo).error(R.drawable.escudo_equipo)
+                Glide.with(binding.root.context).load(it.get("UrlFoto").toString()).placeholder(R.drawable.escudopredeterminado).error(R.drawable.escudopredeterminado)
                     .into(binding.imageVisitantePartido)
-                Picasso.get().load(it.get("UrlFoto").toString()).placeholder(R.drawable.escudo_equipo).error(R.drawable.escudo_equipo)
+                Glide.with(binding.root.context).load(it.get("UrlFoto").toString()).placeholder(R.drawable.escudopredeterminado).error(R.drawable.escudopredeterminado)
                     .into(binding.imageVisitantePartidoEsta)
             }
         }.addOnFailureListener { exception ->

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.estadistica.ListViewEstadistica.MinutoAMinuto
 import com.squareup.picasso.Picasso
@@ -27,11 +28,11 @@ class AdaptadorJugador(private val mcontext: Context, private var listaJugadores
         layout.findViewById<TextView>(R.id.txtLVJEquipo).text = "Equipo:  " + jugador.equipo
 
         if (jugador.foto != "") {
-            Picasso.get()
+            Glide.with(mcontext)
                 .load(jugador.foto)
                 .placeholder(R.drawable.jugador_de_baloncesto)
                 .error(R.drawable.jugador_de_baloncesto)
-                .into(layout.findViewById<ImageView>(R.id.imageLVJJugador))
+                .into(layout.findViewById(R.id.imageLVJJugador))
         }
 
         return layout

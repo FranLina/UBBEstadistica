@@ -22,7 +22,7 @@
             android:layout_weight="1"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/circular"
-            app:srcCompat="@drawable/jugador_blanco" />
+            app:srcCompat="@drawable/jugador_de_baloncesto" />
 
         <ImageView
             android:id="@+id/imgAccionMAM"

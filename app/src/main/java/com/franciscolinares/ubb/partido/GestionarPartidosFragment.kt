@@ -119,6 +119,7 @@ class GestionarPartidosFragment : Fragment() {
                     partido.get("EquipoVisitante").toString().dropLast(2),
                     partido.get("Polideportivo").toString(),
                     partido.get("Resultado").toString(),
+                    partido.get("Cuartos") as List<String>,
                     partido.get("Hora").toString(),
                     partido.get("Fecha").toString(),
                     fechaDate,

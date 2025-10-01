@@ -26,6 +26,7 @@ import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentPartidoBinding
 import com.franciscolinares.ubb.estadistica.ListViewEstadistica.AdaptadorMinuto
@@ -47,12 +48,13 @@ class PartidoFragment : Fragment() {
     private var tiempo = "10:00"
     private var resultado = "0 - 0"
     private var cuarto = 1
+    private var cuartosParcial: ArrayList<String> = arrayListOf<String>()
     private var falL = 0
     private var falV = 0
     private var tmL = 2
     private var tmV = 2
-    private var quintetoL: ArrayList<String> = arrayListOf<String>()
-    private var quintetoV: ArrayList<String> = arrayListOf<String>()
+    private var quintetoL: ArrayList<String> = arrayListOf()
+    private var quintetoV: ArrayList<String> = arrayListOf()
     private var estado = ""
     private var isPlay = false
     private var pauseOffSet: Long = 10 * 60 * 1000
@@ -387,7 +389,7 @@ class PartidoFragment : Fragment() {
 
                 view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
                     val lista = llenarListToggle()
-                    manejarFalta("FALTA COMETIDA",comprobarEquipoJugador(llenarListToggle()), lista, idPartido)
+                    manejarFalta("FALTA COMETIDA", comprobarEquipoJugador(llenarListToggle()), lista, idPartido)
                     vaciarToggle(lista)
                     dialog.hide()
                 }
@@ -411,14 +413,14 @@ class PartidoFragment : Fragment() {
 
                 view.findViewById<Button>(R.id.btnAnotar).setOnClickListener {
                     val lista = llenarListToggle()
-                    manejarFalta("FALTA TÉCNICA",comprobarEquipoJugador(llenarListToggle()), lista, idPartido)
+                    manejarFalta("FALTA TÉCNICA", comprobarEquipoJugador(llenarListToggle()), lista, idPartido)
                     vaciarToggle(lista)
                     dialog.dismiss()
                 }
 
                 view.findViewById<Button>(R.id.btnFallar).setOnClickListener {
                     val lista = llenarListToggle()
-                    manejarFalta("FALTA ANTIDEPORTIVA",comprobarEquipoJugador(llenarListToggle()), lista, idPartido)
+                    manejarFalta("FALTA ANTIDEPORTIVA", comprobarEquipoJugador(llenarListToggle()), lista, idPartido)
                     vaciarToggle(lista)
                     dialog.dismiss()
                 }
@@ -2770,6 +2772,7 @@ class PartidoFragment : Fragment() {
             .addOnSuccessListener {
                 tiempo = it.get("Tiempo").toString()
                 cuarto = it.get("Cuarto").toString().toInt()
+                cuartosParcial = it.get("Cuartos") as ArrayList<String>
                 falL = it.get("FaltaL").toString().toInt()
                 falV = it.get("FaltaV").toString().toInt()
                 tmL = it.get("TiempoML").toString().toInt()
@@ -2955,6 +2958,33 @@ class PartidoFragment : Fragment() {
         }
     }
 
+    private fun actualizaCuartoParcial() {
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(binding.root.context)
+        val idPartido = prefs.getString("idPartido", "").toString()
+
+        if (cuartosParcial.isEmpty()) {
+            cuartosParcial.add(resultado)
+        } else {
+            var rclt = 0
+            var rcvt = 0
+            val resultadoPartido = resultado.split(" - ")
+            for (parcial in cuartosParcial) {
+                val resultadoCuarto = parcial.split(" - ")
+                rclt += resultadoCuarto[0].toInt()
+                rcvt += resultadoCuarto[1].toInt()
+            }
+            val rcl = (resultadoPartido[0].toInt() - rclt)
+            val rcv = (resultadoPartido[1].toInt() - rcvt)
+            cuartosParcial.add("$rcl - $rcv")
+        }
+        db.collection("Partidos").document(idPartido).update(
+            hashMapOf(
+                "Cuartos" to cuartosParcial,
+            ) as Map<String, Any>
+        )
+    }
+
     @SuppressLint("SetTextI18n")
     private fun gestionCrononometro(chronometer: Chronometer) {
         if (chronometer.text.toString() == "00:00" && estado != "Finalizado") {
@@ -2962,6 +2992,8 @@ class PartidoFragment : Fragment() {
             val idPartido = prefs.getString("idPartido", "").toString()
 
             val horaActual = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+
+            actualizaCuartoParcial()
 
             if (cuarto == 1 || cuarto == 2 || cuarto == 3) {
                 falL = 0
@@ -4539,9 +4571,11 @@ class PartidoFragment : Fragment() {
         db.collection("Equipos").document(eLocal).get()
             .addOnSuccessListener {
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
                         .placeholder(R.drawable.escudopredeterminado)
+                        .centerCrop()
+                        .override(100,100)
                         .error(R.drawable.escudopredeterminado)
                         .into(binding.escudoLocal)
                 }
@@ -4552,10 +4586,12 @@ class PartidoFragment : Fragment() {
         db.collection("Equipos").document(eVisitante).get()
             .addOnSuccessListener {
                 if (it.get("UrlFoto") != "") {
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
                         .placeholder(R.drawable.escudopredeterminado)
                         .error(R.drawable.escudopredeterminado)
+                        .centerCrop()
+                        .override(100,100)
                         .into(binding.escudoVisitante)
                 }
             }.addOnFailureListener { exception ->

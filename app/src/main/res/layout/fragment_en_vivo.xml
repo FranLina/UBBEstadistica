@@ -32,8 +32,7 @@
                 android:id="@+id/imageLocalPartido"
                 android:layout_width="60sp"
                 android:layout_height="50sp"
-                android:src="@drawable/ic_launcher_foreground"
-                app:srcCompat="@drawable/escudo_equipo" />
+                app:srcCompat="@drawable/escudopredeterminado" />
 
             <TextView
                 android:id="@+id/txtNombreELocal"
@@ -68,8 +67,7 @@
                 android:id="@+id/imageVisitantePartido"
                 android:layout_width="60sp"
                 android:layout_height="50sp"
-                android:src="@drawable/ic_launcher_foreground"
-                app:srcCompat="@drawable/escudo_equipo" />
+                app:srcCompat="@drawable/escudopredeterminado" />
 
             <TextView
                 android:id="@+id/txtNombreEVisitante"
@@ -129,7 +127,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    app:srcCompat="@drawable/escudo_equipo" />
+                    app:srcCompat="@drawable/escudopredeterminado" />
 
                 <TextView
                     android:id="@+id/txtEquipoLJC"
@@ -162,7 +160,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    app:srcCompat="@drawable/escudo_equipo" />
+                    app:srcCompat="@drawable/escudopredeterminado" />
 
                 <TextView
                     android:id="@+id/txtEquipoVJC"
@@ -193,5 +191,33 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="10dp" />
+
+    <FrameLayout
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/loadingAnimation"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/basketball_loading" />
+
+        <TextView
+            android:id="@+id/loadingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="100dp"
+            android:text="No hay Datos"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </FrameLayout>
 
 </LinearLayout>

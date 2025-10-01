@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.navigation.Navigation
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.franciscolinares.ubb.databinding.FragmentCrearJugadorBinding
 import com.google.firebase.firestore.ktx.firestore
@@ -69,10 +70,12 @@ class CrearJugadorFragment : Fragment() {
                 binding.txtCJApellido2.setText(it.get("Apellido2").toString())
                 binding.txtCJFechaNacimiento.setText(it.get("FechaNacimiento").toString())
                 if (it.get("UrlFoto").toString() != "") {
-                    Picasso.get()
+                    Glide.with(binding.root.context)
                         .load(it.get("UrlFoto").toString())
                         .placeholder(R.drawable.jugador_de_baloncesto)
                         .error(R.drawable.jugador_de_baloncesto)
+                        .centerCrop()
+                        .override(300,300)
                         .into(binding.imgCJFoto)
                 }
                 val cat = it.get("Categoria").toString()
@@ -196,7 +199,7 @@ class CrearJugadorFragment : Fragment() {
                             Toast.makeText(context, "Cargada la foto con exito", Toast.LENGTH_LONG).show()
                             jugadorRef.get().addOnSuccessListener { j ->
                                 if (j.get("UrlFoto").toString() != "") {
-                                    Picasso.get()
+                                    Glide.with(binding.root.context)
                                         .load(j.get("UrlFoto").toString())
                                         .placeholder(R.drawable.jugador_de_baloncesto)
                                         .error(R.drawable.jugador_de_baloncesto)

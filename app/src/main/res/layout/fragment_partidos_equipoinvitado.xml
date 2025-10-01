@@ -9,4 +9,11 @@
         android:id="@+id/LVPartidosInvitado"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <com.franciscolinares.ubb.utils.LoadingOverlayView
+        android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="10dp"
+        android:visibility="gone" />
 </FrameLayout>

@@ -10,6 +10,7 @@ class Partido(
     val nombreVisitante: String,
     val polideportivo: String,
     val resultado: String,
+    val cuartos: List<String>,
     val hora: String,
     val fecha: String,
     val fechaDate: Date,

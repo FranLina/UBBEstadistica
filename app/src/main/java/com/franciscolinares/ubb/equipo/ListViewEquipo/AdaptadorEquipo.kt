@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.franciscolinares.ubb.R
 import com.squareup.picasso.Picasso
 
@@ -26,10 +27,10 @@ class AdaptadorEquipo(private val mcontext: Context, private val listaEquipo: Li
         layout.findViewById<TextView>(R.id.txtLVELocalidad).text = "Localidad:  " + equipo.localidad
 
         if (equipo.foto != "") {
-            Picasso.get()
+            Glide.with(mcontext)
                 .load(equipo.foto)
-                .placeholder(R.drawable.escudo_equipo)
-                .error(R.drawable.escudo_equipo)
+                .placeholder(R.drawable.escudopredeterminado)
+                .error(R.drawable.escudopredeterminado)
                 .into(layout.findViewById<ImageView>(R.id.imageLVEquipo))
         }
 

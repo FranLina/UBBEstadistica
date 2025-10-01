@@ -53,7 +53,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_weight="1"
-                        app:srcCompat="@drawable/escudo_equipo" />
+                        app:srcCompat="@drawable/escudopredeterminado" />
 
                     <TextView
                         android:id="@+id/txtPlantillaEquipoV"
